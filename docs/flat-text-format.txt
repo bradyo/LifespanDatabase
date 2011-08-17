@@ -1,0 +1,52 @@
+[Observation]
+lifespanEffect: increased
+species: Caenorhabditis elegans
+strain: Bristol N2
+citationPubmedId: 8638122
+body: <p>Mutation of both clk-1 and daf-2 results in a nearly 5-fold (500%) 
+	increase in life-span.</p><p>Other phenotypes: Overexpression of clk-1 
+	increases mitochondrial activity and shortens life-span [pubmed:10202142]. 
+	Loss of function mutation increases adult life-span by 30% [pubmed:8638122]. 
+	Mutations in clk-1 are highly pleiotropic resulting in an average lengthening 
+	of embryonic development, post-embryonic development, and adult rhythmic 
+	behaviors such as defecation, swimming, and pharyngeal pumping [pubmed:7768437].</p>
+status: public
+  
+[Gene]
+ncbiGeneId: 19274107
+symbol: clk-1
+alleleType: non-null recessive
+
+[Gene]
+ncbiGeneId: 19274102
+symbol: daf-2
+alleleType: non-null recessive
+
+
+
+[Observation]
+id: 122
+lifespanEffect: increased
+species: Caenorhabditis elegans
+strain: Bristol N2
+citationPubmedId: 8638122
+body: <p>Mutation of both clk-1 and daf-2 results in a nearly 5-fold (500%) increase in life-span.</p><p>Other phenotypes: Overexpression of clk-1 	increases mitochondrial activity and shortens life-span [pubmed:10202142]. Loss of function mutation increases adult life-span by 30% [pubmed:8638122].	Mutations in clk-1 are highly pleiotropic resulting in an average lengthening of embryonic development, post-embryonic development, and adult rhythmic behaviors such as defecation, swimming, and pharyngeal pumping [pubmed:7768437].</p>
+status: public
+  
+[Gene]
+id: 123
+ncbiGeneId: 19274107
+symbol: clk-1
+alleleType: non-null recessive
+
+[Gene]
+id: 124
+ncbiGeneId: 19274102
+symbol: daf-2
+alleleType: non-null recessive
+
+
+
+
+
+

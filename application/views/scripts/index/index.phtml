@@ -1,0 +1,176 @@
+<div style="width:23%; float:left">
+    <div style="padding:10px">
+        <h2>About Database</h2>
+        <p>Sageweb Lifespan Observation database collects published lifespan
+        data across multiple species. Users are allowed to submit new data
+        as well as edit existing data.</p>
+        <br />
+
+        <h2>New Updates</h2>
+        <ul>
+            <li><strong><?php echo date('Y-m-d') ?></strong><br />
+                new updates made to gene, compound, and search pages</li>
+            <li><strong>2010-06-08</strong><br />
+                gene data from AGEID database imported</li>
+            <li><strong>2010-06-02</strong><br />
+                database application launched on sageweb.org</li>
+        </ul>
+        <br />
+
+        <h2>Download Entire Database</h2>
+        <p>The entire database is available for download in various formats.</p>
+        <dl>
+            <dt><a href="<?php echo $this->baseUrl('search') . '?format=xml' ?>"
+                >XML</a></dt>
+                <dd>The standard data exchange format.</dd>
+            <dt><a href="<?php echo $this->baseUrl('search') . '?format=yml' ?>"
+                >YAML</a></dt>
+                <dd>A more human readable XML variant.</dd>
+            <dt><a href="<?php echo $this->baseUrl('search') . '?format=csv' ?>"
+                >CSV</a></dt>
+                <dd>Flat comma-delimited file readable by Excel.</dd>
+        </dl>
+        <p style="margin-top:1em">Users can also export specific searches on
+            the search results page.</p>
+
+    </div>
+</div>
+
+<div style="width:50%; min-width:500px; padding-left:1em; padding-right:1em; float: left;">
+    <h2 style="text-align:center">Select a species below to browse:</h2>
+
+    <map name="speciesMap" id="speciesMap">
+        <area alt="Homo sapiens" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations', 'q' => 'species:"Homo sapiens"'
+            )) ?>" shape="rect" coords="124,0,302,96" />
+        <area alt="Pan troglodytes" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations','q' => 'species:"Pan troglodytes"'
+            )) ?>" shape="rect" coords="387,35,584,125" />
+        <area alt="Mus musculus" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations','q' => 'species:"Mus musculus"'
+            )) ?>" shape="rect" coords="0,83,167,155" />
+        <area alt="Drosophila melanogaster" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations','q' => 'species:"Drosophila melanogaster"'
+            )) ?>" shape="rect" coords="385,166,575,230" />
+        <area alt="Caenorhabditis elegans" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations','q' => 'species:"Caenorhabditis elegans"'
+            )) ?>" shape="rect" coords="48,211,205,282" />
+        <area alt="Saccharomyces cerevisiae" href="<?php echo $this->url(array(
+            'controller' => 'search', 'action' => 'index',
+            't' => 'observations','q' => 'species:"Saccharomyces cerevisiae"'
+            )) ?>" shape="rect" coords="287,249,486,290" />
+    </map>
+    <img src="<?php echo $this->baseUrl('images/species_net(3).png') ?>" alt=""
+         usemap="#speciesMap" style="border:none" />
+
+    <?php if (count($this->featuredObservations) > 0): ?>
+        <h2 style="margin-top:2em;text-align:center">Featured Observations:</h2>
+        <?php foreach ($this->featuredObservations as $observation): ?>
+            <hr class="separator" />
+            <div style="margin-top:1em; margin-bottom: 1em">
+                <em><?php echo $this->escape($observation->species) ?></em>
+                <?php if (!empty($observation->strain)): ?>
+                    (<?php echo $this->escape($observation->strain) ?>)
+                <?php endif ?>
+                <br />
+                <?php echo $observation->body ?>
+                <a href="<?php echo $this->url(array(
+                    'controller' => 'observations',
+                    'action' => 'show',
+                    'id' => $observation->id
+                )) ?>">view more...</a>
+            </div>
+        <?php endforeach ?>
+    <?php endif ?>
+
+
+    <?php if ($this->lastObservation !== null): ?>
+        <h2 style="margin-top:1em;text-align:center">Most Recent Observation:</h2>
+        <hr class="separator" />
+        <div style="margin: 1em 0">
+            <em><?php echo $this->escape($this->lastObservation->species) ?></em>
+            <?php if (!empty($this->lastObservation->strain)): ?>
+                (<?php echo $this->escape($this->lastObservation->strain) ?>)
+            <?php endif ?>
+            <br />
+            <?php echo $this->lastObservation->body ?>
+            <a href="<?php echo $this->url(array(
+                'controller' => 'observations',
+                'action' => 'show',
+                'id' => $this->lastObservation->id
+            )) ?>">view more...</a>
+        </div>
+    <?php endif ?>
+    <br />
+    <br />
+</div>
+
+<div style="width: 23%; float:left;">
+    <div style="padding:10px;">
+        <h2>Database Summary</h2>
+        <table class="dataTable" style="width:100%" >
+            <tr>
+                <th>Species</th>
+                <th style="text-align:center">Observations</th>
+            </tr>
+            <?php foreach ($this->statistics as $row): ?>
+                <tr>
+                    <td><em><?php echo $this->escape($row['short_species']) ?></em></td>
+                    <td style="text-align:center">
+												<a href="<?php echo $this->url(array(
+													'controller' => 'search', 
+													'action' => 'index',
+													't' => 'observations',
+													'q' => 'species:"' . $row['species'] . '"'
+													)) ?>"
+												><?php echo $row['observationCount'] ?>
+										</td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+        <br />
+
+        <h2>Top Contributers</h2>
+        <table class="dataTable" style="width:100%" >
+            <tr>
+                <th>Username</th>
+                <th style="text-align:center">Observations</th>
+            </tr>
+            <?php foreach ($this->topContributers as $row): ?>
+                <tr>
+                    <td><em><?php echo $this->escape($row['username']) ?></em></td>
+                    <td style="text-align:center">
+											<a href="<?php echo $this->url(array(
+												'controller' => 'search', 
+												'action' => 'index',
+												't' => 'observations',
+												'q' => 'submittedBy:"' . $row['username'] . '"'
+												)) ?>"
+											><?php echo $row['count'] ?></a></td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+				<br />
+
+        <h2>Database Growth</h2>
+        <table class="dataTable" style="width:100%" >
+            <tr>
+                <th>Time</th>
+                <th style="text-align:center">New Observations</th>
+            </tr>
+            <?php foreach ($this->growthRows as $timeFrame => $count): ?>
+                <tr>
+                    <td><em><?php echo $timeFrame ?></em></td>
+                    <td style="text-align:center"><?php echo $count ?></td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+        <br />
+
+    </div>
+</div>

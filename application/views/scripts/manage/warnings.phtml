@@ -1,0 +1,9 @@
+<?php echo $this->partial('manage/_tabs.phtml', array(
+    'tabs' => $this->tabs
+    )) ?>
+
+<a href="<?php echo $this->url(array('format' => 'rss')) ?>"
+   class="rss" style="float:right"
+   >Subscribe to RSS</a>
+
+<h1>Warnings Pending Review</h1>

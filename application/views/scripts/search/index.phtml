@@ -1,0 +1,156 @@
+
+<div class="leftSidebar">
+    <?php if (count($this->existingFilters) > 0): ?>
+        <div class="block">
+            <div class="blockTitle">Applied Filters</div>
+            <div class="blockContent">
+                <?php echo $this->partial('search/_existingFilters.phtml', array(
+                    'existingFilters' => $this->existingFilters,
+                    )) ?>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if (count($this->filters) > 0): ?>
+        <div class="block">
+            <div class="blockTitle">Narrow Search</div>
+            <div class="blockContent">
+                <?php echo $this->partial('search/_filters.phtml', array(
+                    'filters' => $this->filters,
+                    )) ?>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if (count($this->rows) > 0): ?>
+        <div class="block">
+            <div class="blockTitle">Download Results</div>
+            <div class="blockContent">
+                <a href="<?php echo $this->url(array('format' => 'csv')) ?>"
+                   >CSV</a>
+                <a href="<?php echo $this->url(array('format' => 'xml')) ?>"
+                    >XML</a>
+                <a href="<?php echo $this->url(array('format' => 'yml')) ?>"
+                    >YAML</a>
+            </div>
+        </div>
+    <?php endif ?>
+</div>
+
+
+<div style="margin-left:220px;">
+    <?php if (count($this->rows) > 0): ?>
+        <div style="position: relative; height: auto;">
+            <div style="height: 2em;">
+                <div style="position: absolute; left: 0; top: 0; font-weight: bold; font-size:1.1em">
+                    <?php $itemStart = ($this->pager->getPage() - 1) * 10 + 1; ?>
+                    Showing results <?php echo $itemStart ?>-<?php echo $itemStart + 10 ?> of
+                    <?php echo $this->pager->getLastPage() * 10 ?>:
+                </div>
+
+                <div style="position: absolute; right: 0; top: 0">
+                    Sort by:
+                    <a href="<?php echo $this->url(array(
+                        'sortBy' => 'date',
+                        'sortOrder' => 'asc'
+                        )) ?>">date</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="listing" style="width:100%;">
+            <tr>
+                <?php // this is just a spacer to add an extra line at the top of the table ?>
+                <td colspan="3" style="padding:0"></td>
+            </tr>
+            <?php foreach ($this->rows as $row): ?>
+                <tr>
+                    <td class="actionCell">
+                        <img src="<?php echo $this->baseUrl() . '/images/notebook_50px.png' ?>"
+                             alt="Lifespan Observation" />
+                    </td>
+                    <td>
+                        <em>Lifespan:</em>
+                        <?php if ($row['lifespanEffect'] == 'increased'): ?>
+                            <img src="<?php echo $this->baseUrl('images/up.png') ?>" alt=""/>
+                        <?php elseif ($row['lifespanEffect'] == 'decreased'): ?>
+                            <img src="<?php echo $this->baseUrl('images/down.png') ?>" alt=""/>
+                        <?php endif ?>
+
+                        <?php if (!empty($row['lifespanEffect'])): ?>
+                            <?php echo $this->escape($row['lifespanMeasure']) ?>
+                            <?php if (!empty($row['lifespanChange'])): ?>
+                                <?php echo round($row['lifespanChange'], 2) ?>%
+                            <?php endif ?>
+                            <?php if (!empty($row['lifespanUnits'])): ?>
+                                (<?php echo $this->escape($row['lifespanUnits']) ?>)
+                            <?php endif ?>
+                        <?php endif ?>
+                        <br />
+
+                        <em>Organism:</em>
+                        <?php echo $this->escape($row['species']) ?>
+                        <?php if (!empty($row['strain'])): ?>
+                            (<?php echo $this->escape($row['strain']) ?>)
+                        <?php endif ?>
+                        <?php if (!empty($row['matingType'])): ?>
+                             <?php echo $row['matingType'] ?>
+                        <?php endif ?>
+                        <br />
+
+                        <?php foreach ($row['genes'] as $gene): ?>
+                            <em>Gene Intervention:</em>
+                            <?php echo $this->escape($gene['symbol']) ?>
+                            <?php if (isset($gene['allele'])): ?>
+                                (<?php echo $this->escape($gene['allele']) ?>)
+                            <?php endif ?>
+                            <?php echo $this->escape($gene['alleleType']) ?>
+                            <br />
+                        <?php endforeach ?>
+
+                        <?php foreach ($row['compounds'] as $compound): ?>
+                            <em>Compound Intervention:</em>
+                            <?php echo $this->escape($compound['name']) ?>
+                            <?php if (!empty($compound['quantity'])): ?>
+                                (<?php echo $this->escape($compound['quantity']) ?>)
+                            <?php endif ?>
+                            <br />
+                        <?php endforeach ?>
+
+                        <?php foreach ($row['environments'] as $environment): ?>
+                            <em>Environment Intervention:</em>
+                            <?php echo $this->escape($environment['type']) ?>
+                            <br />
+                        <?php endforeach ?>
+
+                        <div style="color:#666"><?php echo $row['body'] ?></div>
+                    </td>
+
+                    <td class="actionCell">
+                        <a href="<?php echo $this->url(array(
+                            'controller' => 'observation',
+                            'action' => 'show',
+                            'id' => $row['id'],
+                        )) ?>">View</a><br />
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+
+        <?php echo $this->partial('_paginationList.phtml', array('pager' => $this->pager)) ?>
+
+    <?php else: ?>
+    
+        <div style="position: relative; height: auto;">
+            <div style="height: 2em;">
+                <div style="position: absolute; left: 0; top: 0; font-weight: bold; font-size:1.1em">
+                    No results matching search.
+                </div>
+            </div>
+            <p>Try broadening your search terms or performing an <a href="">advanced search</a>.</p>
+        </div>
+
+    <?php endif ?>
+</div>
+
+

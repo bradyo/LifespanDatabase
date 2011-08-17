@@ -1,0 +1,7 @@
+mod_date:[20020101 TO 20030101]
+title:"search term"
+
+
+"80 TO 100"[lifespan]
+">80"[lifespanChange]
+"RNAi knockdown"[alleleType]

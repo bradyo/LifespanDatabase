@@ -1,0 +1,22 @@
+<?php if (isset($this->comments)): ?>
+    <?php foreach ($this->comments as $comment): ?>
+        <div class="comments
+            <?php echo ($comment['status'] == 'pending') ? 'comment-pending' : '' ?>
+            ">
+            <div class="comment-header">
+                <em>
+                <?php if ($comment['status'] == 'pending'): ?>
+                    <span class="pending-message">(Pending Review)</span>
+                <?php endif ?>
+                <?php echo substr($comment['createdAt'], 0, 11) ?>
+                <?php echo $comment['author'] ?> wrote:
+                </em>
+            </div>
+            <div class="comment-body">
+                <?php echo $this->escape($comment['body']) ?>
+            </div>
+        </div>
+    <?php endforeach ?>
+<?php else: ?>
+    <p>No comments.</p>
+<?php endif ?>

@@ -1,0 +1,45 @@
+observations:
+	-	body: 						sir2 fob1 double deletion does not extend in BY4742
+		conditions_body: 	YPD media, 1764 cells
+		species:					Saccharomyces cerevisiae
+		strain:						BY4742
+		lifespan:
+			effect: 		none
+			measure:		mean
+			type: 			replicative
+			magnitude: 	0.21%
+		citation:
+			year: 	2010
+			author: Brady Olsen
+			title: 	Unpublished result
+			source: kaeberleinlab.org
+		genes:
+			-	ncbi_gene_id: 851520
+				symbol:				SIR2
+				allele_type: 	null deletion
+			- ncbi_gene_id: 851688
+				symbol:				FOB1
+				allele_type: 	null deletion
+
+	-	body: 						sir2 fob1 double deletion under caloric restriction extend lifespan
+		conditions_body: 	YPD 0.05% glucose media, 361 cells
+		species:					Saccharomyces cerevisiae
+		strain:						BY4742
+		lifespan:
+			effect: 		increased
+			measure:		mean
+			type: 			replicative
+			magnitude: 	61.15%		
+		citation:
+			pubmed_id: 29175101
+		genes:
+			- ncbi_gene_id: 851520
+				symbol:				SIR2
+				allele_type: 	null deletion
+			-	ncbi_gene_id: 851688
+				symbol:				FOB1
+				allele_type: 	null deletion
+		environments:
+			- type: caloric restriction
+				body: Used 0.05% glucose YPD
+

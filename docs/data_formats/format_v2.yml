@@ -1,0 +1,31 @@
+observations:
+  - id:                number
+    species:           text
+    strain:            text
+    lifespanEffect:    [none, increased, decreased]
+    lifespanMeasure:   [mean, median, max, individual]
+    lifespanUnit:      [days, years, divisions, si] 
+    lifespanValue:     number
+    lifespanBase:      number
+    lifespanChange:    number (%)
+    citationPubmedId:  number
+    citationYear:      number
+    citationAuthor:    text
+    citationTitle:     text
+    citationSource:    text
+    body:              text
+    genes:
+      - ncbiGeneId:  number
+        symbol:      string
+        alleleType:  [over-expression, deletion / null, non-null recessive, non-null dominant, non-null semi-dominant, RNAi knockdown, anti-sense RNA ]
+    compounds:
+      - ncbiCompoundId:  number
+        name:            string
+        quantity:        string
+    environments: 
+      - name:         text
+        description:  text
+    revision:
+      status: [accepted, rejected, pending]
+      comment: text
+

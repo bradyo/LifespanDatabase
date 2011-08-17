@@ -1,0 +1,212 @@
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Lifespan Observations Database</title>
+    <?php $this->headLink()->prependStylesheet($this->baseUrl().'/styles/global.css') ?>
+    <?php echo $this->headLink() ?>
+    <?php echo $this->headScript() ?>
+
+<style type="text/css">
+#top-bar {
+    margin: 0 auto;
+    width: 960px;
+    height: 2em;
+    line-height: 2em;
+    vertical-align: middle;
+}
+
+#global-crumb {
+    float: left;
+}
+
+#user-menu {
+    float: right;
+}
+
+#viewport {
+    width: 960px;
+}
+
+
+#masthead {
+    width: 960px;
+    margin: 0 auto;
+    height: 60px;
+}
+
+#header {
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #666;
+}
+
+#header-text {
+    padding-top: 10px;
+    color: white;
+    font-size: 30px;
+    font-weight: bolder;
+    font-family: serif;
+}
+
+#header-text a {
+    color: white;
+}
+
+#header-text a:hover {
+    text-decoration: none;
+}
+
+#header-logo {
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+ul.sponsors-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+ul.sponsors-list li { display: inline; }
+ul.sponsors-list li a {
+    text-decoration: none;
+    padding: .2em 1em;
+    color: #fff;
+    background-color: #036;
+}
+ul.sponsors-list li a:hover {
+    color: #fff;
+    background-color: #369;
+}
+
+#header .sponsor {
+    border: 1px solid black;
+    background-color: white;
+    margin-top: 10px;
+}
+
+#header .become-sponsor {
+    display: inline;
+    border: 1px solid black;
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    margin-top: 10px;
+}
+
+#menu {
+    margin: 0 auto;
+    width: 960px;
+    margin-bottom: 1em;
+}
+
+#content {
+    margin: 0 auto;
+    width: 960px;
+}
+
+.search-input {
+    height: 1.25em;
+    padding: 2px;
+}
+
+#footer {
+    width: 960px;
+    margin: 2em auto;
+    padding: 1em 0;
+    background-color: #ddd;
+    border: 1px solid #999;
+    color: #666;
+}
+
+
+</style>
+
+
+</head>
+
+<body>
+    <div id="top-bar">
+        <div id="global-crumb">
+            <a href="http://sageweb.org">Sageweb.org</a> > Lifespan Database
+        </div>
+
+        <div id="user-menu">
+            <?php if (!Zend_Auth::getInstance()->hasIdentity()): ?>
+                <a href="<?php echo $this->baseUrl('account/login')
+                    . '?destination=' . $this->url() ?>">Sign In</a>
+                or
+                <a href="http://sageweb.org/user/register">Create an account</a>
+            <?php else: ?>
+                <?php echo Zend_Auth::getInstance()->getIdentity()->username ?>:
+                <a href="<?php echo $this->baseUrl('account/settings') ?>"
+                    >Settings</a>
+                <a href="<?php echo $this->baseUrl('account/logout')
+                    . '?destination=' . $this->url() ?>">Logout</a>
+            <?php endif ?>
+        </div>
+    </div>
+
+    <div id="header">
+        <div id="masthead">
+            <div style="float: left">
+                <img id="header-logo" src="<?php echo $this->baseUrl() . '/images/tree-of-life.png' ?>"
+                     alt="Lifespan Database" />
+                <span id="header-text"><a href="<?php echo $this->baseUrl('/') ?>"
+                    >Lifespan Database</a></span>
+            </div>
+
+            <div style="display:inline; float: right; height: 60px; vertical-align: middle;" >
+                <a href="http://www.ellisonfoundation.org/">
+                    <img class="sponsor" src="<?php echo $this->baseUrl() . '/images/ellison_50px_wide.jpg' ?>"
+                       alt="Ellison Medical Foundation" />
+                </a>
+                <a href="http://www.pathology.washington.edu/">
+                    <img class="sponsor" src="<?php echo $this->baseUrl() . '/images/uw-path_50px_wide.jpg' ?>"
+                       alt="University of Washington Pathology" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="menu">
+        <div style="float:left">
+            <form action="<?php echo $this->baseUrl('search') ?>" method="get" style="display:inline-block">
+                <?php echo $this->formText('q', $this->layout()->q, array(
+                    'size' => '35',
+                    'class'=>'search-input'
+                    ))
+                ?>
+                <button type="submit" class="button"><span><span>Search</span></span></button>
+            </form>
+            
+            <a class="button" href="<?php echo $this->baseUrl('search/advanced') ?>"
+               ><span><span>Advanced</span></span></a>
+        </div>
+
+        <div style="float: right">
+            <a class="button" href="<?php echo $this->baseUrl('observation/new') ?>"
+               ><span><span>Add</span></span></a>
+            <a class="button"  href="<?php echo $this->baseUrl('observation/upload') ?>"
+               ><span><span>Upload</span></span></a>
+            <a class="button"  href="<?php echo $this->baseUrl('manage') ?>"
+               ><span><span>Manage</span></span></a>
+        </div>
+
+        <div style="clear:both"></div>
+    </div>
+
+    <div id="content">
+        <?php echo $this->layout()->content; ?>
+    </div>
+
+    <div id="footer">2010 | Kaeberlein Lab</div>
+
+</body>
+</html>
+
+
+
+
+

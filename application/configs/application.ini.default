@@ -1,0 +1,75 @@
+[production]
+
+	phpSettings.display_startup_errors = 0
+	phpSettings.display_errors = 0
+	phpSettings.memory_limit = 1024M;
+
+	includePaths.library = APPLICATION_PATH "/../library"
+	bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+	bootstrap.class = "Bootstrap"
+	appnamespace = "Application"
+
+	autoloaderNamespaces[] = "Sageweb"
+	autoloaderNamespaces[] = "Doctrine"
+
+	resources.session.save_path = APPLICATION_PATH "/../data/session"
+	resources.session.use_only_cookies = true
+	resources.session.remember_me_seconds = 864000
+
+	resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+	resources.frontController.params.displayExceptions = 0
+	resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts/"
+	resources.view[] =
+	resources.view.helperPath = APPLICATION_PATH "/views/helpers"
+
+	resources.multidb.db.default = true
+	resources.multidb.db.adapter = PDO_MYSQL
+	resources.multidb.db.host = localhost
+	resources.multidb.db.dbname = sagewebo_agingdb
+	resources.multidb.db.username = changeme
+	resources.multidb.db.password = changeme
+
+	resources.multidb.ncbiDb.adapter = PDO_MYSQL
+	resources.multidb.ncbiDb.host = localhost
+	resources.multidb.ncbiDb.dbname = sagewebo_ncbi
+	resources.multidb.ncbiDb.username = changeme
+	resources.multidb.ncbiDb.password = changeme
+
+	resources.multidb.ppodDb.adapter = PDO_MYSQL
+	resources.multidb.ppodDb.host = localhost
+	resources.multidb.ppodDb.dbname = sagewebo_ppod
+	resources.multidb.ppodDb.username = changeme
+	resources.multidb.ppodDb.password = changeme
+
+	doctrine.dsn = "mysql://sagewebo_agingdb:changeme@localhost/sagewebo_agingdb"
+	doctrine.models_path = APPLICATION_PATH "/models/orm"
+	doctrine.data_fixtures_path = APPLICATION_PATH "/../doctrine/data/fixtures"
+	doctrine.sql_path = APPLICATION_PATH "/../doctrine/data/migrations"
+	doctrine.migrations_path = APPLICATION_PATH "/../doctrine/migrations"
+	doctrine.yaml_schema_path = APPLICATION_PATH "/../doctrine/schema"
+
+
+
+[staging : production]
+
+	phpSettings.display_startup_errors = 1
+	phpSettings.display_errors = 1
+
+
+
+[testing : production]
+
+	phpSettings.display_startup_errors = 1
+	phpSettings.display_errors = 1
+
+
+
+[development : production]
+
+	phpSettings.display_startup_errors = 1
+	phpSettings.display_errors = 1
+
+	baseHttp = "http://agingdb"
+
+	resources.frontController.params.displayExceptions = 1
+

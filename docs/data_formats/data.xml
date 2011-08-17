@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<observations>
+	<observation>
+		<body>sir2 fob1 double deletion does not extend in BY4742</body>
+		<conditions_body>YPD media, 1764 cells</conditions_body>
+		<ncbi_tax_id>4932</ncbi_tax_id>
+		<species>Saccharomyces cerevisiae</species>
+		<strain>BY4742</strain>
+		<lifespan>
+			<effect>none</effect>
+			<measure>mean</measure>
+			<type>replicative</type>
+			<magnitude>0.21%</magnitude>
+		</lifespan>
+		<genes>
+			<gene>
+				<ncbi_gene_id>851520</ncbi_gene_id>
+				<symbol>SIR2</symbol>
+				<allele_type>null deletion</allele_type>
+			</gene>
+			<gene>
+				<ncbi_gene_id>851688</ncbi_gene_id>
+				<symbol>FOB2</symbol>
+				<allele_type>null deletion</allele_type>
+			</gene>
+		</genes>
+	</observation>
+
+	<observation>
+		<body>sir2 fob1 double deletion under caloric restriction extend lifespan</body>
+		<conditions_body>YPD 0.05% glucose media, 361 cells</conditions_body>
+		<species>Saccharomyces cerevisiae</species>
+		<strain>BY4742</strain>
+		<lifespan>
+			<effect>increased</effect>
+			<measure>mean</measure>
+			<type>replicative</type>
+			<magnitude>61.15%</magnitude>
+		</lifespan>
+		<genes>
+			<gene>
+				<ncbi_gene_id>851520</ncbi_gene_id>
+				<symbol>SIR2</symbol>
+				<allele_type>null deletion</allele_type>
+			</gene>
+			<gene>
+				<ncbi_gene_id>851688</ncbi_gene_id>
+				<symbol>FOB2</symbol>
+				<allele_type>null deletion</allele_type>
+			</gene>
+		</genes>
+		<environments>
+			<environment>
+				<type>caloric restriction</type>
+				<body>Used 0.05% glucose YPD</body>
+			</environment>
+		</environments>
+	</observation>
+
+</observations>
