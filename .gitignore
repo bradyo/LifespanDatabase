@@ -2,17 +2,11 @@
 /application/configs/application.ini
 
 # ignore data directories
-/data/cache
-/data/logs
-/data/lucene
-/data/sql-dumps
-/data/uploads
-/data/ncbi
-/data/ppod
-/data/session
-
-# ignore error files
-/error_log
+/data/cache/application/*
+/data/cache/htmlpurifier/*
+/data/logs/*
+/data/lucene/*
+/data/external/
 
 # ignore dev files
 /nbproject/private/
