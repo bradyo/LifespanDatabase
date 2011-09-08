@@ -1,14 +1,14 @@
 # ignore local configuration
-/application/configs/application.ini
+application/configs/application.ini
 
 # ignore data directories
-/data/cache/application/*
-/data/cache/htmlpurifier/*
-/data/logs/*
-/data/lucene/*
-/data/external/
+data/cache/application/*
+data/cache/htmlpurifier/*
+data/logs/*
+data/lucene/*
+data/external/
 
 # ignore dev files
-/nbproject/private/
+nbproject/private/
 
 
