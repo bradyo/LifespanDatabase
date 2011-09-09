@@ -20,7 +20,7 @@ class GeneTable extends Doctrine_Table
     public static function import($ncbiGeneId)
     {
         // import new gene information
-        $data = Application_Model_Service_Ncbi::getGeneData($ncbiGeneId);
+        $data = Application_Service_NcbiService::getGeneData($ncbiGeneId);
         if (!$data) {
             return null;
         }        
@@ -56,7 +56,7 @@ class GeneTable extends Doctrine_Table
     private static function _importGeneSynonyms(Gene $gene)
     {
         // import gene synonyms
-        $synonyms = Application_Model_Service_Ncbi::getGeneSynonyms($gene->ncbiGeneId);
+        $synonyms = Application_Service_NcbiService::getGeneSynonyms($gene->ncbiGeneId);
         foreach ($synonyms as $synonym) {
             $geneSynonym = new GeneSynonym();
             $geneSynonym->geneId = $gene->id;
@@ -67,7 +67,7 @@ class GeneTable extends Doctrine_Table
 
     private static function _importGeneLinks(Gene $gene)
     {
-        $dbxrefs = Application_Model_Service_Ncbi::getGeneDbxrefs($gene->ncbiGeneId);
+        $dbxrefs = Application_Service_NcbiService::getGeneDbxrefs($gene->ncbiGeneId);
         foreach ($dbxrefs as $dbxref) {
             $values = explode(':', $dbxref);
             if (count($values) < 2) {
@@ -87,7 +87,7 @@ class GeneTable extends Doctrine_Table
 
     private static function _importGeneGos(Gene $gene)
     {
-        $rows = Application_Model_Service_Ncbi::getGeneGos($gene->ncbiGeneId);
+        $rows = Application_Service_NcbiService::getGeneGos($gene->ncbiGeneId);
         foreach ($rows as $row) {
             $geneGo = new GeneGo();
             $geneGo->geneId = $gene->id;
@@ -101,16 +101,16 @@ class GeneTable extends Doctrine_Table
 
      private static function _importGeneHomologs(Gene $gene)
      {
-         $rows = Application_Model_Service_Ncbi::getGeneHomologs($gene->ncbiGeneId);
+         $rows = Application_Service_NcbiService::getGeneHomologs($gene->ncbiGeneId);
          foreach ($rows as $row) {
              $proteinId = $row['protein_id'];
 
              // look up ncbi gene id for ppod homolog
              $ncbiGeneIds = array();
              if ($row['database_id'] == 'NCBI') {
-                 $ncbiGeneIds = Application_Model_Service_Ncbi::getGeneIdsBy('protein_acc', $proteinId);
+                 $ncbiGeneIds = Application_Service_NcbiService::getGeneIdsBy('protein_acc', $proteinId);
              } elseif ($row['database_id'] == 'UniProtKB') {
-                 $ncbiGeneIds = Application_Model_Service_Ncbi::getGeneIdsBy('uniprot_id', $proteinId);
+                 $ncbiGeneIds = Application_Service_NcbiService::getGeneIdsBy('uniprot_id', $proteinId);
              }
 
              foreach ($ncbiGeneIds as $ncbiGeneId) {
@@ -126,7 +126,7 @@ class GeneTable extends Doctrine_Table
                  // check to see if homolog is in agingdb, if so, add its id
                  $homologGene = GeneTable::getInstance()->findOneBy('ncbiGeneId', $ncbiGeneId);
                  if (!$homologGene) {
-                    $homologGeneData = Application_Model_Service_Ncbi::getGeneData($ncbiGeneId);
+                    $homologGeneData = Application_Service_NcbiService::getGeneData($ncbiGeneId);
                     if ($homologGeneData) {
                         // uncomment line below to import gene information for
                         // all homologs recursively

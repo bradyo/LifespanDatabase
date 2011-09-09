@@ -31,7 +31,7 @@ class CitationTable extends Doctrine_Table
             return;
         }
 
-        $data = Application_Model_Service_PubMed::getCitationData($pubmedId);
+        $data = Application_Service_Remote_PubMed::getCitationData($pubmedId);
         if (!$data) {
             return;
         }

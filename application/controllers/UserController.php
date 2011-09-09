@@ -40,8 +40,8 @@ class UserController extends Zend_Controller_Action
                         $this->_redirect('account');
                     }
                 } else {
-									  $this->view->message = 'Username and password incorrect.';
-								}
+                    $this->view->message = 'Username and password incorrect.';
+                }
             }
         }
         $this->view->form = $form;

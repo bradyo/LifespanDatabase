@@ -161,7 +161,7 @@ class Application_Model_ObservationUpdater
         // if both ncbi tax id and species are set, check that they match
         if (isset($data['ncbiTaxId']) && isset($data['species'])) {
             $ncbiTaxId = $data['ncbiTaxId'];
-            $ncbiSpecies = Application_Model_Service_Ncbi::getSpeciesName($ncbiTaxId);
+            $ncbiSpecies = Application_Service_NcbiService::getSpeciesName($ncbiTaxId);
             if ($ncbiSpecies !== null && $data['species'] !== $ncbiSpecies) {
                 $messages[] = "species does not match ncbiTaxId ($ncbiTaxId is $ncbiSpecies).";
             } else {
@@ -189,7 +189,7 @@ class Application_Model_ObservationUpdater
                 $messages[] = 'citationPubmedId must be a integer.';
             } else {
                 $pubmedId = $data['citationPubmedId'];
-                $citationData = Application_Model_Service_PubMed::getCitationData($pubmedId);
+                $citationData = Application_Service_Remote_PubMed::getCitationData($pubmedId);
                 if (!$citationData) {
                     $messages[] = 'failed to get citation data for pubmed id';
                 } else {
@@ -218,7 +218,7 @@ class Application_Model_ObservationUpdater
                         if (!isset($gene['symbol'])) {
                             // look up gene symbol
                             $ncbiGeneId = $gene['ncbiGeneId'];
-                            $symbol = Application_Model_Service_Ncbi::getGeneSymbol($ncbiGeneId);
+                            $symbol = Application_Service_NcbiService::getGeneSymbol($ncbiGeneId);
                             if ($symbol) {
                                 $gene['symbol'] = $symbol;
                             } else {
@@ -238,10 +238,10 @@ class Application_Model_ObservationUpdater
                         $ncbiTaxId = $data['ncbiTaxId'];
                     } elseif (isset($data['species'])) {
                         $species = $data['species'];
-                        $ncbiTaxId = Application_Model_Service_Ncbi::getTaxonId($species);
+                        $ncbiTaxId = Application_Service_NcbiService::getTaxonId($species);
                     }
 
-                    $geneIds = Application_Model_Service_Ncbi::getGeneIds($symbol, $ncbiTaxId);
+                    $geneIds = Application_Service_NcbiService::getGeneIds($symbol, $ncbiTaxId);
                     if (count($geneIds) > 1) {
                         $messages[] = "Gene symbol '$symbol' resolves to multiple NCBI gene IDs: "
                             . join(', ', $geneIds) . '.';

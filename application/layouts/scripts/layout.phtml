@@ -1,129 +1,11 @@
-<?php echo $this->doctype() ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Lifespan Observations Database</title>
+    <?php echo $this->headTitle() ?>
     <?php $this->headLink()->prependStylesheet($this->baseUrl().'/styles/global.css') ?>
     <?php echo $this->headLink() ?>
     <?php echo $this->headScript() ?>
-
-<style type="text/css">
-#top-bar {
-    margin: 0 auto;
-    width: 960px;
-    height: 2em;
-    line-height: 2em;
-    vertical-align: middle;
-}
-
-#global-crumb {
-    float: left;
-}
-
-#user-menu {
-    float: right;
-}
-
-#viewport {
-    width: 960px;
-}
-
-
-#masthead {
-    width: 960px;
-    margin: 0 auto;
-    height: 60px;
-}
-
-#header {
-    border-bottom: 1px solid #000;
-    border-top: 1px solid #666;
-}
-
-#header-text {
-    padding-top: 10px;
-    color: white;
-    font-size: 30px;
-    font-weight: bolder;
-    font-family: serif;
-}
-
-#header-text a {
-    color: white;
-}
-
-#header-text a:hover {
-    text-decoration: none;
-}
-
-#header-logo {
-    float: left;
-    margin-top: 10px;
-    margin-right: 10px;
-}
-
-ul.sponsors-list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-}
-ul.sponsors-list li { display: inline; }
-ul.sponsors-list li a {
-    text-decoration: none;
-    padding: .2em 1em;
-    color: #fff;
-    background-color: #036;
-}
-ul.sponsors-list li a:hover {
-    color: #fff;
-    background-color: #369;
-}
-
-#header .sponsor {
-    border: 1px solid black;
-    background-color: white;
-    margin-top: 10px;
-}
-
-#header .become-sponsor {
-    display: inline;
-    border: 1px solid black;
-    height: 50px;
-    width: 200px;
-    background-color: white;
-    margin-top: 10px;
-}
-
-#menu {
-    margin: 0 auto;
-    width: 960px;
-    margin-bottom: 1em;
-}
-
-#content {
-    margin: 0 auto;
-    width: 960px;
-}
-
-.search-input {
-    height: 1.25em;
-    padding: 2px;
-}
-
-#footer {
-    width: 960px;
-    margin: 2em auto;
-    padding: 1em 0;
-    background-color: #ddd;
-    border: 1px solid #999;
-    color: #666;
-}
-
-
-</style>
-
-
 </head>
 
 <body>
@@ -201,8 +83,9 @@ ul.sponsors-list li a:hover {
         <?php echo $this->layout()->content; ?>
     </div>
 
-    <div id="footer">2010 | Kaeberlein Lab</div>
-
+    <div id="footer">
+        2010 | Kaeberlein Lab
+    </div>
 </body>
 </html>
 

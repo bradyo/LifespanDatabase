@@ -20,7 +20,7 @@ class TaxonomyTable extends Doctrine_Table
     public static function import($ncbiTaxId)
     {
         // import new gene information
-        $data = Application_Model_Service_Ncbi::getTaxonData($ncbiTaxId);
+        $data = Application_Service_NcbiService::getTaxonData($ncbiTaxId);
         if (!$data) {
             return null;
         }
@@ -31,7 +31,7 @@ class TaxonomyTable extends Doctrine_Table
         $taxonomy->save();
 
         // fetch synonyms
-        $rows = Application_Model_Service_Ncbi::getTaxonSynonyms($ncbiTaxId);
+        $rows = Application_Service_NcbiService::getTaxonSynonyms($ncbiTaxId);
         foreach ($rows as $row) {
             $taxonomySynonym = new TaxonomySynonym();
             $taxonomySynonym->taxonomyId = $taxonomy->id;

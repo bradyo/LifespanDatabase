@@ -36,7 +36,7 @@ class ServiceController extends Zend_Controller_Action
         $this->getHelper('ViewRenderer')->setNoRender();
 
         $ncbiCompoundId = $this->_getParam('ncbiCompoundId');
-        $name = Application_Model_Service_Ncbi::getCompoundName($ncbiCompoundId);
+        $name = Application_Service_NcbiService::getCompoundName($ncbiCompoundId);
         $data = array(
             'name' => $name,
             'targetId' => $this->_getParam('targetId')

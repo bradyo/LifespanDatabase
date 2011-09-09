@@ -2,10 +2,9 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-     protected function _initAutoloader() {
+    protected function _initAutoloader() {
         $loader = Zend_Loader_Autoloader::getInstance();
         $loader->registerNamespace('Doctrine');
-        $loader->registerNamespace('NP');
         $loader->registerNamespace('Application');
     }
 
@@ -31,7 +30,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = new Zend_View();
         
         $view->addHelperPath('Application/View/Helper', 'Application_View_Helper');
-        $view->addHelperPath('NP/View/Helper', 'NP_View_Helper');
 
         $view->setEncoding('UTF-8');
         $view->doctype('XHTML1_STRICT');
@@ -48,22 +46,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headLink()->appendStylesheet('/library/jquery-ui/css/custom/jquery-ui-1.8.7.custom.css');
         $view->headScript()->appendFile('/library/jquery-ui/js/jquery-ui-1.8.7.custom.min.js');
 
-        $view->headScript()->appendFile('/library/fancybox/jquery.fancybox-1.3.2.pack.js');
-        $view->headLink()->appendStylesheet('/library/fancybox/jquery.fancybox-1.3.2.css', 'screen');
-
-        $view->headTitle('Sageweb');
+        $view->headTitle('Lifespan Observation Database');
         $view->headTitle()->setSeparator(' - ');
         
         // add view helper
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
         $viewRenderer->setView($view);
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
-    }
-
-    protected function _initPlugins() {
-        $this->bootstrap('frontController');
-        $front = Zend_Controller_Front::getInstance();
-        $front->registerPlugin(new Application_Plugin_Access());
     }
 
     protected function _initCache() {
@@ -78,12 +67,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('cache', $cache);
     }
 
-   
-    protected function _initDatabases()
-    {
+    protected function _initDatabases() {
         $this->bootstrap('multidb');
         $resource = $this->getPluginResource('multidb');
 
+        /* @var $db Zend_Db_Adapter_Abstract */
         $db = $resource->getDb('db');
         Zend_Registry::set('db', $db);
 
@@ -92,29 +80,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $ppodDb = $resource->getDb('ppodDb');
         Zend_Registry::set('ppodDb', $ppodDb);
-    }
-
-    protected function _initDoctrine()
-    {
-        //Load the autoloader
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->registerNamespace('Doctrine');
-        $autoloader->pushAutoloader(array('Doctrine', 'autoload'));
-        $autoloader->pushAutoloader(array('Doctrine', 'modelsAutoload'), '');
-
-        $manager = Doctrine_Manager::getInstance();
-        $manager->setAttribute(Doctrine::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-        $manager->setAttribute(Doctrine::ATTR_MODEL_LOADING,
-            Doctrine::MODEL_LOADING_CONSERVATIVE);
-        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-
-        $options = $this->getOption('doctrine');
-        Doctrine::loadModels($options['models_path']);
-
-        $conn = Doctrine_Manager::connection($options['dsn'], 'agingdb');
-        $conn->setAttribute(Doctrine::ATTR_USE_NATIVE_ENUM, true);
-
-        return $options;
+        
+        // set up doctrine with database settings
+        $config = new \Doctrine\ORM\Configuration;
+        $config->setProxyDir(APPLICATION_PATH . '/proxies');
+        $config->setProxyNamespace('Proxies');
+        $config->setAutoGenerateProxyClasses(true);
+        
+        $driver = $config->newDefaultAnnotationDriver(APPLICATION_PATH . '/models');
+        $config->setMetadataDriverImpl($driver);
+        
+        $cache = new \Doctrine\Common\Cache\ArrayCache;
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
+        
+        $connectionParams = $db->getConfig();
+        $connectionParams['user'] = 'root';
+        $connectionParams['driver'] = 'pdo_mysql';
+        $em = \Doctrine\ORM\EntityManager::create($connectionParams, $config);
+        Zend_Registry::set('em', $em);
     }
 
     protected function _initSession() {     
@@ -135,15 +119,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('frontController');
         $router = $this->frontController->getRouter();
         $router->setChainNameSeparator('/');
-        
-        $configPath = APPLICATION_PATH . '/configs/routes.ini';
-        $config = new Zend_Config_Ini($configPath);
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/routes.ini');
         $router->addConfig($config, 'routes');
     }
 
     protected function _initI18n() {
         // set up timezone
-        date_default_timezone_set('America/Los_Angeles');
+        date_default_timezone_set('UTC');
 
         // set up locale
         $locale = Zend_Locale::setDefault('en_US');
@@ -156,7 +138,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
 
         // create search index
-        $indexPath = DATA_PATH . '/lucene/index';
+        $indexPath = DATA_PATH . '/lucene';
         try {
             $index = Zend_Search_Lucene::open($indexPath);
         } catch (Zend_Search_Lucene_Exception $e) {
