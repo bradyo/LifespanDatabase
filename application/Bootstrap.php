@@ -83,7 +83,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         // set up doctrine with database settings
         $config = new \Doctrine\ORM\Configuration;
-        $config->setProxyDir(APPLICATION_PATH . '/proxies');
+        $config->setProxyDir(DATA_PATH . '/cache/doctrine/proxies');
         $config->setProxyNamespace('Proxies');
         $config->setAutoGenerateProxyClasses(true);
         

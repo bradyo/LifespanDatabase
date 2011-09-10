@@ -129,12 +129,17 @@ class IndexController extends Zend_Controller_Action
 //    }
     
     public function testAction() {
-        $observation = new Application_Model_Observation();
-        $observation->setBody('test');
+//        $observation = new Application_Model_Observation();
+//        $observation->setBody('test');
         
         $em = Application_Registry::getEm();
-        $em->persist($observation);
-        $em->flush();
+        
+        $repo = $em->getRepository('Application_Model_Citation');
+        $citations = $repo->findBy(array(), null, 20);
+        
+        var_dump($citations);
+        
+        die();
     }
 }
 

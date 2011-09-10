@@ -2,14 +2,11 @@
 CREATE TABLE citation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     year INT,
-    author VARCHAR(255),
-    title VARCHAR(255),
-    source VARCHAR(255),
+    author TEXT,
+    title TEXT,
+    source TEXT,
     pubmed_id INT,
     INDEX (year),
-    INDEX (author),
-    INDEX (title),
-    INDEX (source),
     INDEX (pubmed_id)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
