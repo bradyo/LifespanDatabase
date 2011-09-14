@@ -4,6 +4,7 @@ application/configs/application.ini
 # ignore data directories
 data/cache/application/*
 data/cache/htmlpurifier/*
+data/cache/doctrine/*
 data/logs/*
 data/lucene/*
 data/external/
