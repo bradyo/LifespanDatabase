@@ -1,12 +1,15 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="citation")
  */
-class Application_Model_Citation 
+class Citation 
 {
     /**
+     * @var integer
      * @Id @Column(name="id", type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
@@ -14,6 +17,7 @@ class Application_Model_Citation
     
     /**
      * Year the publication was published.
+     * @var integer
      * @Column(name="year", type="integer")
      */
     private $year;
@@ -40,16 +44,6 @@ class Application_Model_Citation
      */
     private $pubmedId;
     
-    
-    /**
-     * @PrePersist @PreUpdate
-     */
-    public function validate() {
-        if ($this->authors == null) {
-            throw new Exception();
-        }
-    }
-
     
     public function getId() {
         return $this->id;

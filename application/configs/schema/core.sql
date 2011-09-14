@@ -1,4 +1,29 @@
 
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(32) UNIQUE NOT NULL,
+    name VARCHAR(64),
+    email VARCHAR(128),
+    role VARCHAR(32) DEFAULT "member",
+    status VARCHAR(32) DEFAULT "active",
+    created_at DATETIME,
+    seen_at DATETIME,
+    password_algorithm VARCHAR(32),
+    password_hash VARCHAR(40),
+    password_salt VARCHAR(40),
+    activation_key VARCHAR(40),
+    timezone VARCHAR(32) NOT NULL DEFAULT "America/Los_Angeles",
+    locale VARCHAR(32) NOT NULL DEFAULT "en_US",
+    language VARCHAR(2) NOT NULL DEFAULT "en",
+    newsletter VARCHAR(32) NULL,
+    reputation INTEGER NOT NULL DEFAULT 1,
+    post_count INTEGER NOT NULL DEFAULT 0,
+    INDEX(name), INDEX (role), INDEX (status), INDEX (email),
+    INDEX (timezone), INDEX (locale), INDEX (language), INDEX (newsletter),
+    INDEX (created_at), INDEX (seen_at), INDEX (reputation), INDEX (post_count)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+
+
 CREATE TABLE citation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     year INT,

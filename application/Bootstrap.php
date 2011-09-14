@@ -16,8 +16,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLayout() {
         Zend_Layout::startMvc();
         $layout = Zend_Layout::getMvcInstance();
-        $layout->setLayoutPath(APPLICATION_PATH . '/layouts/scripts');
-        $layout->setLayout('layout');
+        $layout->setLayoutPath(APPLICATION_PATH . '/layouts');
+        $layout->setLayout('main');
         $layout->startMvc();
     }
     
@@ -29,6 +29,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initView() {
         $view = new Zend_View();
         
+        $view->setScriptPath(APPLICATION_PATH . '/views');
         $view->addHelperPath('Application/View/Helper', 'Application_View_Helper');
 
         $view->setEncoding('UTF-8');

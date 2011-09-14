@@ -6,6 +6,23 @@ class IndexController extends Zend_Controller_Action
         
     }
     
+        
+    public function testAction() {
+        
+        $em = Application_Registry::getEm();
+
+        $repo = $em->getRepository('Application_Model_Observation');
+        /* @var $observation Application_Model_Observation */
+        $observation = $repo->findOneBy(array('id' => 2));
+        
+        
+        foreach ($observation->getGeneInterventions() as $geneIntervention) {
+            /* @var $geneIntervention Application_Model_GeneIntervention */
+            var_dump($geneIntervention->getGene());
+        }
+        
+        die();
+    }
     
 //    public function indexAction()
 //    {
@@ -127,19 +144,6 @@ class IndexController extends Zend_Controller_Action
 //        $this->view->rows = $browser->getRows();
 //        $this->view->paginator = $browser->getPaginator();
 //    }
-    
-    public function testAction() {
-//        $observation = new Application_Model_Observation();
-//        $observation->setBody('test');
-        
-        $em = Application_Registry::getEm();
-        
-        $repo = $em->getRepository('Application_Model_Citation');
-        $citations = $repo->findBy(array(), null, 20);
-        
-        var_dump($citations);
-        
-        die();
-    }
+
 }
 
