@@ -2,9 +2,9 @@
 
 /**
  * @Entity
- * @Table(name="species")
+ * @Table(name="strain")
  */
-class Application_Model_Species 
+class Application_Model_Strain
 {
     
 }

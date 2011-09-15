@@ -4,7 +4,7 @@
  * @Entity
  * @Table(name="observation_gene")
  */
-class Application_Model_GeneIntervention {
+class Application_Model_ObservationGene {
     
     /**
      * @var integer
@@ -56,10 +56,6 @@ class Application_Model_GeneIntervention {
         $this->observation = $observation;
     }
 
-    /**
-     *
-     * @return Application_Model_Gene
-     */
     public function getGene() {
         return $this->gene;
     }
@@ -82,26 +78,5 @@ class Application_Model_GeneIntervention {
 
     public function setAllele($allele) {
         $this->allele = $allele;
-    }
-
-        
-    
-    public static function getAlleleTypes() {
-        $alleleTypes = array(
-            'normal' => 'normal',
-            'over-expression' => 'over-expression',
-            'deletion / null' => 'deletion / null',
-            'non-null recessive' => 'non-null recessive',
-            'non-null dominant' => 'non-null dominant',
-            'non-null semi-dominant' => 'non-null semi-dominant',
-            'RNAi knockdown' => 'RNAi knockdown',
-            'anti-sense RNA' => 'anti-sense RNA',
-            'loss of function' => 'loss of function',
-            'gain of function' => 'gain of function',
-            'dominant negative' => 'dominant negative',
-            'heterozygous diploid' => 'heterozygous diploid',
-            'unknown' => 'unknown',
-        );
-        return $alleleTypes;
     }
 }

@@ -52,7 +52,7 @@ CREATE TABLE species_synonym (
     species_id INT NOT NULL,
     type VARCHAR(64),
     synonym VARCHAR(128) NOT NULL,
-    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE CASCADE
+    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE CASCADE,
     INDEX (type),
     INDEX (synonym)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -64,7 +64,7 @@ CREATE TABLE strain (
     name VARCHAR(128) NOT NULL,
     common_name VARCHAR(128),
     INDEX (guid),
-    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL
+    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL,
     INDEX (name),
     INDEX (common_name)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -227,6 +227,7 @@ CREATE TABLE observation (
     guid CHAR(32) NOT NULL,
     public_id INTEGER NOT NULL,
     version INTEGER,
+    is_current TINYINT(1),
     status VARCHAR(64),
     authored_at DATETIME,
     author_id INT,
@@ -289,9 +290,9 @@ CREATE TABLE observation (
 CREATE TABLE observation_stats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     observation_id INT NOT NULL,
-    gene_count INT NOT NULL DEFAULT(0),
-    compound_count INT NOT NULL DEFAULT (0),
-    environment_count INT NOT NULL DEFAULT (0),
+    gene_count INT NOT NULL DEFAULT 0,
+    compound_count INT NOT NULL DEFAULT 0,
+    environment_count INT NOT NULL DEFAULT 0,
     FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
     INDEX (gene_count),
     INDEX (compound_count),

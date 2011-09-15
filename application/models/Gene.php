@@ -13,10 +13,12 @@ class Application_Model_Gene
      */
     private $id;
     
-//    /**
-//     *
-//     */     
-//    private $species;
+    /**
+     * @var Application_Model_Species Species gene belongs to.
+     * @OneToOne(targetEntity="Application_Model_Species")
+     * @JoinColumn(name="species_id", referencedColumnName="id")
+     */     
+    private $species;
     
     /**
      * @var string Official gene symbol.

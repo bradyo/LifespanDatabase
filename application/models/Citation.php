@@ -1,12 +1,10 @@
 <?php
 
-namespace Application\Model;
-
 /**
  * @Entity
  * @Table(name="citation")
  */
-class Citation 
+class Application_Model_Citation 
 {
     /**
      * @var integer
@@ -16,30 +14,25 @@ class Citation
     private $id;
     
     /**
-     * Year the publication was published.
-     * @var integer
+     * @var integer Year the publication was published.
      * @Column(name="year", type="integer")
      */
     private $year;
     
     /**
-     * Authors of the publication, multiple authors separated by commas.
-     * @var string
+     * @var string Authors of the publication, multiple authors separated by commas.
      * @Column(name="author", type="text")
      */
     private $authors;
     
     /**
-     * The source information of the citation, like the journal name and page
-     * numbers.
-     * @var string
+     * @var string Source information like the journal, name, and page.
      * @Column(name="source", type="text")
      */
     private $source;
     
     /**
-     * Pubmed ID of this citaiton if available.
-     * @var int
+     * @var integer Pubmed ID of this citaiton if available.
      * @Column(name="pubmed_id", type="integer")
      */
     private $pubmedId;
