@@ -57,20 +57,57 @@ class Application_Model_Observation
      * @Column(name="review_status", type="string")
      */
     private $reviewStatus;
-    
-    
+
+        
+    /**
+     * @var DateTime When the author submitted the observation entry.
+     * @Column(name="authored_at", type="datetime")
+     */
     private $authoredAt;
     
+    /**
+     * @var Application_Model_User User that created the observation version.
+     * @OneToOne(targetEntity="Application_Model_User", fetch="EAGER")
+     * @JoinColumn(name="author_Id", referencedColumnName="id")
+     */
     private $author;
     
+    /**
+     * @var string Author's comment on the observation version.
+     * @Column(name="author_comment", type="text")
+     */
+    private $authorComment;
+    
+    /**
+     * @var DateTime When the observation entry was reviewed.
+     * @Column(name="reviewed_at", type="datetime")
+     */
     private $reviewedAt;
     
+    /**
+     * @var Application_Model_User User that reviewed the observation version.
+     * @OneToOne(targetEntity="Application_Model_User", fetch="EAGER")
+     * @JoinColumn(name="reviewer_id", referencedColumnName="id")
+     */
     private $reviewer;
     
+    /**
+     * @var string Reviewer's comment on the observation version.
+     * @Column(name="reviewer_comment", type="text")
+     */
     private $reviewerComment;
     
+    /**
+     * @var DateTime When the first version of the observation was created (original
+     *  creation time)
+     * @Column(name="created_at", type="datetime")
+     */
     private $createdAt;
     
+    /**
+     * @var DateTime When this version of the observation was created.
+     * @Column(name="updated_at", type="datetime")
+     */
     private $updatedAt;
     
         
@@ -81,11 +118,40 @@ class Application_Model_Observation
     private $citation;
     
     /**
-     * @var Application_Model_ObservationLifespan Lifespan data for observation.
-     * @OneToOne(targetEntity="Application_Model_ObservationLifespan")
-     * @JoinColumn(name="id", referencedColumnName="id")
+     * @var double Lifespan value with interventions.
+     * @Column(name="lifespan", type="float")
      */
-    private $lifespan;
+    private $lifespanValue;
+    
+    /**
+     * @var double Lifespan value without interventions (experiment control).
+     * @Column(name="lifespan_base", type="float")
+     */
+    private $lifespanBaseValue;
+    
+    /**
+     * @var string Units for lifespan values, i.e. days, divisions, etc...)
+     * @Column(name="lifespan_units", type="string")
+     */
+    private $lifespanUnits;
+    
+    /**
+     * @var double Lifespan percent change of intervention vs control.
+     * @Column(name="lifespan_change", type="float")
+     */
+    private $lifespanPercentChange;
+    
+    /**
+     * @var string Direction of lifespan change, if significant.
+     * @Column(name="lifespan_effect", type="string")
+     */
+    private $lifespanEffect;
+    
+    /**
+     * @var string Type of lifespan measurement, i.e. mean, median, max, etc...
+     * @Column(name="lifespan_measure", type="string")
+     */
+    private $lifespanMeasure;
     
     /**
      * @var Application_Model_Species Species used in observation.
@@ -145,7 +211,7 @@ class Application_Model_Observation
     
     /**
      * @OneToOne(targetEntity="Application_Model_ObservationStatistics")
-     * @JoinColumn(name="observation_id", referencedColumnName="id")
+     * @JoinColumn(name="id", referencedColumnName="observation_id")
      */
     private $statistics;
 
@@ -155,7 +221,6 @@ class Application_Model_Observation
         $this->compoundInterventions = new ArrayCollection();
         $this->environmentInterventions = new ArrayCollection();
     }
-    
     
     public function getId() {
         return $this->id;
@@ -229,6 +294,14 @@ class Application_Model_Observation
         $this->author = $author;
     }
 
+    public function getAuthorComment() {
+        return $this->authorComment;
+    }
+
+    public function setAuthorComment($authorComment) {
+        $this->authorComment = $authorComment;
+    }
+
     public function getReviewedAt() {
         return $this->reviewedAt;
     }
@@ -277,12 +350,52 @@ class Application_Model_Observation
         $this->citation = $citation;
     }
 
-    public function getLifespan() {
-        return $this->lifespan;
+    public function getLifespanValue() {
+        return $this->lifespanValue;
     }
 
-    public function setLifespan($lifespan) {
-        $this->lifespan = $lifespan;
+    public function setLifespanValue($lifespanValue) {
+        $this->lifespanValue = $lifespanValue;
+    }
+
+    public function getLifespanBaseValue() {
+        return $this->lifespanBaseValue;
+    }
+
+    public function setLifespanBaseValue($lifespanBaseValue) {
+        $this->lifespanBaseValue = $lifespanBaseValue;
+    }
+
+    public function getLifespanUnits() {
+        return $this->lifespanUnits;
+    }
+
+    public function setLifespanUnits($lifespanUnits) {
+        $this->lifespanUnits = $lifespanUnits;
+    }
+
+    public function getLifespanPercentChange() {
+        return $this->lifespanPercentChange;
+    }
+
+    public function setLifespanPercentChange($lifespanPercentChange) {
+        $this->lifespanPercentChange = $lifespanPercentChange;
+    }
+
+    public function getLifespanEffect() {
+        return $this->lifespanEffect;
+    }
+
+    public function setLifespanEffect($lifespanEffect) {
+        $this->lifespanEffect = $lifespanEffect;
+    }
+
+    public function getLifespanMeasure() {
+        return $this->lifespanMeasure;
+    }
+
+    public function setLifespanMeasure($lifespanMeasure) {
+        $this->lifespanMeasure = $lifespanMeasure;
     }
 
     public function getSpecies() {
@@ -364,5 +477,4 @@ class Application_Model_Observation
     public function setStatistics($statistics) {
         $this->statistics = $statistics;
     }
-
 }

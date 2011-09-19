@@ -4,8 +4,8 @@
  * @Entity
  * @Table(name="observation_gene")
  */
-class Application_Model_ObservationGene {
-    
+class Application_Model_GeneIntervention
+{
     /**
      * @var integer
      * @Id @Column(name="id", type="integer")

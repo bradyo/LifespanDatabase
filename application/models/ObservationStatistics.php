@@ -7,6 +7,20 @@
 class Application_Model_ObservationStatistics 
 {
     /**
+     * @var integer ID of the observation version (each version has different ID)
+     * @Id 
+     * @Column(name="id", type="integer")
+     * @GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @var integer ID of the observation version (each version has different ID)
+     * @Column(name="observation_id", type="integer")
+     */
+    private $observationId;
+    
+    /**
      * @var integer Number of gene interventions.
      * @Column(name="gene_count", type="integer")
      */

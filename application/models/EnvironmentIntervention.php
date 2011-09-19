@@ -4,8 +4,8 @@
  * @Entity
  * @Table(name="observation_environment")
  */
-class Application_Model_EnvironmentIntervention {
-    
+class Application_Model_EnvironmentIntervention 
+{
     /**
      * @var integer
      * @Id @Column(name="id", type="integer")
