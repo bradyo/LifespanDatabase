@@ -1,7 +1,7 @@
 <?php
 
-class Application_Model_MatingTypes {
-    
+class Application_Model_MatingTypes 
+{
     public function getOptions($speciesName = null) {
         if ($speciesName == 'mammal') {
             return $this->getMammalChoices();

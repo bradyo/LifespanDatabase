@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity
  * @Table(name="observation")
+ * @HasLifecycleCallbacks
  */
 class Application_Model_Observation
 {
@@ -109,7 +110,6 @@ class Application_Model_Observation
      * @Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
         
     /**
      * @OneToOne(targetEntity="Application_Model_Citation")
@@ -187,40 +187,64 @@ class Application_Model_Observation
     
     /**
      * @var string Description of observation (basic HTML allowed).
-     * @Column(name="body", type="string")
+     * @Column(name="description", type="string")
      */
-    private $body;
+    private $description;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_GeneIntervention", 
+     * @OneToMany(targetEntity="Application_Model_ObservationGene", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $geneInterventions;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_CompoundIntervention", 
+     * @OneToMany(targetEntity="Application_Model_ObservationCompound", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $compoundInterventions;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_EnvironmentIntervention", 
+     * @OneToMany(targetEntity="Application_Model_ObservationEnvironment", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $environmentInterventions;
+        
+    /**
+     * @var integer Number of gene interventions.
+     * @Column(name="gene_count", type="integer")
+     */
+    private $geneCount;
     
     /**
-     * @OneToOne(targetEntity="Application_Model_ObservationStatistics")
-     * @JoinColumn(name="id", referencedColumnName="observation_id")
+     * @var integer Number of compound interventions.
+     * @Column(name="compound_count", type="integer")
      */
-    private $statistics;
-
+    private $compoundCount;
+    
+    /**
+     * @var integer Number of environment interventions.
+     * @Column(name="environment_count", type="integer")
+     */
+    private $environmentCount;
+    
     
     public function __construct() {
         $this->geneInterventions = new ArrayCollection();
         $this->compoundInterventions = new ArrayCollection();
         $this->environmentInterventions = new ArrayCollection();
     }
+        
+    /** 
+     * Update intervention counts. These are persisted along with observation
+     * to allow for more efficient queries.
+     * @PrePersist 
+     */
+    private function updateInterventionCounts() {
+        $this->geneCount = count($this->geneInterventions);
+        $this->compoundCount = count($this->compoundInterventions);
+        $this->environmentCount = count($this->environmentInterventions);
+    }
+    
     
     public function getId() {
         return $this->id;
@@ -438,12 +462,12 @@ class Application_Model_Observation
         $this->temperature = $temperature;
     }
 
-    public function getBody() {
-        return $this->body;
+    public function getDescription() {
+        return $this->description;
     }
 
-    public function setBody($body) {
-        $this->body = $body;
+    public function setDescription($description) {
+        $this->description = $description;
     }
 
     public function getGeneInterventions() {
@@ -470,11 +494,28 @@ class Application_Model_Observation
         $this->environmentInterventions = $environmentInterventions;
     }
 
-    public function getStatistics() {
-        return $this->statistics;
+    public function getGeneCount() {
+        return $this->geneCount;
     }
 
-    public function setStatistics($statistics) {
-        $this->statistics = $statistics;
+    public function setGeneCount($geneCount) {
+        $this->geneCount = $geneCount;
     }
+
+    public function getCompoundCount() {
+        return $this->compoundCount;
+    }
+
+    public function setCompoundCount($compoundCount) {
+        $this->compoundCount = $compoundCount;
+    }
+
+    public function getEnvironmentCount() {
+        return $this->environmentCount;
+    }
+
+    public function setEnvironmentCount($environmentCount) {
+        $this->environmentCount = $environmentCount;
+    }
+    
 }

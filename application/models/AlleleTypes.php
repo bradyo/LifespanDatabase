@@ -1,6 +1,7 @@
 <?php
 
-class Application_Model_AlleleTypes {
+class Application_Model_AlleleTypes 
+{
     public function getChoices() {
         return array(
             'normal' => 'normal',

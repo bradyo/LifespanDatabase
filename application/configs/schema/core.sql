@@ -51,7 +51,7 @@ CREATE TABLE species_synonym (
     id INT AUTO_INCREMENT PRIMARY KEY,
     species_id INT NOT NULL,
     type VARCHAR(64),
-    synonym VARCHAR(128) NOT NULL,
+    name VARCHAR(128) NOT NULL,
     FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE CASCADE,
     INDEX (type),
     INDEX (synonym)
@@ -198,6 +198,15 @@ CREATE TABLE gene_substrate (
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 
+CREATE TABLE environment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    guid CHAR(32) NOT NULL,
+    name VARCHAR(128),
+    INDEX (guid),
+    INDEX (name)
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+
 CREATE TABLE comment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     parent_guid CHAR(32) NOT NULL,
@@ -239,7 +248,7 @@ CREATE TABLE observation (
 
     created_at DATETIME,
     updated_at DATETIME,
-    email VARCHAR(128),
+    correspondance_email VARCHAR(128),
     lifespan DOUBLE,
     lifespan_base DOUBLE,
     lifespan_units VARCHAR(64),
@@ -252,12 +261,12 @@ CREATE TABLE observation (
     cell_type VARCHAR(64),
     mating_type VARCHAR(64),
     temperature DECIMAL(5,2),
-    citation_pubmed_id INT,
-    citation_year INT,
-    citation_author VARCHAR(255),
-    citation_title VARCHAR (255),
-    citation_source VARCHAR (255),
-    body TEXT,
+    citation_id INT,
+    description TEXT,
+
+    gene_count INT NOT NULL DEFAULT 0,
+    compound_count INT NOT NULL DEFAULT 0,
+    environment_count INT NOT NULL DEFAULT 0,
 
     INDEX (public_id, version),
     INDEX (public_id),
@@ -282,25 +291,11 @@ CREATE TABLE observation (
     INDEX (cell_type),
     INDEX (mating_type),
     INDEX (temperature),
-    INDEX (citation_pubmed_id),
-    INDEX (citation_year),
-    INDEX (citation_author),
-    INDEX (citation_title),
-    INDEX (citation_source)
-) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-
-CREATE TABLE observation_stats (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    observation_id INT NOT NULL,
-    gene_count INT NOT NULL DEFAULT 0,
-    compound_count INT NOT NULL DEFAULT 0,
-    environment_count INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
+    FOREIGN KEY (citation_id) REFERENCES citation (id) ON DELETE SET NULL,
     INDEX (gene_count),
     INDEX (compound_count),
     INDEX (environment_count)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-
 
 CREATE TABLE observation_gene (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -327,17 +322,17 @@ CREATE TABLE observation_compound (
 CREATE TABLE observation_environment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     observation_id INT NOT NULL,
-    type VARCHAR(64) NOT NULL,
-    body TEXT NOT NULL,
+    environment_id INT,
+    description TEXT,
     FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
-    INDEX (type)
+    FOREIGN KEY (environment_id) REFERENCES environment (id) ON DELETE SET NULL
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 
 CREATE TABLE featured_observation (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    observation_public_id INT NOT NULL,
+    observation_id INT NOT NULL,
     position INT DEFAULT(0),
-    INDEX (observation_public_id),
+    FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
     INDEX (position)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

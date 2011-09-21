@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
@@ -12,6 +14,12 @@ class Application_Model_Gene
      * @GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var string Globally unique identifier.
+     * @Column(name="guid", type="string")
+     */
+    private $guid;
     
     /**
      * @var Application_Model_Species Species gene belongs to.
@@ -50,7 +58,34 @@ class Application_Model_Gene
      */
     private $ncbiProteinId;
     
+    /**
+     * @OneToMany(targetEntity="Application_Model_GeneSynonym", mappedBy="gene")
+     */
+    private $synonyms;
     
+    /**
+     * @OneToMany(targetEntity="Application_Model_GeneLink", mappedBy="gene")
+     */
+    private $links;
+    
+    /**
+     * @OneToMany(targetEntity="Application_Model_GeneGoTerm", mappedBy="gene")
+     */
+    private $goTerms;
+    
+    /**
+     * @OneToMany(targetEntity="Application_Model_GeneHomolog", mappedBy="gene")
+     */
+    private $homologs;
+    
+    
+    
+    public function __construct() {
+        $this->synonyms = new ArrayCollection();
+        $this->links = new ArrayCollection();
+        $this->goTerms = new ArrayCollection();
+        $this->homologs = new ArrayCollection();
+    }
     
     public function getId() {
         return $this->id;
@@ -106,5 +141,37 @@ class Application_Model_Gene
 
     public function setNcbiProteinId($ncbiProteinId) {
         $this->ncbiProteinId = $ncbiProteinId;
+    }
+    
+    public function getSynonyms() {
+        return $this->synonyms;
+    }
+
+    public function setSynonyms($synonyms) {
+        $this->synonyms = $synonyms;
+    }
+
+    public function getLinks() {
+        return $this->links;
+    }
+
+    public function setLinks($links) {
+        $this->links = $links;
+    }
+
+    public function getGoTerms() {
+        return $this->goTerms;
+    }
+
+    public function setGoTerms($goTerms) {
+        $this->goTerms = $goTerms;
+    }
+
+    public function getHomologs() {
+        return $this->homologs;
+    }
+
+    public function setHomologs($homologs) {
+        $this->homologs = $homologs;
     }
 }

@@ -1,0 +1,56 @@
+
+Create model objects for the following tables:
+
+
+CREATE TABLE gene_synonym (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    synonym VARCHAR(64) NOT NULL,
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE gene_link (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    database_id VARCHAR(64) NOT NULL,
+    identifier VARCHAR(64) NOT NULL,
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE gene_go (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    go_id VARCHAR(64) NOT NULL,
+    evidence VARCHAR(64),
+    category VARCHAR(64),
+    term VARCHAR(255),
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE gene_homolog (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    ncbi_gene_id INT,
+    homolog_gene_id INT,
+    homolog_ncbi_gene_id INT,
+    algorithm VARCHAR(64),
+    family VARCHAR(64),
+    species VARCHAR(64),
+    symbol VARCHAR(64),
+    protein_database VARCHAR(64),
+    protein_id VARCHAR(64),
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE gene_interaction (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    source VARCHAR(128),
+    pubmed_id INT,
+    partner_gene_id INT,
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+CREATE TABLE gene_substrate (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gene_id INT NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    ncbi_compound_id INT,
+    compound_id INT,
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

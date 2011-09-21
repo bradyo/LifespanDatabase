@@ -2,7 +2,7 @@
 
 class Application_Model_LifespanUnits 
 {
-    public function getOptions() {
+    public function getChoices() {
         return array(
             'days' => 'Days',
             'years' => 'Years',
