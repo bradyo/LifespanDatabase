@@ -5,28 +5,27 @@ class IndexController extends Zend_Controller_Action
     public function indexAction() {
         
     }
-    
-        
-    public function testAction() {
-        $em = Application_Registry::getEm();
 
-        /* @var $repo Appliation_Model_ObservationRepository */
-        $repo = $em->getRepository('Application_Model_Observation');
-        
-        $query = $em->createQuery('
-            SELECT observation, geneInterventions, gene
-            FROM Application_Model_Observation observation 
-            LEFT JOIN observation.geneInterventions geneInterventions
-            LEFT JOIN geneInterventions.gene gene
-            WHERE (observation.geneCount + observation.compoundCount + observation.environmentCount) > 2
-            ');
-        
-        $data = $query->getArrayResult();
-        for ($i = 0; $i < 2; $i++) {
-            print_r($data[$i]);
-        }
-        die();
-    }
+//    public function testAction() {
+//        $em = Application_Registry::getEm();
+//
+//        /* @var $repo Appliation_Model_ObservationRepository */
+//        $repo = $em->getRepository('Application_Model_Observation');
+//        
+//        $query = $em->createQuery('
+//            SELECT observation, geneInterventions, gene
+//            FROM Application_Model_Observation observation 
+//            LEFT JOIN observation.geneInterventions geneInterventions
+//            LEFT JOIN geneInterventions.gene gene
+//            WHERE (observation.geneCount + observation.compoundCount + observation.environmentCount) > 2
+//            ');
+//        
+//        $data = $query->getArrayResult();
+//        for ($i = 0; $i < 2; $i++) {
+//            print_r($data[$i]);
+//        }
+//        die();
+//    }
     
 //    public function indexAction()
 //    {

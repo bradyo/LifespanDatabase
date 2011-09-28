@@ -122,14 +122,14 @@
                 <tr>
                     <td><em><?php echo $this->escape($row['short_species']) ?></em></td>
                     <td style="text-align:center">
-												<a href="<?php echo $this->url(array(
-													'controller' => 'search', 
-													'action' => 'index',
-													't' => 'observations',
-													'q' => 'species:"' . $row['species'] . '"'
-													)) ?>"
-												><?php echo $row['observationCount'] ?>
-										</td>
+                                                <a href="<?php echo $this->url(array(
+                                                    'controller' => 'search', 
+                                                    'action' => 'index',
+                                                    't' => 'observations',
+                                                    'q' => 'species:"' . $row['species'] . '"'
+                                                    )) ?>"
+                                                ><?php echo $row['observationCount'] ?>
+                                        </td>
                 </tr>
             <?php endforeach ?>
         </table>
@@ -145,17 +145,17 @@
                 <tr>
                     <td><em><?php echo $this->escape($row['username']) ?></em></td>
                     <td style="text-align:center">
-											<a href="<?php echo $this->url(array(
-												'controller' => 'search', 
-												'action' => 'index',
-												't' => 'observations',
-												'q' => 'submittedBy:"' . $row['username'] . '"'
-												)) ?>"
-											><?php echo $row['count'] ?></a></td>
+                                            <a href="<?php echo $this->url(array(
+                                                'controller' => 'search', 
+                                                'action' => 'index',
+                                                't' => 'observations',
+                                                'q' => 'submittedBy:"' . $row['username'] . '"'
+                                                )) ?>"
+                                            ><?php echo $row['count'] ?></a></td>
                 </tr>
             <?php endforeach ?>
         </table>
-				<br />
+                <br />
 
         <h2>Database Growth</h2>
         <table class="dataTable" style="width:100%" >

@@ -2,19 +2,7 @@
 
 class UserController extends Zend_Controller_Action
 {
-
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
-
-    public function indexAction()
-    {
-        $this->view->identity = Zend_Auth::getInstance()->getIdentity();
-    }
-
-    public function loginAction()
-    {
+    public function loginAction() {
         $destination = $this->getRequest()->getParam('destination', null);
 
         $form = new Application_Form_Login();
@@ -47,8 +35,7 @@ class UserController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
-    public function logoutAction()
-    {
+    public function logoutAction() {
         $destination = $this->getRequest()->getParam('destination', null);
 
         Zend_Auth::getInstance()->clearIdentity();
@@ -59,6 +46,4 @@ class UserController extends Zend_Controller_Action
             $this->_redirect('/');
         }
     }
-
 }
-
