@@ -1,0 +1,33 @@
+<h1>Observation Revision</h1>
+
+<table class="verticalTable" style="width:800px">
+    <tr>
+        <th style="text-align:left">Current Data</th>
+        <th style="text-align:left">Revision Data</th>
+    </tr>
+
+    <tr>
+        <td>
+            <pre style="width:500px; overflow-x:scroll"
+                 ><?php print_r($this->observation->toArray()) ?></pre>
+        </td>
+        <td>
+            <pre style="width:500px; overflow-x:scroll"
+                 ><?php print_r(json_decode($this->revision->observationData, true)) ?></pre>
+        </td>
+    </tr>
+</table>
+<br />
+<br />
+
+<?php if ($this->revision->status == 'pending'): ?>
+    <h2>This revision is pending approval:</h2>
+    <?php echo $this->form ?>
+
+<?php else: ?>
+    <h2>This revision has been <?php echo $this->revision->status ?>:</h2>
+    <p>Reviewed by: <em><?php echo $this->revision->reviewedBy ?></em></p>
+    <?php if (!empty($this->revision->reviewerComment)): ?>
+        <p>Comment: <?php echo $this->revision->reviewerComment ?></p>
+    <?php endif ?>
+<?php endif ?>

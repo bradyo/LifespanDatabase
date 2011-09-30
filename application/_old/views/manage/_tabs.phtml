@@ -1,0 +1,9 @@
+<ul class="tabs">
+    <?php foreach ($this->tabs as $tab): ?>
+        <li <?php echo ($tab['isSelected']) ? 'class="selected"' : '' ?>>
+            <a href="<?php echo $this->url(array(
+                'action' => $tab['action']
+                )) ?>"><?php echo $tab['label'] ?></a>
+        </li>
+    <?php endforeach ?>
+</ul>

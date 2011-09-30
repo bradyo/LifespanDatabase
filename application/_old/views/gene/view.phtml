@@ -1,0 +1,148 @@
+<?php $this->headScript()->prependScript('var baseUrl = "'.$this->baseUrl().'";') ?>
+<?php $this->headScript()->appendFile($this->baseUrl().'/scripts/jquery-1.4.2.js') ?>
+<?php $this->headScript()->appendFile($this->baseUrl().'/scripts/gene/show.js') ?>
+
+
+<h1 style="margin-bottom:0.25em">
+    Observations on Gene: <?php echo $this->gene['symbol'] ?>
+</h1>
+<input type="hidden" id="ncbiGeneId" value="<?php echo $this->gene['ncbiGeneId'] ?>" />
+
+
+<div class="sidepane">
+    <div class="sidepane-header">
+        <div style="float:right; margin-right:6px; margin-top:3px">
+            <img src="<?php echo $this->baseUrl('images/hide.png') ?>" alt="" />
+        </div>
+        Observations on Homologs
+    </div>
+    <div class="sidepane-bottom">
+        <?php if (count($this->relatedHomologs) > 0): ?>
+            <?php echo $this->partial('tables/homologsSidepane.phtml',
+                    array('homologs' => $this->relatedHomologs)) ?>
+        <?php else: ?>
+            <p style="text-align:center">None found...</p>
+        <?php endif ?>
+    </div>
+</div>
+
+
+<div class="sidepane">
+    <div class="sidepane-header">
+        <div style="float:right; margin-right:6px; margin-top:3px">
+            <img src="<?php echo $this->baseUrl('images/hide.png') ?>" alt="" />
+        </div>
+        User Comments
+    </div>
+    <div class="sidepane-bottom">
+        <?php if (isset($this->commentForm)): ?>
+            <?php echo $this->commentForm ?>
+        <?php else: ?>
+            <p><em>Please <a href="<?php echo $this->baseUrl()."/account/login"
+                . "?destination=" . $this->url() ?>"
+                >login</a> to leave comments.</em></p>
+        <?php endif ?>
+
+        <?php echo $this->partial('comments.phtml',
+                array('comments' => $this->comments)) ?>
+    </div>
+</div>
+
+
+<div class="gene" style="margin-right:420px;">
+    <table class="verticalTable">
+        <tr>
+            <th>Species</th>
+            <td style="width:100%"><?php echo $this->escape($this->gene['species']) ?></td>
+        </tr>
+        <tr>
+            <th>Symbol</th>
+            <td><?php echo $this->escape($this->gene['symbol']) ?></td>
+        </tr>
+        <tr>
+            <th>Locus Tag</th>
+            <td><?php echo $this->escape($this->gene['locusTag']) ?></td>
+        </tr>
+        <tr>
+            <th>Synonyms</th>
+            <td>
+                <?php if (count($this->gene['synonyms']) > 0): ?>
+                    <?php echo $this->escape(join(', ', $this->synonyms)) ?>
+                <?php endif ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td><?php echo $this->escape($this->gene['description']) ?></td>
+        </tr>
+
+        <tr>
+            <th>Ncbi Gene</th>
+            <td>
+                <?php if (isset($this->gene['ncbiGeneId'])): ?>
+                    <a href="http://www.ncbi.nlm.nih.gov/gene/<?php
+                        echo $this->gene['ncbiGeneId'] ?>"
+                        ><?php echo $this->escape($this->gene['ncbiGeneId']) ?></a>
+                <?php endif ?>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Ncbi Protein</th>
+            <td>
+                <?php if (isset($this->gene['ncbiProteinId'])): ?>
+                    <a href="http://www.ncbi.nlm.nih.gov/protein/<?php 
+                        echo $this->gene['ncbiProteinId'] ?>"
+                        ><?php echo $this->escape($this->gene['ncbiProteinId']) ?></a>
+                <?php endif ?>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Links</th>
+            <td>
+                <?php foreach ($this->geneLinks as $label => $url): ?>
+                    <a href="<?php echo $url ?>"><?php echo $label ?></a>
+                <?php endforeach ?>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <h2>Lifespan Observations:</h2>
+    <div id="lifespanObservations">
+        <?php if (count($this->geneObservations) > 0): ?>
+            <?php echo $this->partial('tables/observation.phtml',
+                array('rows' => $this->geneObservations)); ?>
+        <?php else: ?>
+            <p>No lifespan observations for this gene.</p>
+        <?php endif ?>
+    </div>
+    <br />
+    <br />
+
+    <h2>Gene Annotations:</h2>
+    <div id="geneAnnotations">
+        <div class="collapsable" style="margin-top: 1em">
+            <h2 id="gosHeader" class="region collapseable collapsed">Gene Ontology</h2>
+            <div class="content"></div>
+        </div>
+
+        <div class="collapsable" style="margin-top: 1em">
+            <h2 id="ppodHomologsHeader" class="region collapseable collapsed">PPOD Homologs</h2>
+            <div class="content"></div>
+        </div>
+
+        <div class="collapsable" style="margin-top: 1em">
+            <h2 id="interactionsHeader" class="region collapseable collapsed">Protein-Protein Interactions</h2>
+            <div class="content"></div>
+        </div>
+
+        <div class="collapsable" style="margin-top: 1em">
+            <h2 id="substratesHeader" class="region collapseable collapsed">Protein Substrates</h2>
+            <div class="content"></div>
+        </div>
+    </div>
+</div>
+

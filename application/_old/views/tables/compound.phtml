@@ -1,0 +1,23 @@
+<table class="dataTable" style="width:100%">
+    <thead>
+        <tr>
+            <th>Compound</th>
+            <th>NCBI Compound ID</th>
+            <th>Observations</th>
+            <th style="text-align:center">More</th>
+        </tr>
+    </thead>
+
+    <?php foreach ($this->rows as $row): ?>
+        <tr>
+            <td><?php echo $this->escape($row['name']) ?></td>
+            <td><?php echo $this->escape($row['ncbiCompoundId']) ?></td>
+            <td><?php echo $this->escape($row['count']) ?></td>
+            <td style="text-align:center">
+                <a href="<?php echo $this->url(
+                    array('controller' => 'compounds', 'action' => 'show',
+                        'id' => $row['ncbiCompoundId'])) ?>">View</a>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>

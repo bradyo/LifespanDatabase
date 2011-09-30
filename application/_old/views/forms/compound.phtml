@@ -1,0 +1,13 @@
+<td>
+    <?php echo $this->form->id ?>
+    <span style="white-space:nowrap;">
+        <?php echo $this->form->ncbiCompoundId ?>
+        <a href="#" class="getCompoundName">get&nbsp;name</a>
+    </span>
+    <?php echo $this->form->ncbiCompoundId->renderErrors() ?>
+</td>
+<td><?php echo $this->form->name ?></td>
+<td><?php echo $this->form->quantity ?></td>
+<td style="text-align: center; padding-top:8px">
+    <?php echo $this->form->isDeleted ?>
+</td>
