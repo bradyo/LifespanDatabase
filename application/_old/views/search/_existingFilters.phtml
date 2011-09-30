@@ -1,0 +1,7 @@
+<?php foreach ($this->existingFilters as $fieldName => $filter): ?>
+    <div style="margin-bottom: 0.5em">
+        <?php echo $fieldName ?>:<br />
+        <a href="<?php echo $this->url(array('q' => $filter['q'])) ?>" class="remove"
+           ><?php echo $filter['label'] ?></a>
+    </div>
+<?php endforeach ?>

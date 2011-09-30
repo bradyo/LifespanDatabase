@@ -26,6 +26,12 @@ class Application_Model_Citation
     private $authors;
     
     /**
+     * @var string Full title of the publication.
+     * @Column(name="title", type="text")
+     */
+    private $title;
+    
+    /**
      * @var string Source information like the journal, name, and page.
      * @Column(name="source", type="text")
      */
@@ -60,6 +66,14 @@ class Application_Model_Citation
 
     public function setAuthors($authors) {
         $this->authors = $authors;
+    }
+    
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function setTitle($title) {
+        $this->title = $title;
     }
 
     public function getSource() {

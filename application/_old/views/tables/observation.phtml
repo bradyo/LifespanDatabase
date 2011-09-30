@@ -1,0 +1,72 @@
+<table class="dataTable" style="width:100%">
+    <thead>
+        <tr>
+            <th>Species</th>
+            <th>Interventions</th>
+            <th>Lifespan Effect</th>
+            <th style="text-align:center">More</th>
+        </tr>
+    </thead>
+
+    <?php foreach ($this->rows as $row): ?>
+        <tr>
+            <td>
+                <?php echo $this->escape($row['species']) ?>
+                <?php if (!empty($row['strain'])): ?>
+                    (<?php echo $this->escape($row['strain']) ?>)
+                <?php endif ?>
+            </td>
+            <td>
+                <ul>
+                    <?php foreach ($row['genes'] as $gene): ?>
+                        <li>
+                            Gene:
+                            <?php echo $this->escape($gene['symbol']) ?>
+                            <?php echo $this->escape($gene['alleleType']) ?>
+                        </li>
+                    <?php endforeach ?>
+
+                    <?php foreach ($row['compounds'] as $compound): ?>
+                        <li style="white-space: nowrap">
+                            Compound:
+                            <?php echo $this->escape($compound['name']) ?>
+                        </li>
+                    <?php endforeach ?>
+
+                    <?php foreach ($row['environments'] as $environment): ?>
+                        <li style="white-space: nowrap">
+                            Environment:
+                            <?php echo $this->escape($environment['type']) ?>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+            </td>
+            <td>
+                <?php if ($row['lifespanEffect'] == 'increased'): ?>
+                    <img src="<?php echo $this->baseUrl('images/up.png') ?>" alt=""
+                         style="float:right; margin-left:1em;"/>
+                <?php elseif ($row['lifespanEffect'] == 'decreased'): ?>
+                    <img src="<?php echo $this->baseUrl('images/down.png') ?>" alt=""
+                         style="float:right; margin-left:1em;"/>
+                <?php endif ?>
+
+                <?php if (!empty($row['lifespanEffect'])): ?>
+                    <?php echo $this->escape($row['lifespanEffect']) ?>
+                    <?php echo $this->escape($row['lifespanMeasure']) ?>
+                    <?php if (!empty($row['lifespanChange'])): ?>
+                        <?php echo round($row['lifespanChange'], 2) ?>%
+                    <?php endif ?>
+                    <?php if (!empty($row['lifespanUnits'])): ?>
+                        (<?php echo $this->escape($row['lifespanUnits']) ?>)
+                    <?php endif ?>
+
+                    
+                <?php endif ?>
+            </td>
+            <td style="text-align:center">
+                <a href="<?php echo $this->baseUrl() . '/observations/show/id/'
+                    . $row['id'] ?>">View</a>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>

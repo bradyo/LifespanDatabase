@@ -1,8 +1,11 @@
 <?php
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
- * @Entity
+ * @Entity 
  * @Table(name="species")
+ * @HasLifecycleCallbacks
  */
 class Application_Model_Species
 {
@@ -16,7 +19,7 @@ class Application_Model_Species
     
     /**
      * @var string Globally unique identifier.
-     * @Column(name="guid", type="string", length="32")
+     * @Column(name="guid", type="string", length="36")
      */
     private $guid;
     
@@ -47,6 +50,16 @@ class Application_Model_Species
     
     public function __construct() {
         $this->synonyms = new ArrayCollection();
+    }
+    
+    /** 
+     * Generate a unique GUID if needed
+     * @PrePersist 
+     */
+    public function generateGuid() {
+        if (empty($this->guid)) {
+            $this->guid = Application_Guid::generate();
+        }
     }
     
     public function getId() {
@@ -95,5 +108,14 @@ class Application_Model_Species
 
     public function setSynonyms($synonyms) {
         $this->synonyms = $synonyms;
+    }
+    
+    public function toArray() {
+        return array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'commonName' => $this->commonName,
+            'ncbiTaxonId' => $this->ncbiTaxonId,
+        );
     }
 }

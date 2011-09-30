@@ -1,0 +1,41 @@
+<table class="dataTable" style="width:100%">
+    <thead>
+        <tr>
+            <th>PPOD Family</th>
+            <th>Species</th>
+            <th>Gene Symbol</th>
+            <th>Protein</th>
+            <th>Observation</th>
+        </tr>
+    </thead>
+
+    <?php foreach ($this->rows as $row): ?>
+        <tr>
+            <td>
+                <a href="http://ppod.princeton.edu/cgi-bin/ppod.cgi/<?php
+                    echo $row['family'] ?>"
+                    ><?php echo $row['family'] ?></a>
+            </td>
+            <td><?php echo $row['species'] ?></td>
+            <td><?php echo $row['symbol'] ?></td>
+            <td>
+                <?php if ($row['proteinDatabase'] == 'UniProtKB'): ?>
+                    <a href="http://www.uniprot.org/uniprot/<?php echo $row['proteinId'] ?>"
+                       ><?php echo $row['proteinId'] ?></a>
+                <?php elseif ($row['proteinDatabase'] == 'NCBI'): ?>
+                    <a href="http://www.ncbi.nlm.nih.gov/protein/<?php echo $row['proteinId'] ?>"
+                       ><?php echo $row['proteinId'] ?></a>
+                <?php else: ?>
+                    <?php echo $row['proteinId'] ?>
+                <?php endif ?>
+            </td>
+            <td>
+                <?php if (isset($row['homologGeneId'])): ?>
+                    <a href="<?php echo $this->baseUrl('genes/show').'/id/'
+                        .$row['homologNcbiGeneId'] ?>"
+                        ><?php echo $row['homologNcbiGeneId'] ?></a>
+                <?php endif ?>
+            </td>
+        </tr>
+    <?php endforeach ?>
+</table>

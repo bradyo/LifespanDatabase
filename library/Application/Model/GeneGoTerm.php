@@ -38,7 +38,7 @@ class Application_Model_GeneGoTerm
     
     /**
      * @var string Category of term
-     * @Column(name="go_id", type="string", length="64")
+     * @Column(name="category", type="string", length="64")
      */
     private $category;
     

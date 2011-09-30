@@ -1,0 +1,27 @@
+<h1>Advanced Search</h1>
+
+<div class="sidepane">
+    <div class="sidepane-header">Search History</div>
+    <div class="sidepane-bottom">
+        <p>Click the saved searches below to add the data to add their values 
+            to the search form.</p>
+        <?php if (count($this->savedSearches) > 0): ?>
+            <ol style="margin-top: 0.5em">
+            <?php foreach ($this->savedSearches as $search): ?>
+                <li style="margin-left:1.625em; margin-bottom: 0.5em">
+                    <a href="<?php echo $this->baseUrl('search/advanced').'?t=&q='.urlencode($search) ?>"
+                       ><?php echo $search ?></a>
+                </li>
+            <?php endforeach ?>
+            </ol>
+            <p style="padding: 10px; text-align:center">
+                <a href="<?php echo $this->baseUrl('search/clear') ?>"
+                   >Clear history</a>
+            </p>
+        <?php else: ?>
+            <p>No saved search history...</p>
+        <?php endif ?>
+    </div>
+</div>
+
+<?php echo $this->form ?>

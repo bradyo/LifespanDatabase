@@ -1,0 +1,21 @@
+<?php
+
+/* @var $observation Application_Model_Observation */
+$observation = $this->observation;
+
+$author = $observation->getAuthor();
+$authorData = array(
+    'id' => $author->getId(),
+    'username' => $author->getUsername(),
+    'name' => $author->getName(),
+);
+
+$data = array(
+    'id' => $observation->getId(),
+    'guid' => $observation->getGuid(),
+    'lifespanEffect' => $observation->getLifespanEffect(),
+    'author' => $authorData,
+    
+);
+
+$serializer = new Application_EntitySerializer($em);

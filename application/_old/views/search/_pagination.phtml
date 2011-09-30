@@ -1,0 +1,35 @@
+<div class="pagination" style="display:inline">
+    <?php if ($this->pager->getLastPage() < 2): ?>
+        Page 1 of 1
+    <?php else: ?>
+
+        <?php if ($this->pager->getPage() != $this->pager->getFirstPage()): ?>
+            <a href="<?php echo $this->baseUrl('search'),
+                '?t=', urlencode($this->type),
+                '&q=', urlencode($this->queryString),
+                '&p=', $this->pager->getPreviousPage()
+                ?>">Previous</a>
+        <?php endif ?>
+
+        <form action="<?php echo $this->baseUrl('search') ?>"
+              method="get" style="display:inline">
+            <input type="hidden" name="t"
+                   value="<?php echo $this->escape($this->type) ?>" />
+            <input type="hidden" name="q"
+                   value="<?php echo $this->escape($this->queryString) ?>" />
+            Page
+            <?php echo $this->formText('p', $this->pager->getPage(), array('size' => '3')) ?>
+            of
+            <?php echo $this->pager->getLastPage() ?>
+        </form>
+
+        <?php if ($this->pager->getPage() != $this->pager->getLastPage()): ?>
+            <a href="<?php echo $this->baseUrl('search'),
+                '?t=', urlencode($this->type),
+                '&q=', urlencode($this->queryString),
+                '&p=', $this->pager->getNextPage()
+                ?>">Next</a>
+        <?php endif ?>
+
+    <?php endif ?>
+</div>

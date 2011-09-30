@@ -48,14 +48,6 @@ class Application_Model_ObservationGene
         $this->id = $id;
     }
 
-    public function getObservation() {
-        return $this->observation;
-    }
-
-    public function setObservation($observation) {
-        $this->observation = $observation;
-    }
-
     public function getGene() {
         return $this->gene;
     }
@@ -79,4 +71,15 @@ class Application_Model_ObservationGene
     public function setAllele($allele) {
         $this->allele = $allele;
     }
+    
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    public function setObservation($observation) {
+        $this->observation = $observation;
+    }
+
+
+    
 }

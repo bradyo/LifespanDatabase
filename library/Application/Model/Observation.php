@@ -25,7 +25,7 @@ class Application_Model_Observation
 
     /**
      * @var string Globally unique identifier (conserved across versions).
-     * @Column(name="guid", type="string")
+     * @Column(name="guid", type="string", length="36")
      */
     private $guid;
     
@@ -104,13 +104,7 @@ class Application_Model_Observation
      * @Column(name="created_at", type="datetime")
      */
     private $createdAt;
-    
-    /**
-     * @var DateTime When this version of the observation was created.
-     * @Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
-        
+          
     /**
      * @OneToOne(targetEntity="Application_Model_Citation")
      * @JoinColumn(name="citation_id", referencedColumnName="id")
@@ -232,6 +226,7 @@ class Application_Model_Observation
         $this->geneInterventions = new ArrayCollection();
         $this->compoundInterventions = new ArrayCollection();
         $this->environmentInterventions = new ArrayCollection();
+        $this->version = 1;
     }
         
     /** 
@@ -239,13 +234,22 @@ class Application_Model_Observation
      * to allow for more efficient queries.
      * @PrePersist 
      */
-    private function updateInterventionCounts() {
+    public function updateInterventionCounts() {
         $this->geneCount = count($this->geneInterventions);
         $this->compoundCount = count($this->compoundInterventions);
         $this->environmentCount = count($this->environmentInterventions);
     }
     
-    
+    /** 
+     * Generate a unique GUID if needed
+     * @PrePersist 
+     */
+    public function generateGuid() {
+        if (empty($this->guid)) {
+            $this->guid = Application_Guid::generate();
+        }
+    }
+     
     public function getId() {
         return $this->id;
     }
@@ -310,6 +314,9 @@ class Application_Model_Observation
         $this->authoredAt = $authoredAt;
     }
 
+    /**
+     * @return Application_Model_Author
+     */
     public function getAuthor() {
         return $this->author;
     }
@@ -356,14 +363,6 @@ class Application_Model_Observation
 
     public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
-    }
-
-    public function getUpdatedAt() {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt($updatedAt) {
-        $this->updatedAt = $updatedAt;
     }
 
     public function getCitation() {

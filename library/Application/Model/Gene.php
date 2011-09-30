@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity
  * @Table(name="gene")
+ * @HasLifecycleCallbacks
  */
 class Application_Model_Gene 
 {
@@ -85,6 +86,16 @@ class Application_Model_Gene
         $this->links = new ArrayCollection();
         $this->goTerms = new ArrayCollection();
         $this->homologs = new ArrayCollection();
+    }
+    
+    /** 
+     * Generate a unique GUID if needed
+     * @PrePersist 
+     */
+    public function generateGuid() {
+        if (empty($this->guid)) {
+            $this->guid = Application_Guid::generate();
+        }
     }
     
     public function getId() {

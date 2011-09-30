@@ -1,0 +1,68 @@
+<?php
+$totalPages = $this->pager->getLastPage();
+$currentPage = $this->pager->getPage();
+
+// calculate range
+$delta = 5;
+$minPage = $currentPage - $delta;
+if ($minPage < 1) {
+    $minPage = 1;
+}
+$maxPage = $currentPage + $delta;
+if ($maxPage > $totalPages) {
+    $maxPage = $totalPages;
+}
+if ($maxPage < 2 * $delta + 1) {
+    $maxPage = 2 * $delta + 1;
+}
+if ($maxPage > $totalPages) {
+    $maxPage = $totalPages;
+}
+?>
+
+<?php if ($totalPages > 1): ?>
+    <div class="pagination">
+        <?php if ($currentPage > 1): ?>
+            <a href="<?php echo $this->url(array('p' => $currentPage - 1)) ?>"
+                >&lt; Prev</a>
+        <?php endif ?>
+
+        <?php if ($totalPages >= 1): ?>
+            <?php if ($currentPage == 1): ?>
+                <span class="currentPage">1</span>
+            <?php else: ?>
+                <a href="<?php echo $this->url(array('p' => 1)) ?>"
+                   >1</a>
+           <?php endif ?>
+        <?php endif ?>
+
+        <?php if ($totalPages >= 2): ?>
+            <?php if ($currentPage == 2): ?>
+                <span class="currentPage">2</span>
+            <?php else: ?>
+            <a href="<?php echo $this->url(array('p' => 2)) ?>"
+                >2</a>
+            <?php endif ?>
+        <?php endif ?>
+
+        <?php if ($minPage > 3): ?>
+            <span class="noBorder">...</span>
+        <?php endif ?>
+
+        <?php for ($iPage = max(3, $minPage); $iPage <= $maxPage; $iPage++): ?>
+            <?php if ($currentPage == $iPage): ?>
+                <span class="currentPage"><?php echo $iPage ?></span>
+            <?php else: ?>
+            <a href="<?php echo $this->url(array('p' => $iPage)) ?>"
+                ><?php echo $iPage ?></a>
+            <?php endif ?>
+        <?php endfor ?>
+
+        <?php if ($currentPage < $totalPages): ?>
+            <a href="<?php echo $this->url(array('p' => $currentPage + 1)) ?>"
+               >Next &gt;</a>
+        <?php endif ?>
+
+        <div class="clear"></div>
+    </div>
+<?php endif ?>

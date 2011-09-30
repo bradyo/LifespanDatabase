@@ -88,7 +88,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $config->setProxyNamespace('Proxies');
         $config->setAutoGenerateProxyClasses(true);
         
-        $driver = $config->newDefaultAnnotationDriver(APPLICATION_PATH . '/models');
+        $driver = $config->newDefaultAnnotationDriver(BASE_PATH . '/library/Application/Model');
         $config->setMetadataDriverImpl($driver);
         
         $cache = new \Doctrine\Common\Cache\ArrayCache;

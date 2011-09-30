@@ -3,6 +3,7 @@
 /**
  * @Entity
  * @Table(name="strain")
+ * @HasLifecycleCallbacks
  */
 class Application_Model_Strain
 {
@@ -14,7 +15,7 @@ class Application_Model_Strain
     
     /**
      * @var string Globally unique identifier.
-     * @Column(name="guid", type="string", length="32")
+     * @Column(name="guid", type="string", length="36")
      */
     private $guid;
     
@@ -37,6 +38,16 @@ class Application_Model_Strain
      */
     private $commonName;
     
+    
+    /** 
+     * Generates a unique GUID.
+     * @PrePersist  
+     */
+    public function generateGuid() {
+        if (empty($this->guid)) {
+            $this->guid = Application_Guid::generate();
+        }
+    }
     
     public function getId() {
         return $this->id;

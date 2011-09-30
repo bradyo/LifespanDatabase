@@ -191,7 +191,7 @@ class Application_Model_User
      * Methods
      * =======================================================================
      */
-    
+
     public function setPassword($password) {
         $salt = sha1(time());
         $this->passwordAlgorithm = 'sha1';
@@ -224,15 +224,6 @@ class Application_Model_User
             return $this->name;
         } else {
             return $this->username;
-        }
-    }
-
-    public function getRole()
-    {
-        if ($this->id == null) {
-            return self::ROLE_GUEST;
-        } else {
-            return $this->_get('role');
         }
     }
 

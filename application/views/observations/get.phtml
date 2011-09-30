@@ -1,0 +1,242 @@
+<?php
+
+/* @var $observation Application_Model_Observation */
+$observation = $this->observation;
+
+$serializer = new Application_EntitySerializer(Application_Registry::getEm());
+$data = $serializer->toJson($observation);
+
+print_r($data);
+die();
+
+?>
+
+<h1 style="margin-bottom:0.25em; display:none;">Observation <?php echo $observation->getId() ?></h1>
+
+<div class="sidepane sidepane-export">
+    <div style="text-align:center">
+        <strong>Export:</strong>
+        <a href="<?php echo $this->url(array('action' => 'export', 'format' => 'csv')) ?>">CSV</a>
+        <a href="<?php echo $this->url(array('action' => 'export', 'format' => 'xml')) ?>">XML</a>
+        <a href="<?php echo $this->url(array('action' => 'export', 'format' => 'yml')) ?>">YAML</a>
+    </div>
+</div>
+
+<?php if ($this->canEdit): ?>
+    <div class="sidepane sidepane-export">
+        <div style="text-align:center">
+            <strong>Changes:</strong>
+            <a class="action" href="<?php echo $this->url(
+                array('action' => 'edit', 'id' => $this->observation->id)
+                ) ?>">Edit</a>
+            <a class="action" href="<?php echo $this->url(
+               array('action' => 'revisions', 'id' => $this->observation->id)
+               ) ?> ">Revisions
+            <?php if ($this->pendingRevisionsCount > 0): ?>
+               (<?php echo $this->pendingRevisionsCount ?> pending)
+            <?php endif ?>
+            </a>
+        </div>
+    </div>
+<?php endif ?>
+
+
+<?php if (count($this->relatedObservations) > 0): ?>
+    <div class="sidepane">
+        <div class="sidepane-header">Related Observations</div>
+        <div class="sidepane-bottom">
+            <?php foreach ($this->relatedObservations as $row): ?>
+                <a href="<?php echo $this->baseUrl($row['page']) . '?' . $row['params']  ?>"
+                   ><?php echo $row['label'] ?></a> (<?php echo $row['count'] ?>)
+                   <br />
+            <?php endforeach ?>
+        </div>
+    </div>
+<?php endif ?>
+
+
+<div class="sidepane">
+    <div class="sidepane-header">User Comments</div>
+    <div class="sidepane-bottom">
+        <?php if (isset($this->commentForm)): ?>
+            <?php echo $this->commentForm ?>
+        <?php else: ?>
+            <p><em>Please <a href="<?php echo $this->baseUrl()."/account/login"
+                . "?destination=" . $this->url() ?>"
+                >login</a> to leave comments.</em></p>
+        <?php endif ?>
+
+        <?php //echo $this->partial('comments.phtml', array('comments' => $this->comments)) ?>
+    </div>
+</div>
+
+<div style="width:auto; margin-right:420px">
+    <table class="verticalTable">
+        <tr>
+            <th>Observation ID</th>
+            <td style="width:100%"><?php echo $this->observation->id ?></td>
+        </tr>
+        <tr>
+            <th>Species</th>
+            <td style="width:100%"><?php echo $this->escape($this->observation->species) ?></td>
+        </tr>
+        <tr>
+            <th>Strain</th>
+            <td><?php echo $this->escape($this->observation->strain) ?></td>
+        </tr>
+        <?php if (!empty($this->observation->matingType)): ?>
+            <tr>
+                <th>
+                    <?php if ($this->observation->species == 'Saccharomyces cerevisiae'): ?>
+                        Mating Type
+                    <?php else: ?>
+                        Sex
+                    <?php endif ?>
+                </th>
+                <td><?php echo $this->escape($this->observation->matingType) ?></td>
+            </tr>
+        <?php endif ?>
+        <?php if (!empty($this->observation->cellType)): ?>
+            <tr>
+                <th>Cell Type</th>
+                <td><?php echo $this->escape($this->observation->cellType) ?></td>
+            </tr>
+        <?php endif ?>
+        <?php if (!empty($this->observation->temperature)): ?>
+            <tr>
+                <th>Temperature</th>
+                <td><?php echo round($this->observation->temperature, 2) ?></td>
+            </tr>
+        <?php endif ?>
+
+         <tr>
+            <th>Lifespans</th>
+            <td>
+								<?php if (!empty($this->observation->lifespan)): ?>
+		              <?php echo round($this->observation->lifespan, 2) ?>
+		              <?php echo $this->escape($this->observation->lifespanUnit) ?>
+
+		              <?php if (!empty($this->observation->lifespanBase)): ?>
+		                  / 
+		                  <?php echo round($this->observation->lifespanBase, 2) ?>
+		                  <?php echo $this->escape($this->observation->lifespanUnit) ?>
+		              <?php endif ?>
+								<?php endif ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Lifespan Effect</th>
+            <td>
+                <?php if (!empty($this->observation->lifespanEffect)): ?>
+                    <?php echo $this->escape($this->observation->lifespanEffect) ?>
+                    <?php echo $this->escape($this->observation->lifespanMeasure) ?>
+                    <?php if (!empty($this->observation->lifespanChange)): ?>
+                        <?php echo round($this->observation->lifespanChange, 2) ?>%
+                    <?php endif ?>
+                <?php endif ?>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Citation</th>
+            <td>
+                <?php if (isset($this->observation->citationAuthor)): ?>
+                    <?php echo $this->escape($this->observation->citationAuthor) ?>.
+                    (<?php echo $this->escape($this->observation->citationYear) ?>).
+                    <u><?php echo $this->escape($this->observation->citationTitle) ?></u>.
+                    <?php echo $this->escape($this->observation->citationSource) ?>.
+                    <?php if (isset($this->observation->citationPubmedId)): ?>
+                        <a class="grayed-anchor" href="http://www.ncbi.nlm.nih.gov/pubmed/<?php
+                            echo $this->observation->citationPubmedId ?>"
+                           >[pubmed]</a>
+                    <?php endif ?>
+                <?php endif ?>
+            </td>
+        </tr>
+
+
+        <tr>
+            <th>Details</th>
+            <td>
+                <div class="details">
+                    <?php echo $this->observation->body ?>
+                </div>
+            </td>
+        </tr>
+     
+       
+    </table>
+
+    <?php if (count($this->observation->genes) > 0): ?>
+        <h2 style="margin-top:1em">Gene Interventions:</h2>
+        <table class="dataTable" style="width:auto">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Allele</th>
+                    <th>Allele Type</th>
+                    <th>NCBI Gene ID</th>
+                    <th style="text-align:center">More</th>
+                </tr>
+            </thead>
+            <?php foreach ($this->observation->genes as $gene): ?>
+                <tr>
+                    <td><?php echo $this->escape($gene->symbol) ?></td>
+                    <td><?php echo $gene->allele ?></td>
+                    <td><?php echo $gene->alleleType ?></td>
+                    <td><?php echo $gene->ncbiGeneId ?></td>
+                    <td style="text-align:center">
+                        <?php if (!empty($gene->ncbiGeneId)): ?>
+                        <a href="<?php echo $this->baseUrl() . '/genes/show/id/'
+                           . $gene->ncbiGeneId ?>"
+                           >View</a>
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    <?php endif ?>
+
+    <?php if (count($this->observation->compounds) > 0): ?>
+        <h2 style="margin-top:1em">Compound Interventions</h2>
+        <table class="dataTable" style="width:auto">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Ncbi Id</th>
+                </tr>
+            </thead>
+            <?php foreach ($this->observation->compounds as $compound): ?>
+                <tr>
+                    <td><?php echo $this->escape($compound->name) ?></td>
+                    <td><?php echo $this->escape($compound->quantity) ?></td>
+                    <td>
+                        <a href="<?php echo $this->baseUrl()
+                            . '/compounds/show/id/' . $compound->ncbiCompoundId ?>"
+                            ><?php echo $compound->ncbiCompoundId ?></a>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    <?php endif ?>
+
+
+    <?php if (count($this->observation->environments) > 0): ?>
+        <h2 style="margin-top:1em">Environment Interventions</h2>
+        <table class="dataTable" style="width:auto">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Body</th>
+                </tr>
+            </thead>
+            <?php foreach ($this->observation->environments as $environment): ?>
+                <tr>
+                    <td><?php echo $this->escape($environment->type) ?></td>
+                    <td><?php echo $this->escape($environment->body) ?></td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+    <?php endif ?>
+</div>
