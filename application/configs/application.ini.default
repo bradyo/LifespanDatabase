@@ -1,75 +1,48 @@
 [production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+phpSettings.memory_limit = 1024M;
 
-	phpSettings.display_startup_errors = 0
-	phpSettings.display_errors = 0
-	phpSettings.memory_limit = 1024M;
+includePaths.library = APPLICATION_PATH "/../library"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
 
-	includePaths.library = APPLICATION_PATH "/../library"
-	bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
-	bootstrap.class = "Bootstrap"
-	appnamespace = "Application"
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 0
 
-	autoloaderNamespaces[] = "Sageweb"
-	autoloaderNamespaces[] = "Doctrine"
+resources.multidb.db.default = true
+resources.multidb.db.adapter = PDO_MYSQL
+resources.multidb.db.host = localhost
+resources.multidb.db.dbname = agingdb
+resources.multidb.db.username = username
+resources.multidb.db.password = password
+resources.multidb.db.params.charset = "UTF-8"
 
-	resources.session.save_path = APPLICATION_PATH "/../data/session"
-	resources.session.use_only_cookies = true
-	resources.session.remember_me_seconds = 864000
+resources.multidb.ncbiDb.adapter = PDO_MYSQL
+resources.multidb.ncbiDb.host = localhost
+resources.multidb.ncbiDb.dbname = ncbi
+resources.multidb.ncbiDb.username = username
+resources.multidb.ncbiDb.password = password
+resources.multidb.ncbiDb.params.charset = "UTF-8"
 
-	resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
-	resources.frontController.params.displayExceptions = 0
-	resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts/"
-	resources.view[] =
-	resources.view.helperPath = APPLICATION_PATH "/views/helpers"
-
-	resources.multidb.db.default = true
-	resources.multidb.db.adapter = PDO_MYSQL
-	resources.multidb.db.host = localhost
-	resources.multidb.db.dbname = sagewebo_agingdb
-	resources.multidb.db.username = changeme
-	resources.multidb.db.password = changeme
-
-	resources.multidb.ncbiDb.adapter = PDO_MYSQL
-	resources.multidb.ncbiDb.host = localhost
-	resources.multidb.ncbiDb.dbname = sagewebo_ncbi
-	resources.multidb.ncbiDb.username = changeme
-	resources.multidb.ncbiDb.password = changeme
-
-	resources.multidb.ppodDb.adapter = PDO_MYSQL
-	resources.multidb.ppodDb.host = localhost
-	resources.multidb.ppodDb.dbname = sagewebo_ppod
-	resources.multidb.ppodDb.username = changeme
-	resources.multidb.ppodDb.password = changeme
-
-	doctrine.dsn = "mysql://sagewebo_agingdb:changeme@localhost/sagewebo_agingdb"
-	doctrine.models_path = APPLICATION_PATH "/models/orm"
-	doctrine.data_fixtures_path = APPLICATION_PATH "/../doctrine/data/fixtures"
-	doctrine.sql_path = APPLICATION_PATH "/../doctrine/data/migrations"
-	doctrine.migrations_path = APPLICATION_PATH "/../doctrine/migrations"
-	doctrine.yaml_schema_path = APPLICATION_PATH "/../doctrine/schema"
-
-
-
-[staging : production]
-
-	phpSettings.display_startup_errors = 1
-	phpSettings.display_errors = 1
-
+resources.multidb.ppodDb.adapter = PDO_MYSQL
+resources.multidb.ppodDb.host = localhost
+resources.multidb.ppodDb.dbname = ppod
+resources.multidb.ppodDb.username = username
+resources.multidb.ppodDb.password = password
+resources.multidb.ppodDb.params.charset = "UTF-8"
 
 
 [testing : production]
-
-	phpSettings.display_startup_errors = 1
-	phpSettings.display_errors = 1
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
 
 
 
 [development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
 
-	phpSettings.display_startup_errors = 1
-	phpSettings.display_errors = 1
-
-	baseHttp = "http://agingdb"
-
-	resources.frontController.params.displayExceptions = 1
+resources.frontController.params.displayExceptions = 1
 
