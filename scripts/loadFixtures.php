@@ -61,7 +61,7 @@ $em->persist($citation);
 
 // create a few varying entries
 for ($i = 1; $i <= 3; $i++) {
-    $day = 20 + i;
+    $day = 20 + $i;
     $creationDate = new DateTime('2010-04-'.$day.' 10:24:1', new DateTimeZone('America/Los_Angeles'));
     
     $observation = new Application_Model_Observation();

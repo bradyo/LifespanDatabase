@@ -13,6 +13,7 @@ class Application_Model_MatingTypes
             return $this->getFlyChoices();
         }
         return array(
+            '' => null,
             'male' => 'Male',
             'female' => 'Female',
             'hermaphrodite' => 'Hermaphrodite',
@@ -24,6 +25,7 @@ class Application_Model_MatingTypes
      
     public function getMammalChoices() {
         return array(
+            '' => null,
             'male' => 'Male',
             'female' => 'Female',
         );
@@ -31,6 +33,7 @@ class Application_Model_MatingTypes
     
     public function getWormChoices() {
         return array(
+            '' => null,
             'male' => 'Male',
             'female' => 'Female',
             'hermaphrodite' => 'Hermaphrodite',
@@ -39,6 +42,7 @@ class Application_Model_MatingTypes
     
     public function getFlyChoices() {
         return array(
+            '' => null,
             'male' => 'Male',
             'female' => 'Female',
         );
@@ -46,6 +50,7 @@ class Application_Model_MatingTypes
     
     public function getYeastChoices() {
         return array(
+            '' => null,
             'mata' => 'MATa',
             'matalpha' => 'MATalpha',
             'diploid' => 'Diploid',

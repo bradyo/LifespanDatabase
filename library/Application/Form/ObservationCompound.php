@@ -1,6 +1,6 @@
 <?php
 
-class Application_Form_ObservationCompound extends Zend_Form_SubForm
+class Application_Form_ObservationFormCompound extends Zend_Form_SubForm
 {
     public function init()
     {

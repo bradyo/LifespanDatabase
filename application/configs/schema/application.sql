@@ -102,14 +102,14 @@ CREATE TABLE IF NOT EXISTS compound_synonym (
 CREATE TABLE IF NOT EXISTS gene (
     id INT AUTO_INCREMENT PRIMARY KEY,
     guid CHAR(36) NOT NULL,
-    species_id INT,
+    species VARCHAR(128),
     symbol VARCHAR(64),
     locus_tag VARCHAR(64),
     description VARCHAR(255),
     ncbi_gene_id INT,
     ncbi_protein_id INT,
     INDEX (guid),
-    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL,
+    INDEX (species),
     INDEX (symbol),
     INDEX (locus_tag),
     INDEX (ncbi_gene_id),
@@ -263,8 +263,8 @@ CREATE TABLE IF NOT EXISTS observation (
     lifespan_change DOUBLE,
     lifespan_effect VARCHAR(64),
     lifespan_measure VARCHAR(64),
-    species_id INT,
-    strain_id INT,
+    species VARCHAR(128),
+    strain VARCHAR(128),
     cell_type VARCHAR(64),
     mating_type VARCHAR(64),
     temperature DECIMAL(5,2),
@@ -291,13 +291,13 @@ CREATE TABLE IF NOT EXISTS observation (
     INDEX (lifespan_change),
     INDEX (lifespan_effect),
     INDEX (lifespan_measure),
-    FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL,
-    FOREIGN KEY (strain_id) REFERENCES strain (id) ON DELETE SET NULL,
+    INDEX (species),
+    INDEX (strain),
     INDEX (cell_type),
     INDEX (mating_type),
     INDEX (temperature),
     FOREIGN KEY (citation_id) REFERENCES citation (id) ON DELETE SET NULL,
-    INDEX (gene_count),
+    INDEX (gene_count),FOREIGN KEY (citation_id) REFERENCES citation (id) ON DELETE SET NULL,
     INDEX (compound_count),
     INDEX (environment_count)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -306,10 +306,12 @@ CREATE TABLE IF NOT EXISTS observation_gene (
     id INT AUTO_INCREMENT PRIMARY KEY,
     observation_id INT NOT NULL,
     gene_id INT,
+    symbol VARCHAR(64),
     allele_type VARCHAR(64),
     allele VARCHAR(64),
     FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
-    FOREIGN KEY (gene_id) REFERENCES gene (id) ON DELETE SET NULL,    
+    FOREIGN KEY (gene_id) REFERENCES gene (id) ON DELETE SET NULL,
+    INDEX (symbol),
     INDEX (allele_type),
     INDEX (allele)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -318,9 +320,11 @@ CREATE TABLE IF NOT EXISTS observation_compound (
     id INT AUTO_INCREMENT PRIMARY KEY,
     observation_id INT NOT NULL,
     compound_id INT,
+    name VARCHAR(128),
     quantity VARCHAR(64),
     FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
     FOREIGN KEY (compound_id) REFERENCES compound (id) ON DELETE SET NULL,
+    INDEX (name),
     INDEX (quantity)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
@@ -328,9 +332,11 @@ CREATE TABLE IF NOT EXISTS observation_environment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     observation_id INT NOT NULL,
     environment_id INT,
+    name VARCHAR(64),
     description TEXT,
     FOREIGN KEY (observation_id) REFERENCES observation (id) ON DELETE CASCADE,
-    FOREIGN KEY (environment_id) REFERENCES environment (id) ON DELETE SET NULL
+    FOREIGN KEY (environment_id) REFERENCES environment (id) ON DELETE SET NULL,
+    INDEX (name)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 

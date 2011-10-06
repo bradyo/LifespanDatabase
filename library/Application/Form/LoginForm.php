@@ -1,6 +1,6 @@
 <?php
 
-class Application_Form_Login extends Zend_Form
+class Application_Form_LoginForm extends Zend_Form
 {
     public function init() {
         $this->setMethod('post');

@@ -28,8 +28,14 @@ class Application_Model_ObservationGene
     private $gene;
     
     /**
+     * @var string Gene symbol.
+     * @Column(name="symbol", type="string", length="64")
+     */
+    private $symbol;
+    
+    /**
      * @var string
-     * @Column(name="allele_type", type="string")
+     * @Colu*mn(name="allele_type", type="string")
      */
     private $alleleType;
     
@@ -55,6 +61,14 @@ class Application_Model_ObservationGene
     public function setGene($gene) {
         $this->gene = $gene;
     }
+    
+    public function getSymbol() {
+        return $this->symbol;
+    }
+
+    public function setSymbol($symbol) {
+        $this->symbol = $symbol;
+    }
 
     public function getAlleleType() {
         return $this->alleleType;
@@ -79,7 +93,4 @@ class Application_Model_ObservationGene
     public function setObservation($observation) {
         $this->observation = $observation;
     }
-
-
-    
 }

@@ -186,12 +186,6 @@ class Application_Model_User
     }
 
 
-    /**
-     * =======================================================================
-     * Methods
-     * =======================================================================
-     */
-
     public function setPassword($password) {
         $salt = sha1(time());
         $this->passwordAlgorithm = 'sha1';

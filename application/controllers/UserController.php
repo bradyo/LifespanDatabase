@@ -5,7 +5,7 @@ class UserController extends Zend_Controller_Action
     public function loginAction() {
         $destination = $this->getRequest()->getParam('destination', null);
 
-        $form = new Application_Form_Login();
+        $form = new Application_Form_LoginForm();
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getParams())) {
                 $auth = Zend_Auth::getInstance();
