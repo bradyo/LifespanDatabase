@@ -148,16 +148,14 @@ class Application_Model_Observation
     private $lifespanMeasure;
     
     /**
-     * @var Application_Model_Species Species used in observation.
-     * @OneToOne(targetEntity="Application_Model_Species")
-     * @JoinColumn(name="species_id", referencedColumnName="id")
+     * @var string Full species name.
+     * @Column(name="species", type="string", length="128")
      */
     private $species;
     
     /**
-     * @var Application_Model_Strain Strain used in observation.
-     * @OneToOne(targetEntity="Application_Model_Strain")
-     * @JoinColumn(name="strain_id", referencedColumnName="id")
+     * @var string Full strain name.
+     * @Column(name="strain", type="string", length="128")
      */
     private $strain;
     
@@ -314,9 +312,6 @@ class Application_Model_Observation
         $this->authoredAt = $authoredAt;
     }
 
-    /**
-     * @return Application_Model_Author
-     */
     public function getAuthor() {
         return $this->author;
     }
@@ -516,5 +511,4 @@ class Application_Model_Observation
     public function setEnvironmentCount($environmentCount) {
         $this->environmentCount = $environmentCount;
     }
-    
 }

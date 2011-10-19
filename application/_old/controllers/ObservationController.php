@@ -154,7 +154,7 @@ class ObservationController extends Zend_Controller_Action
         $identity = Zend_Auth::getInstance()->getIdentity();
         $canPublish = ($identity->is_moderator == '1') ? true : false;
 
-        $form = new Application_Form_Observation($canPublish);
+        $form = new Application_Form_ObservationForm($canPublish);
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getParams())) {
                 $values = $this->getFilteredFormValues($form->getValues());
@@ -196,7 +196,7 @@ class ObservationController extends Zend_Controller_Action
         $identity = Zend_Auth::getInstance()->getIdentity();
         $canPublish = ($identity->is_moderator == '1') ? true : false;
 
-        $form = new Application_Form_Observation($canPublish);
+        $form = new Application_Form_ObservationForm($canPublish);
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getParams())) {
                 $values = $this->getFilteredFormValues($form->getValues());
@@ -376,7 +376,7 @@ class ObservationController extends Zend_Controller_Action
         $isModerator = $identity->is_moderator;
 
         if ($revision->status == 'pending' && $isModerator) {
-            $form = new Application_Form_ObservationRevision();
+            $form = new Application_Form_ObservationFormRevision();
             if ($this->getRequest()->isPost()) {
                 if ($form->isValid($this->getRequest()->getParams())) {
                     $values = $form->getValues();

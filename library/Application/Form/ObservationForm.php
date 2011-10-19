@@ -1,58 +1,89 @@
 <?php
 
-/**
- * Description of Observation
- *
- * @author brady
- */
-class Application_Form_Observation extends Zend_Form
+class Application_Form_ObservationForm extends Zend_Form
 {
-    private $_canPublish;
-
-    public function __construct($canPublish = null)
-    {
-        $this->_canPublish = ($canPublish === true) ? true : false;
-        parent::__construct();
+    /**
+     * The user editing the form.
+     * @var Application_Model_User
+     */
+    private $user;
+    
+    /**
+     * @var Application_Model_LifespanEffects
+     */
+    private $lifespanEffects;
+    
+    /**
+     * @var Application_Model_LifespanMeasures
+     */
+    private $lifespanMeasures;
+    
+    /**
+     * @var Application_Model_LifespanUnits
+     */
+    private $lifespanUnits;
+    
+    /**
+     * @var Application_Model_MatingTypes
+     */
+    private $matingTypes;
+    
+    
+    /**
+     * @param Application_Model_User $user
+     * @param array $options 
+     */
+    public function __construct($user, $options = null) {
+        parent::__construct($options);
+        $this->user = $user;
+        
+        $this->lifespanEffects = new Application_Model_LifespanEffects();
+        $this->lifespanMeasures = new Application_Model_LifespanMeasures();
+        $this->lifespanUnits = new Application_Model_LifespanUnits();
+        $this->matingTypes = new Application_Model_MatingTypes();
     }
 
-    public function canPublish()
-    {
-        return $this->_canPublish;
-    }
-
-    public function init()
-    {
-        $this->setMethod(Zend_Form::METHOD_POST);
-        $this->setAction('');
-
-        $this->initBaseElements();
-        $this->initLifespanElements();
-        $this->initCitationElements();
-
-        $this->addSubForm(new Zend_Form_SubForm(), 'genes');
-        $this->addSubForm(new Zend_Form_SubForm(), 'compounds');
-        $this->addSubForm(new Zend_Form_SubForm(), 'environments');
-
-        if ($this->_canPublish === true) {
-            $this->initPublishElements();
+    public function init() {
+        $this->addBaseElements();
+        $this->addLifespanElements();
+        $this->addCitationElements();
+        $this->addInterventionSubForms();
+        
+        if ($this->user->isModerator()) {
+            $this->addReviewerFields();
         }
-
+        
         $this->addElement('submit', 'Submit', array(
             'ignore'   => true,
             'label'    => 'Submit',
-            'style'     => 'width:10em'
-        ));
-
-        // set decorator to view script
-        $this->setDecorators(array(
-            array('ViewScript', array('viewScript' => 'forms/observation.phtml'))
         ));
     }
+    
+    private function addInterventionSubForms() {
+        $this->addSubForm(new Zend_Form_SubForm(), 'genes');
+        $this->addSubForm(new Zend_Form_SubForm(), 'compounds');
+        $this->addSubForm(new Zend_Form_SubForm(), 'environments');
+    }
 
-    private function initBaseElements()
-    {
+    private function getStatusChoices() {
+        return array(
+            Application_Model_Observation::STATUS_PUBLIC,
+            Application_Model_Observation::STATUS_DELETED,
+        );
+    }
+    
+    private function addBaseElements() {
         $this->addElement('hidden', 'id', array(
            'required' => false,
+        ));
+        
+        $this->addElement('select', 'status', array(
+            'label' => 'Set Status:',
+            'multiOptions' => $this->getStatusChoices(),
+            'required' => true,
+            'decorators' => array(
+                'Label', 'ViewHelper'
+            )
         ));
 
         $this->addElement('text', 'ncbiTaxId', array(
@@ -66,47 +97,33 @@ class Application_Form_Observation extends Zend_Form
         
         $this->addElement('text', 'species', array(
             'label' => 'Species:',
-            'validators' => array(
-            ),
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
         $this->addElement('text', 'strain', array(
             'label' => 'Strain:',
-            'validators' => array(
-            ),
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
         $this->addElement('text', 'strainGenotype', array(
             'label' => 'Genotype:',
-            'validators' => array(
-            ),
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
         $this->addElement('text', 'cellType', array(
             'label' => 'Cell Type:',
-            'validators' => array(
-            ),
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
-        $matingTypeOptions = array_merge(
-            array('' => ''),
-            Observation::getMatingTypes()
-        );
         $this->addElement('select', 'matingType', array(
             'label' => 'Mating Type:',
-            'multiOptions' => $matingTypeOptions,
-            'validators' => array(
-            ),
+            'multiOptions' => $this->matingTypes->getOptions(),
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
-        $this->addElement('textarea', 'body', array(
-            'label'      => 'Observation Details:',
-            'required'   => true,
+        $this->addElement('textarea', 'description', array(
+            'label' => 'Description:',
+            'required' => true,
             'rows' => 6,
             'cols' => 80,
         ));
@@ -121,12 +138,11 @@ class Application_Form_Observation extends Zend_Form
         ));
     }
 
-    private function initLifespanElements()
-    {
+    private function addLifespanElements() {
         $this->addElement('text', 'lifespan', array(
-            'label'         => 'Lifespan:',
-            'required'      => false,
-            'validators'    => array(
+            'label' => 'Lifespan:',
+            'required' => false,
+            'validators' => array(
                 array('validator' => 'Float'),
             ),
             'size' => 8,
@@ -134,26 +150,19 @@ class Application_Form_Observation extends Zend_Form
         ));
 
         $this->addElement('text', 'lifespanBase', array(
-            'label'         => 'Lifespan (WT):',
-            'required'      => false,
-            'validators'    => array(
+            'label' => 'Lifespan (WT):',
+            'required' => false,
+            'validators' => array(
                 array('validator' => 'Float'),
             ),
             'size' => 8,
             'decorators' => array('Label', 'ViewHelper', 'Errors')
         ));
 
-        $unitChoices = array(
-            '' => 'N/A',
-            'days' => 'Days',
-            'years' => 'Years',
-            'divisions' => 'Divisions',
-            'si' => 'SI'
-        );
         $this->addElement('radio', 'lifespanUnit', array(
             'label'         => 'Units:',
             'required'      => false,
-            'multiOptions'  => $unitChoices,
+            'multiOptions'  => $this->lifespanUnits->getChoices(),
             'class' => 'radio',
             'value' => '',
             'decorators' => array('Label', 'ViewHelper', 'Errors')
@@ -169,34 +178,24 @@ class Application_Form_Observation extends Zend_Form
             'decorators' => array('Label', 'ViewHelper', 'Errors')
         ));
 
-
-        $effectChoices = array_merge(
-            array('' => 'N/A'),
-            Observation::getLifespanEffects()
-        );
         $this->addElement('radio', 'lifespanEffect', array(
             'label'         => 'Effect:',
             'required'      => false,
-            'multiOptions'  => $effectChoices,
+            'multiOptions'  => $this->lifespanEffects->getChoices(),
             'value'         => '',
             'class'         => 'radio'
         ));
 
-        $measureChoices = array_merge(
-            array('' => 'N/A'),
-            Observation::getLifespanMeasures()
-        );
         $this->addElement('radio', 'lifespanMeasure', array(
-            'label'         => 'Measure:',
-            'required'      => false,
-            'multiOptions'  => $measureChoices,
-            'value'         => '',
-            'class'         => 'radio'
+            'label' => 'Measure:',
+            'required' => false,
+            'multiOptions' => $this->lifespanMeasures->getChoices(),
+            'value' => '',
+            'class' => 'radio'
         ));
     }
 
-    private function initCitationElements()
-    {
+    private function addCitationElements() {
         $this->addElement('text', 'citationPubmedId', array(
             'label' => 'PubMed Id:',
             'validators' => array(
@@ -241,9 +240,8 @@ class Application_Form_Observation extends Zend_Form
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
     }
-
-    private function initPublishElements()
-    {
+    
+    public function addReviewElements() {
         $statusChocies = Observation::getStatusChoices();
         $this->addElement('select', 'status', array(
             'label'         => 'Status:',
@@ -259,17 +257,15 @@ class Application_Form_Observation extends Zend_Form
             'cols' => 80,
         ));
     }
-
-    public function setValues($values)
-    {
-        // popluate parent form
-        $this->populate($values);
-
+    
+    public function populate(array $values) {
+        parent::populate($values);
+        
         // populate sub forms
         if (isset($values['genes'])) {
             $genesForm = $this->getSubForm('genes');
             foreach ($values['genes'] as $i => $geneValues) {
-                $geneForm = new Application_Form_ObservationGene();
+                $geneForm = new Application_Form_ObservationFormGeneForm();
                 $geneForm->populate($geneValues);
                 $genesForm->addSubForm($geneForm, (string)$i);
             }
@@ -277,7 +273,7 @@ class Application_Form_Observation extends Zend_Form
         if (isset($values['compounds'])) {
             $compoundsForm = $this->getSubForm('compounds');
             foreach ($values['compounds'] as $i => $compoundValues) {
-                $compoundForm = new Application_Form_ObservationCompound();
+                $compoundForm = new Application_Form_ObservationFormCompound();
                 $compoundForm->populate($compoundValues);
                 $compoundsForm->addSubForm($compoundForm, (string)$i);
             }
@@ -285,18 +281,10 @@ class Application_Form_Observation extends Zend_Form
         if (isset($values['environments'])) {
             $environmentsForm = $this->getSubForm('environments');
             foreach ($values['environments'] as $i => $environmentValues) {
-                $environmentForm = new Application_Form_ObservationEnvironment();
+                $environmentForm = new Application_Form_ObservationFormEnvironment();
                 $environmentForm->populate($environmentValues);
                 $environmentsForm->addSubForm($environmentForm, (string)$i);
             }
         }
     }
-
-    public function isValid($data)
-    {
-        $this->setValues($data);
-        return parent::isValid($data);
-    }
-
 }
-

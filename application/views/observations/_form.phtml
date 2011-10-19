@@ -2,6 +2,12 @@
 <?php $this->headScript()->appendFile($this->baseUrl() . '/scripts/jquery-1.4.2.js') ?>
 <?php $this->headScript()->appendFile($this->baseUrl() . '/scripts/observation/form.js') ?>
 
+<?php 
+/* @var $form Application_Form_ObservationFormForm */
+$form = $this->form;
+?>
+
+
 <form name="observationForm" action="<?php echo $this->element->getAction() ?>" method="post">
 
     <?php if ($this->element->isErrors()): ?>

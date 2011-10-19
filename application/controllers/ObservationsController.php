@@ -6,35 +6,7 @@ class ObservationsController extends Zend_Controller_Action
      * @var $repository Application_Model_ObservationRepository 
      */
     private $repository;
-    
-    public function preDispatch() {
-        $this->initContextSwitcher();
-    }
-    
-    private function initContextSwitcher() {
-        /* @var $contextSwitch Zend_Controller_Action_Helper_ContextSwitch */
-        $contextSwitch = $this->getHelper('contextSwitch');
-        $contextSwitch->setAutoJsonSerialization(true);
 
-        $actions = array(
-            'index',
-            'get',
-            'post',
-            'put',
-            'delete',
-        );
-        $contexts = array(
-            'xml',
-            'json',
-        );
-        foreach ($actions as $action) {
-            foreach ($contexts as $context) {
-                $contextSwitch->addActionContext($action, $context);
-            }
-        }
-        $contextSwitch->initContext();
-    }
-    
     public function init() {
         $this->repository = Application_Registry::getEm()
             ->getRepository('Application_Model_Observation');
@@ -47,17 +19,25 @@ class ObservationsController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         
         $observation = $this->repository->findOneBy(array('id' => $id));
-        
+        if (!$observation) {
+            throw new Zend_Controller_Action_Exception('Observation not found.', 404);
+        }
         $this->view->observation = $observation;
         
-        $this->getResponse()->setHttpResponseCode(200);
+        
     }
     
     public function addAction() {
-        // show form
+        $form = new Application_Form_ObservationForm();
+        
+        
+        if ()
     }
     
     public function postAction() {
+        
+        
+        $observation = new Application_Model_Observation();
         
     }
     
@@ -66,9 +46,8 @@ class ObservationsController extends Zend_Controller_Action
     }
     
     public function deleteAction() {
-        
-        
-        $this->getResponse()->setHttpResponseCode(204);
+        $message = 'Delete operation not supported.';
+        throw new Application_Exception_NotSupportedException($message);
     }
 }
 

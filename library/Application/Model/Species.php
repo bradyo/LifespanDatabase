@@ -109,13 +109,4 @@ class Application_Model_Species
     public function setSynonyms($synonyms) {
         $this->synonyms = $synonyms;
     }
-    
-    public function toArray() {
-        return array(
-            'id' => $this->id,
-            'name' => $this->name,
-            'commonName' => $this->commonName,
-            'ncbiTaxonId' => $this->ncbiTaxonId,
-        );
-    }
 }
