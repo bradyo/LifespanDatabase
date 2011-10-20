@@ -19,4 +19,23 @@ class Application_Service_ObservationService
     public function setUser($user) {
         $this->user = $user;
     }
+    
+    public function index($params) {
+    }
+    
+    public function get($id) {
+        
+    }
+    
+    public function put($id, $data) {
+        
+    } 
+    
+    public function post($data) {
+        
+    }
+    
+    public function delete($id) {
+        
+    }
 }

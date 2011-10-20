@@ -36,12 +36,6 @@ class Application_Model_Observation
     private $publicId;
     
     /**
-     * @var integer Version number of the observation
-     * @Column(name="version", type="integer")
-     */
-    private $version;
-    
-    /**
      * @var boolean Version number of the observation
      * @Column(name="is_current", type="boolean")
      */
