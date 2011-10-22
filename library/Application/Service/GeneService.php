@@ -5,7 +5,7 @@
  *
  * @author brady
  */
-class Application_Service_PpodService
+class Application_Service_GeneService
 {
     public static function getHomologs($databaseId, $proteinId)
     {

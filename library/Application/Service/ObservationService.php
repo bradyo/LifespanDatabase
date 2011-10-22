@@ -1,8 +1,11 @@
 <?php
 
+use Doctrine\ORM\EntityManager;
+
 class Application_Service_ObservationService 
 {
     /**
+     * @var EntityManager
      */
     private $entityManager;
     

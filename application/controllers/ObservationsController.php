@@ -17,32 +17,22 @@ class ObservationsController extends Zend_Controller_Action
     
     public function getAction() {
         $id = $this->getRequest()->getParam('id');
-        
         $observation = $this->repository->findOneBy(array('id' => $id));
         if (!$observation) {
             throw new Zend_Controller_Action_Exception('Observation not found.', 404);
         }
         $this->view->observation = $observation;
-        
-        
     }
     
     public function addAction() {
         $form = new Application_Form_ObservationForm();
-        
-        
-        if ()
+    }
+    
+    public function editAction() {
     }
     
     public function postAction() {
-        
-        
         $observation = new Application_Model_Observation();
-        
-    }
-    
-    public function putAction() {
-        
     }
     
     public function deleteAction() {
@@ -50,4 +40,3 @@ class ObservationsController extends Zend_Controller_Action
         throw new Application_Exception_NotSupportedException($message);
     }
 }
-
