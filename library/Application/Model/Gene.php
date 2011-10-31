@@ -9,6 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Application_Model_Gene 
 {
+    private $errors;
+    
+    private function validate() {
+        $errors = array();
+     
+        $validator = new Zend_Validate();
+        
+        
+        
+        $this->errors = $errors;
+    }
+    
     /**
      * @var integer
      * @Id @Column(name="id", type="integer")
