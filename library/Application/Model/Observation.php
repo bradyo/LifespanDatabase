@@ -213,6 +213,12 @@ class Application_Model_Observation
      */
     private $environmentCount;
     
+    /**
+     *
+     * @var array of validation error messages
+     */
+    private $errorMessages;
+    
     
     public function __construct() {
         $this->geneInterventions = new ArrayCollection();
@@ -231,7 +237,7 @@ class Application_Model_Observation
         $this->compoundCount = count($this->compoundInterventions);
         $this->environmentCount = count($this->environmentInterventions);
     }
-    
+
     /** 
      * Generate a unique GUID if needed
      * @PrePersist 

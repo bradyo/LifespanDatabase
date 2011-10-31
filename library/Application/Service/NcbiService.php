@@ -182,7 +182,7 @@ class Application_Service_NcbiService
         $proteinAcc =  $geneData['protein_acc'];
         if ($proteinAcc !== null) {
             $database = 'NCBI';
-            $homologs = Application_Service_PpodService::getHomologs($database, $proteinAcc);
+            $homologs = Application_Service_GeneService::getHomologs($database, $proteinAcc);
             foreach ($homologs as $homolog) {
                 $homolog['source'] = 'PPOD';
                 $rows[] = $homolog;
@@ -192,7 +192,7 @@ class Application_Service_NcbiService
         $uniprotIds = self::getGeneUniProtIds($ncbiGeneId);
         foreach ($uniprotIds as $uniprotId) {
             $database = 'UniProtKB';
-            $homologs = Application_Service_PpodService::getHomologs($database, $uniprotId);
+            $homologs = Application_Service_GeneService::getHomologs($database, $uniprotId);
             foreach ($homologs as $homolog) {
                 $homolog['source'] = 'PPOD';
                 $rows[] = $homolog;
