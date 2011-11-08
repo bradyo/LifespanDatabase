@@ -7,28 +7,7 @@ class Application_Form_ObservationForm extends Zend_Form
      * @var Application_Model_User
      */
     private $user;
-    
-    /**
-     * @var Application_Model_LifespanEffects
-     */
-    private $lifespanEffects;
-    
-    /**
-     * @var Application_Model_LifespanMeasures
-     */
-    private $lifespanMeasures;
-    
-    /**
-     * @var Application_Model_LifespanUnits
-     */
-    private $lifespanUnits;
-    
-    /**
-     * @var Application_Model_MatingTypes
-     */
-    private $matingTypes;
-    
-    
+       
     /**
      * @param Application_Model_User $user
      * @param array $options 
@@ -36,11 +15,6 @@ class Application_Form_ObservationForm extends Zend_Form
     public function __construct($user, $options = null) {
         parent::__construct($options);
         $this->user = $user;
-        
-        $this->lifespanEffects = new Application_Model_LifespanEffects();
-        $this->lifespanMeasures = new Application_Model_LifespanMeasures();
-        $this->lifespanUnits = new Application_Model_LifespanUnits();
-        $this->matingTypes = new Application_Model_MatingTypes();
     }
 
     public function init() {
@@ -115,9 +89,11 @@ class Application_Form_ObservationForm extends Zend_Form
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
+        $matingTypes = new Application_Model_MatingTypes();
+        $options = $matingTypes->getOptions();
         $this->addElement('select', 'matingType', array(
             'label' => 'Mating Type:',
-            'multiOptions' => $this->matingTypes->getOptions(),
+            'multiOptions' => $options,
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
 
@@ -242,12 +218,15 @@ class Application_Form_ObservationForm extends Zend_Form
     }
     
     public function addReviewElements() {
-        $statusChocies = Observation::getStatusChoices();
+        $options = array(
+            Application_Model_Observation::STATUS_PUBLIC => 'Public',
+            Application_Model_Observation::STATUS_DELETED => 'Deleted',
+        );
         $this->addElement('select', 'status', array(
             'label'         => 'Status:',
             'required'      => false,
             'value'         => 'accepted',
-            'multiOptions'  => $statusChocies,
+            'multiOptions'  => $options,
         ));
 
         $this->addElement('textarea', 'reviewerComment', array(

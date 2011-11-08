@@ -49,7 +49,7 @@ class SearchController extends Zend_Controller_Action
 
     public function advancedAction()
     {
-        $form = new Application_Form_AdvancedSearch();
+        $form = new Application_Form_SearchForm();
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getParams())) {
             // build search string

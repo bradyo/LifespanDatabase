@@ -36,12 +36,6 @@ class Application_Model_Observation
     private $publicId;
     
     /**
-     * @var boolean Version number of the observation
-     * @Column(name="is_current", type="boolean")
-     */
-    private $isCurrent;
-    
-    /**
      * @var string Status of observation version.
      * @Column(name="status", type="string")
      */
@@ -91,14 +85,7 @@ class Application_Model_Observation
      * @Column(name="reviewer_comment", type="text")
      */
     private $reviewerComment;
-    
-    /**
-     * @var DateTime When the first version of the observation was created (original
-     *  creation time)
-     * @Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-          
+              
     /**
      * @OneToOne(targetEntity="Application_Model_Citation")
      * @JoinColumn(name="citation_id", referencedColumnName="id")
@@ -213,18 +200,11 @@ class Application_Model_Observation
      */
     private $environmentCount;
     
-    /**
-     *
-     * @var array of validation error messages
-     */
-    private $errorMessages;
-    
     
     public function __construct() {
         $this->geneInterventions = new ArrayCollection();
         $this->compoundInterventions = new ArrayCollection();
         $this->environmentInterventions = new ArrayCollection();
-        $this->version = 1;
     }
         
     /** 
@@ -236,16 +216,6 @@ class Application_Model_Observation
         $this->geneCount = count($this->geneInterventions);
         $this->compoundCount = count($this->compoundInterventions);
         $this->environmentCount = count($this->environmentInterventions);
-    }
-
-    /** 
-     * Generate a unique GUID if needed
-     * @PrePersist 
-     */
-    public function generateGuid() {
-        if (empty($this->guid)) {
-            $this->guid = Application_Guid::generate();
-        }
     }
      
     public function getId() {
@@ -270,22 +240,6 @@ class Application_Model_Observation
 
     public function setPublicId($publicId) {
         $this->publicId = $publicId;
-    }
-
-    public function getVersion() {
-        return $this->version;
-    }
-
-    public function setVersion($version) {
-        $this->version = $version;
-    }
-
-    public function getIsCurrent() {
-        return $this->isCurrent;
-    }
-
-    public function setIsCurrent($isCurrent) {
-        $this->isCurrent = $isCurrent;
     }
 
     public function getStatus() {
@@ -350,14 +304,6 @@ class Application_Model_Observation
 
     public function setReviewerComment($reviewerComment) {
         $this->reviewerComment = $reviewerComment;
-    }
-
-    public function getCreatedAt() {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt($createdAt) {
-        $this->createdAt = $createdAt;
     }
 
     public function getCitation() {
@@ -463,6 +409,7 @@ class Application_Model_Observation
     public function setDescription($description) {
         $this->description = $description;
     }
+    
 
     public function getGeneInterventions() {
         return $this->geneInterventions;
@@ -471,7 +418,7 @@ class Application_Model_Observation
     public function setGeneInterventions($geneInterventions) {
         $this->geneInterventions = $geneInterventions;
     }
-
+    
     public function getCompoundInterventions() {
         return $this->compoundInterventions;
     }
@@ -479,7 +426,7 @@ class Application_Model_Observation
     public function setCompoundInterventions($compoundInterventions) {
         $this->compoundInterventions = $compoundInterventions;
     }
-
+    
     public function getEnvironmentInterventions() {
         return $this->environmentInterventions;
     }
@@ -492,23 +439,11 @@ class Application_Model_Observation
         return $this->geneCount;
     }
 
-    public function setGeneCount($geneCount) {
-        $this->geneCount = $geneCount;
-    }
-
     public function getCompoundCount() {
         return $this->compoundCount;
     }
 
-    public function setCompoundCount($compoundCount) {
-        $this->compoundCount = $compoundCount;
-    }
-
     public function getEnvironmentCount() {
         return $this->environmentCount;
-    }
-
-    public function setEnvironmentCount($environmentCount) {
-        $this->environmentCount = $environmentCount;
     }
 }

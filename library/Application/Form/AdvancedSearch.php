@@ -5,13 +5,10 @@
  *
  * @author brady
  */
-class Application_Form_AdvancedSearch extends Zend_Form
+class Application_Form_SearchForm extends Zend_Form
 {
     public function init()
     {
-        $this->setMethod(Zend_Form::METHOD_POST);
-        $this->setAction('');
-
         $this->_initObservationElements();
         $this->_initLifespanElements();
         $this->_initGeneElements();
@@ -70,8 +67,6 @@ class Application_Form_AdvancedSearch extends Zend_Form
                 array('validator' => 'Int'),
             ),
         ));
-
-
     }
 
     private function _initLifespanElements()

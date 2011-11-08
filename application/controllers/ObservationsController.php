@@ -53,6 +53,8 @@ class ObservationsController extends Zend_Controller_Action
         $offset = ($pageNumber - 1) * self::ITEMS_PER_PAGE;
         $observations = $this->repository->findBy($filter, $order, $limit, $offset);
         $this->view->observations =  $observations;
+        
+        $this->view->render('observations/list.json');
     }
     
     public function getAction() {
