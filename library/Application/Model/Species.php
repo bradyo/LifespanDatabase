@@ -5,7 +5,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity 
  * @Table(name="species")
- * @HasLifecycleCallbacks
  */
 class Application_Model_Species
 {
@@ -50,16 +49,6 @@ class Application_Model_Species
     
     public function __construct() {
         $this->synonyms = new ArrayCollection();
-    }
-    
-    /** 
-     * Generate a unique GUID if needed
-     * @PrePersist 
-     */
-    public function generateGuid() {
-        if (empty($this->guid)) {
-            $this->guid = Application_Guid::generate();
-        }
     }
     
     public function getId() {

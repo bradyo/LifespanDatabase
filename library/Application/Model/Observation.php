@@ -9,11 +9,29 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Application_Model_Observation
 {
+    /**
+     * Status given to observations that are active and made public in searches.
+     */
     const STATUS_PUBLIC = "public";
+    
+    /**
+     * Status given to observations that have been deleted.
+     */
     const STATUS_DELETED = "deleted";
     
+    /**
+     * Review status given to observations that have not yet been reviewed.
+     */
     const REVIEW_STATUS_PENDING = "pending";
+    
+    /**
+     * Review status given to observations that have been accepted by a reviewer.
+     */
     const REVIEW_STATUS_ACCEPTED = "accepted";
+    
+    /**
+     * Review status given to observations that have been rejected by a reviewer.
+     */
     const REVIEW_STATUS_REJECTED = "rejected";
     
     /**

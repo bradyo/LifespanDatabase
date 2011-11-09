@@ -39,16 +39,6 @@ class Application_Model_Strain
     private $commonName;
     
     
-    /** 
-     * Generates a unique GUID.
-     * @PrePersist  
-     */
-    public function generateGuid() {
-        if (empty($this->guid)) {
-            $this->guid = Application_Guid::generate();
-        }
-    }
-    
     public function getId() {
         return $this->id;
     }
