@@ -10,17 +10,8 @@ update {html(set flash, redirect to get/edit), xml, json}
 delete {html(set flash, redirect to index), xml, json}
  */
 
-class Api_ObservationsController extends Application_Controller_RestController
+class Api_SpeciesController extends Application_Controller_RestController
 {   
-    public function optionsAction() {
-        $this->view->message = 'Resource Options';
-        $this->getResponse()->setHttpResponseCode(200);
-    }
-    
-    public function headAction() {
-        $this->getResponse()->setHttpResponseCode(200);
-    }
-
     public function indexAction() {
         $this->view->resources = array();
         $this->getResponse()->setHttpResponseCode(200);
