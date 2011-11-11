@@ -12,48 +12,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         require_once 'HTMLPurifier/Bootstrap.php';
         spl_autoload_register(array('HTMLPurifier_Bootstrap', 'autoload'));
     }
-
+    
     protected function _initLayout() {
         Zend_Layout::startMvc();
         $layout = Zend_Layout::getMvcInstance();
         $layout->setLayoutPath(APPLICATION_PATH . '/layouts');
         $layout->setLayout('main');
         $layout->startMvc();
-    }
-    
-    protected function _initFrontControllerOptions() {
-        $front = Zend_Controller_Front::getInstance();
-        $front->setControllerDirectory(APPLICATION_PATH . '/controllers');
-    }
-    
-    protected function _initView() {
-        $view = new Zend_View();
-        
-        $view->setScriptPath(APPLICATION_PATH . '/views');
-        $view->addHelperPath('Application/View/Helper', 'Application_View_Helper');
-
-        $view->setEncoding('UTF-8');
-        $view->doctype('XHTML1_STRICT');
-
-        $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
-        $view->headMeta()->appendHttpEquiv('Content-Language', 'en-US');
-
-        $view->headScript()->appendFile('/library/jquery-1.4.4.min.js');
-        $view->headScript()->appendFile('/library/jquery.tools.min.js');
-
-        $view->headLink()->appendStylesheet('/css/global.css');
-        $view->headScript()->appendFile('/js/global.js');
-
-        $view->headLink()->appendStylesheet('/library/jquery-ui/css/custom/jquery-ui-1.8.7.custom.css');
-        $view->headScript()->appendFile('/library/jquery-ui/js/jquery-ui-1.8.7.custom.min.js');
-
-        $view->headTitle('Lifespan Observation Database');
-        $view->headTitle()->setSeparator(' - ');
-        
-        // add view helper
-        $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer();
-        $viewRenderer->setView($view);
-        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
     }
 
     protected function _initCache() {
@@ -115,14 +80,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Session::setSaveHandler($sessionHandler);
         Zend_Session::start();
     }
-    
-    protected function _initRoutes() {
-        $this->bootstrap('frontController');
-        $router = $this->frontController->getRouter();
-        $router->setChainNameSeparator('/');
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/routes.ini');
-        $router->addConfig($config, 'routes');
-    }
 
     protected function _initI18n() {
         // set up timezone
@@ -146,6 +103,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $index = Zend_Search_Lucene::create($indexPath);
         }
         Zend_Registry::set('searchIndex', $index);
+    }
+
+    protected function _initCustomActionHelpers() {
+        $contextSwitch = new Application_Controller_Action_Helper_RestContextSwitch();
+        Zend_Controller_Action_HelperBroker::addHelper($contextSwitch);
     }
 }
 

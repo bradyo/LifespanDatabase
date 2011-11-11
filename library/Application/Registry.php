@@ -15,4 +15,15 @@ class Application_Registry {
     public static function getDb() {
         return Zend_Registry::get('db');
     }
+    
+    /**
+     * @return Application_Model_User
+     */
+    public static function getCurrentUser() {
+        if (Zend_Registry::isRegistered('currentUser')) {
+            return Zend_Registry::get('currentUser');
+        } else {
+            return new Application_Model_DefaultUser();
+        }
+    }
 }

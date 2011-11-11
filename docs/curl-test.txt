@@ -1,0 +1,7 @@
+curl -v -H "Accept: application/json" http://lifespan/api/observations
+curl -v -H "Accept: application/json" -X HEAD http://lifespan/api/observations/1
+curl -v -H "Accept: application/json" -X OPTIONS http://lifespan/api/observations/1
+curl -v -H "Accept: application/json" -X GET http://lifespan/api/observations/1
+curl -v -H "Accept: application/json" -X POST http://lifespan/api/observations
+curl -v -H "Accept: application/json" -X PUT -d '' http://lifespan/api/observations/1
+curl -v -H "Accept: application/json" -X DELETE http://lifespan/api/observations/1

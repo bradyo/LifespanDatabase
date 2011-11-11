@@ -1,15 +1,11 @@
 <?php
 
-class IndexController extends Zend_Controller_Action
+class Default_IndexController extends Zend_Controller_Action
 {
     public function indexAction() {
         
     }
     
-    public function schemaAction() {
-        
-    }
-
 //    public function testAction() {
 //        $em = Application_Registry::getEm();
 //

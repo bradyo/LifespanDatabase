@@ -10,7 +10,7 @@ update {html(set flash, redirect to get/edit), xml, json}
 delete {html(set flash, redirect to index), xml, json}
  */
 
-class ObservationsController extends Zend_Controller_Action
+class Default_ObservationsController extends Zend_Controller_Action
 {
     /**
      * Listing items per page.

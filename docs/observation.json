@@ -1,9 +1,9 @@
 {
     description: "double deletion extends lifespan",
     lifespan: "40",
-    lifespan_units: "days",
-    lifespan_measure: "mean",
-    lifespan_effect: "increased",
+    lifespanUnits: "days",
+    lifespanMeasure: "mean",
+    lifespanEffect: "increased",
     temperature: "25",
     geneInterventions: [
         {
