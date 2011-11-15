@@ -1,7 +1,19 @@
 <?php
 
-class Application_Model_Service_SpeciesService 
+class Application_Service_SpeciesService 
 {
+    /**
+     * @var array validation error messages
+     */
+    private $validationErrors;
+    
+    private function validateData($data) {
+                
+
+    }
+    
+    
+    
     /**
      *
      * @param Application_Model_User $user

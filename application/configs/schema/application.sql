@@ -45,10 +45,12 @@ CREATE TABLE IF NOT EXISTS citation (
 
 CREATE TABLE IF NOT EXISTS species (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
     name VARCHAR(128) NOT NULL,
     common_name VARCHAR(128),
     ncbi_tax_id INT,    
+    INDEX (status),
     INDEX (guid),
     INDEX (common_name),
     INDEX (name),
@@ -67,10 +69,12 @@ CREATE TABLE IF NOT EXISTS species_synonym (
 
 CREATE TABLE IF NOT EXISTS strain (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
     species_id INT,
     name VARCHAR(128) NOT NULL,
     common_name VARCHAR(128),
+    INDEX (status),
     INDEX (guid),
     FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL,
     INDEX (name),
@@ -80,10 +84,12 @@ CREATE TABLE IF NOT EXISTS strain (
 
 CREATE TABLE IF NOT EXISTS compound (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     ncbi_compound_id INT,
+    INDEX (status),
     INDEX (guid),
     INDEX (ncbi_compound_id),
     INDEX (name)
@@ -101,6 +107,7 @@ CREATE TABLE IF NOT EXISTS compound_synonym (
 
 CREATE TABLE IF NOT EXISTS gene (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
     species VARCHAR(128),
     symbol VARCHAR(64),
@@ -108,6 +115,7 @@ CREATE TABLE IF NOT EXISTS gene (
     description VARCHAR(255),
     ncbi_gene_id INT,
     ncbi_protein_id INT,
+    INDEX (status),
     INDEX (guid),
     INDEX (species),
     INDEX (symbol),
@@ -209,8 +217,10 @@ CREATE TABLE IF NOT EXISTS gene_substrate (
 
 CREATE TABLE IF NOT EXISTS environment (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
     name VARCHAR(128),
+    INDEX (status),
     INDEX (guid),
     INDEX (name)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -246,8 +256,8 @@ CREATE TABLE IF NOT EXISTS observation (
     public_id INTEGER NOT NULL,
     version INTEGER,
     is_current TINYINT(1),
-    status VARCHAR(64),
-    review_status VARCHAR(64),
+    status VARCHAR(32),
+    review_status VARCHAR(32),
     authored_at DATETIME,
     author_id INT,
     author_comment TEXT,

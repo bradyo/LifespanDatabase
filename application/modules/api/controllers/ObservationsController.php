@@ -12,24 +12,38 @@ delete {html(set flash, redirect to index), xml, json}
 
 class Api_ObservationsController extends Application_Controller_RestController
 {   
-    public function optionsAction() {
-        $this->view->message = 'Resource Options';
-        $this->getResponse()->setHttpResponseCode(200);
+    /**
+     * @var Application_Service_ObservationService
+     */
+    private $observationService;
+    
+    public function init() {
+        parent::init();
+        
+        $em = Application_Registry::getEm();
+        $currentUser = Application_Registry::getCurrentUser();
+        $this->observationService = new Application_Service_Observation($em, $currentUser);
     }
     
-    public function headAction() {
-        $this->getResponse()->setHttpResponseCode(200);
-    }
-
     public function indexAction() {
         $this->view->resources = array();
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction() {
-        $this->view->id = $this->_getParam('id');
+        $id = $this->_getParam('id');
+        
+        $observation = $this->observationRepository->find($id);
+        if ( ! $observation) {
+            
+        }
+        
+        $data = array();
+        
         $this->view->resource = new stdClass;
         $this->view->resource->name = "hello";
+        
+        
         
         $format = $this->getRequest()->getParam('format');
         $json = Zend_Json_Encoder::encode(array('hello' => 'world', 'format' => $format));
