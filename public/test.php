@@ -20,8 +20,9 @@ $application = new Zend_Application(
 $application->bootstrap();
 
 
-echo "testing class\n";
 $em = Application_Registry::getEm();
-$test = new Test_Model_SpeciesServiceTest($em);
+$tester = new Test_Model_SpeciesServiceTest($em);
 //$test->setUp();
-$test->testCreateNotAuthorized();
+$tester->testCreate();
+$tester->testUpdate();
+//$test->testCreateNotAuthorized();

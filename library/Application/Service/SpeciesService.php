@@ -36,8 +36,6 @@ class Application_Service_SpeciesService
         // filter input data
         $filteredData = $this->filter($data);
         
-        var_dump($filteredData);
-        
         // validate input data
         if (! $this->isValidData($filteredData)) {
             throw new Application_Exception_ValidateException('Invalid data');
@@ -47,22 +45,15 @@ class Application_Service_SpeciesService
         $species = new Application_Model_Species();
         $species->setGuid(Application_Guid::generate());
         $species->fromArray($filteredData);
-        
-        foreach ($species->getSynonyms() as $synonym) {
-            /* @var $synonym Application_Model_SpeciesSynonym */
-            $synonym->setSpecies($species);
-            $this->em->persist($synonym);
-        }
-        
         $this->em->persist($species);
         $this->em->flush();
-        
-        var_dump($species);
-        
+
         return $species;
     }   
     
     public function update($id, $data) {
+        $data['id'] = $id;
+        
         // check authorization
         if ( ! $this->user->isAdmin()) {
             throw new Application_Exception_UnauthorizedException('Permission denied');
@@ -82,12 +73,12 @@ class Application_Service_SpeciesService
         if (!$species) {
             throw new Exception('Species not found');
         }
-        $species->fromArray($filteredData);
+        
         foreach ($species->getSynonyms() as $synonym) {
-            /* @var $synonym Application_Model_SpeciesSynonym */
-            $synonym->setSpecies($species);
-            $this->em->persist($synonym);
+            $species->getSynonyms()->removeElement($synonym);
+            $this->em->remove($synonym);
         }
+        $species->fromArray($filteredData);
         $this->em->persist($species);
         $this->em->flush();
         
@@ -97,7 +88,7 @@ class Application_Service_SpeciesService
     public function delete($id) {
         // check authorization
         if ( ! $this->user->isAdmin()) {
-            throw new Exception('Permission denied');
+            throw new Application_Exception_UnauthorizedException('Permission denied');
         }
         
         // fetch entity
@@ -107,6 +98,7 @@ class Application_Service_SpeciesService
             throw new Exception('Species not found');
         }
         
+        // delete
         $this->em->remove($species);
         $this->em->flush();
     }
@@ -131,7 +123,7 @@ class Application_Service_SpeciesService
             $message = 'Species name cannot be empty';
             $this->validationErrors['name'] = $message;
         }
-        if ($this->nameExists($data['name'])) {
+        if ($this->nameExists($data['name'], $data['id'])) {
             $message = 'Species name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;
         }
@@ -140,11 +132,13 @@ class Application_Service_SpeciesService
         return $isValid;
     }
     
-    private function nameExists($name) {
+    private function nameExists($name, $excludeId = null) {
         $query = $this->em->createQuery('
-            SELECT s FROM Application_Model_Species s WHERE s.name = :name
+            SELECT s FROM Application_Model_Species s 
+            WHERE s.name = :name AND s.id <> :excludeId
             ');
         $query->setParameter('name', $name);
+        $query->setParameter('excludeId', $excludeId);
         $species = $query->getResult();
         return (count($species) > 0);
     }

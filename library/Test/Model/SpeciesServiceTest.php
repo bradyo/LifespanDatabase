@@ -36,43 +36,8 @@ class Test_Model_SpeciesServiceTest {
     public function testCreate() {
         $userRepo = $this->em->getRepository('Application_Model_User');
         $adminUser = $userRepo->findOneBy(array('username' => 'admin'));
-        $service = new Application_Service_SpeciesService($adminUser, $this->em);
+        $speciesService = new Application_Service_SpeciesService($adminUser, $this->em);
         
-        $data = $this->getSampleData();
-        try {
-            $species = $service->create($data);
-            var_dump($species);
-            echo "species created\n";
-        } catch (Exception $e) {
-            echo "failed to create:\n";
-            $validationErrors = $service->getValidationErrors();
-            var_dump($validationErrors);
-        }
-    }
-    
-    public function testCreateNotAuthorized() {
-        $userRepo = $this->em->getRepository('Application_Model_User');
-        $adminUser = $userRepo->findOneBy(array('username' => 'member'));
-        $service = new Application_Service_SpeciesService($adminUser, $this->em);
-        
-        $data = $this->getSampleData();
-        try {
-            $species = $service->create($data);
-            var_dump($species);
-            echo "species created\n";
-        } 
-        catch (Application_Exception_UnauthorizedException $e) {
-            echo "failed to create - user not authorized:\n";
-            var_dump($e->getMessage());
-        }
-        catch (Application_Exception_ValidateException $e) {
-            echo "failed to create - validation error:\n";
-            $validationErrors = $service->getValidationErrors();
-            var_dump($validationErrors);
-        }
-    }
-    
-    private function getSampleData() {
         $data = array(
             'name' => 'Saccharomyces cerevisiae',
             'commonName' => 'yeast',
@@ -92,6 +57,52 @@ class Test_Model_SpeciesServiceTest {
                 )
             ),
         );
-        return $data;
+        try {
+            $species = $speciesService->create($data);
+            echo "species created\n";
+            var_dump($species);
+        } 
+        catch (Application_Exception_UnauthorizedException $e) {
+            echo "failed to create - user not authorized:\n";
+            var_dump($e->getMessage());
+        }
+        catch (Application_Exception_ValidateException $e) {
+            echo "failed to create - validation error:\n";
+            var_dump($speciesService->getValidationErrors());
+        }
+    }
+    
+    public function testUpdate() {
+        $userRepo = $this->em->getRepository('Application_Model_User');
+        $adminUser = $userRepo->findOneBy(array('username' => 'admin'));
+        $speciesService = new Application_Service_SpeciesService($adminUser, $this->em);
+        
+        $repo = $this->em->getRepository('Application_Model_Species');
+        $oldSpecies = $repo->find(1);
+        
+        $newData = array(
+            'name' => 'Saccharomyces cerevisiae',
+            'commonName' => 'brewer\'s yeast',
+            'ncbiTaxonId' => 4932,
+            'synonyms' => array(
+                array(
+                    'type' => 'common',
+                    'name' => 'Brewer\'s yeast',
+                )
+            ),
+        );
+        try {
+            $species = $speciesService->update($oldSpecies->getId(), $newData);
+            var_dump($species);
+            echo "species updated";
+        } 
+        catch (Application_Exception_UnauthorizedException $e) {
+            echo "failed to update - user not authorized:\n";
+            var_dump($e->getMessage());
+        }
+        catch (Application_Exception_ValidateException $e) {
+            echo "failed to update - validation error:\n";
+            var_dump($speciesService->getValidationErrors());
+        }
     }
 }

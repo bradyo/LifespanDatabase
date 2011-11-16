@@ -42,7 +42,7 @@ class Application_Model_Species
     
     /**
      * $var array(Application_Model_SpeciesSynonym) List of synonyms for species name.
-     * @OneToMany(targetEntity="Application_Model_SpeciesSynonym", mappedBy="species")
+     * @OneToMany(targetEntity="Application_Model_SpeciesSynonym", mappedBy="species", cascade={"persist"})
      */
     private $synonyms;
     
@@ -96,6 +96,7 @@ class Application_Model_Species
     }
 
     public function addSynonym($synonym) {
+        $synonym->setSpecies($this);
         $this->synonyms->add($synonym);
     }
     
@@ -103,6 +104,7 @@ class Application_Model_Species
         $properties = get_object_vars($this);
         foreach ($data as $key => $value) {
             if ($key == 'synonyms') {
+                $this->synonyms = new ArrayCollection();
                 foreach ($value as $synonymData) {
                     $synonym = new Application_Model_SpeciesSynonym();
                     $synonym->fromArray($synonymData);
