@@ -41,8 +41,8 @@ class Application_Model_Species
     private $ncbiTaxonId;
     
     /**
-     * $var array(Application_Model_GeneSynonym) List of synonyms for species name.
-     * @OneToMany(targetEntity="Application_Model_GeneSynonym", mappedBy="gene")
+     * $var array(Application_Model_SpeciesSynonym) List of synonyms for species name.
+     * @OneToMany(targetEntity="Application_Model_SpeciesSynonym", mappedBy="species")
      */
     private $synonyms;
     
@@ -64,7 +64,7 @@ class Application_Model_Species
     }
 
     public function setGuid($guid) {
-        $this->guid = $guid;
+        $this->guid = (string) $guid;
     }
 
     public function getName() {
@@ -72,7 +72,7 @@ class Application_Model_Species
     }
 
     public function setName($name) {
-        $this->name = $name;
+        $this->name = (string) $name;
     }
 
     public function getCommonName() {
@@ -80,7 +80,7 @@ class Application_Model_Species
     }
 
     public function setCommonName($commonName) {
-        $this->commonName = $commonName;
+        $this->commonName = (string) $commonName;
     }
 
     public function getNcbiTaxonId() {
@@ -88,14 +88,57 @@ class Application_Model_Species
     }
 
     public function setNcbiTaxonId($ncbiTaxonId) {
-        $this->ncbiTaxonId = $ncbiTaxonId;
+        $this->ncbiTaxonId = (integer) $ncbiTaxonId;
     }
 
     public function getSynonyms() {
         return $this->synonyms;
     }
 
-    public function setSynonyms($synonyms) {
-        $this->synonyms = $synonyms;
+    public function addSynonym($synonym) {
+        $this->synonyms->add($synonym);
+    }
+    
+    public function fromArray($data) {
+        $properties = get_object_vars($this);
+        foreach ($data as $key => $value) {
+            if ($key == 'synonyms') {
+                foreach ($value as $synonymData) {
+                    $synonym = new Application_Model_SpeciesSynonym();
+                    $synonym->fromArray($synonymData);
+                    $this->addSynonym($synonym);
+                }
+            } 
+            else if (array_key_exists($key, $properties)) {
+                $setter = 'set' . ucfirst($key);
+                $this->{$setter}($value);
+            }
+        }
+    }
+    
+    public function toArray() {
+        $synonymsData = array();
+        foreach ($this->getSynonyms() as $synonym) {
+            /* @var $synonym Application_Model_SpeciesSynonym */
+            $synonymsData[] = $synonym->toArray();
+        }
+        $data = array(
+            'id' => $this->id,
+            'guid' => $this->guid,
+            'name' => $this->name,
+            'commonName' => $this->commonName,
+            'ncbiTaxonId' => $this->ncbiTaxonId,
+            'synonyms' => $synonymsData,
+        );
+        return $data;
+    }
+    
+    /**
+     * @PrePersist @PreUpdate
+     */
+    public function validate() {
+        if ($this->guid === null) {
+            throw new Application_Exception_ValidateException("Guid required");
+        }
     }
 }

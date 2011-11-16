@@ -6,8 +6,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $loader = Zend_Loader_Autoloader::getInstance();
         $loader->registerNamespace('Doctrine');
         $loader->registerNamespace('Application');
+        $loader->registerNamespace('Test');
     }
-
+    
     protected function _initHtmlPurifier() {
         require_once 'HTMLPurifier/Bootstrap.php';
         spl_autoload_register(array('HTMLPurifier_Bootstrap', 'autoload'));
