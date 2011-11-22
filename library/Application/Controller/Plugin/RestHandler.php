@@ -35,6 +35,10 @@ class Application_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_A
     }
     
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request) {
+        if ($this->getRequest()->getParam('format')) {
+            return;
+        }
+        
         $this->getResponse()->setHeader('Vary', 'Accept');
         $mimeType = strtolower(str_replace(' ', '', $request->getHeader('Accept')));
         switch ($mimeType) {
@@ -42,8 +46,10 @@ class Application_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_A
                 $request->setParam('format', 'xml');
                 break;
             case 'application/json':
-            default:
                 $request->setParam('format', 'json');
+                break;
+            default:
+                $request->setParam('format', 'text');
                 break;
         }
     }

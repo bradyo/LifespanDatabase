@@ -2,32 +2,48 @@
 
 abstract class Application_Controller_RestController extends Zend_Rest_Controller
 {
-    protected $contexts = array(
-        'xml',
-        'json',
-    );
- 
-    protected $actions = array(
-        'options',
-        'head',
-        'index',
-        'get',
-        'post',
-        'put',
-        'delete'
-    );
-    
     public function init() {
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
         
-        // initialize contexts
-        $contextSwitch = $this->getHelper('restContextSwitch');
-        $contextSwitch->setAutoSerialization(true);
-        foreach ($this->contexts as $context) {
-            foreach ($this->actions as $action) {
-                $contextSwitch->addActionContext($action, $context);
-            }
+        // initialize contexts       
+        $contextSwitch = $this->getHelper('contextSwitch');
+        $contextSwitch->setContexts(
+            array( 
+                'json' => array(
+                    'headers' => array(
+                        'Content-Type' => 'application/json',
+                        'Content-Charset' => 'utf-8',
+                    ),
+                    'callbacks' => array(
+                        'post' => array(&$this, 'renderJson')
+                    ),
+                ),
+                'xml' => array(
+                    'headers' => array(
+                        'Content-Type' => 'text/xml',
+                        'Content-Charset' => 'utf-8',
+                    ),
+                    'callbacks' => array(
+                        'post' => array(&$this, 'renderXml')
+                    ),
+                ),
+                'text' => array(
+                    'headers' => array(
+                        'Content-Type' => 'text/plain',
+                        'Content-Charset' => 'utf-8',
+                    ),
+                    'callbacks' => array(
+                        'post' => array(&$this, 'renderText')
+                    )
+                )
+            )
+        );
+        
+        // add contexts
+        $actions = array('options', 'head', 'index', 'get', 'post', 'put', 'delete');
+        foreach ($actions as $action) {
+            $contextSwitch->addActionContext($action, array('xml', 'json', 'text'));
         }
         $contextSwitch->initContext();
     }
@@ -66,5 +82,37 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
         $response = $this->getResponse();
         $response->setBody(sprintf('Resource #%s Deleted', $this->_getParam('id')));
         $response->setHttpResponseCode(200);
+    }
+    
+    public function renderXml() {
+        $data = $this->view->getVars();
+        if (count($data) !== 0) {
+            $serializer = new Application_Serializer_Adapter_Xml();
+            $body = $serializer->serialize($data);
+            $this->getResponse()->setBody($body);
+        }
+    }
+    
+    public function renderJson() {
+        $data = $this->view->getVars();
+        if (count($data) !== 0) {
+            $serializer = new Zend_Serializer_Adapter_Json();
+            $body = $serializer->serialize($data);
+
+            $callback = $this->getRequest()->getParam('jsonp-callback', false);
+            if ($callback !== false and !empty($callback)) {
+                $body = sprintf('%s(%s)', $callback, $body);
+            }
+            $this->getResponse()->setBody($body);
+        }
+    }
+    
+    public function renderText() {
+        $data = $this->view->getVars();
+        if (count($data) !== 0) {
+            $serializer = new Zend_Serializer_Adapter_Json();
+            $body = $serializer->serialize($data);
+            $this->getResponse()->setBody($body);
+        }
     }
 }

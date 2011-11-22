@@ -23,6 +23,5 @@ $application->bootstrap();
 $em = Application_Registry::getEm();
 $tester = new Test_Model_SpeciesServiceTest($em);
 //$test->setUp();
-$tester->testCreate();
-$tester->testUpdate();
+$tester->test();
 //$test->testCreateNotAuthorized();

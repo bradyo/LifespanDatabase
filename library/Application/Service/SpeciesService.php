@@ -103,6 +103,25 @@ class Application_Service_SpeciesService
         $this->em->flush();
     }
     
+    public function get($id) {
+        $repo = $this->em->getRepository('Application_Model_Species');
+        $item = $repo->find($id);
+        if (!$item) {
+            throw new Exception('Species not found');
+        }
+        return $item->toArray();        
+    }
+    
+    public function getAll() {
+        $repo = $this->em->getRepository('Application_Model_Species');
+        $items = $repo->findAll();
+        $data = array();
+        foreach ($items as $item) {
+            $data[] = $item->toArray();
+        }
+        return $data;     
+    }
+    
     private function filter($data) {
         $filteredData = array();
         foreach ($data as $key => $value) {
@@ -123,6 +142,10 @@ class Application_Service_SpeciesService
             $message = 'Species name cannot be empty';
             $this->validationErrors['name'] = $message;
         }
+        
+        if ( ! isset($data['id'])) {
+            $data['id'] = null;
+        }
         if ($this->nameExists($data['name'], $data['id'])) {
             $message = 'Species name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;
@@ -133,12 +156,20 @@ class Application_Service_SpeciesService
     }
     
     private function nameExists($name, $excludeId = null) {
-        $query = $this->em->createQuery('
-            SELECT s FROM Application_Model_Species s 
-            WHERE s.name = :name AND s.id <> :excludeId
-            ');
-        $query->setParameter('name', $name);
-        $query->setParameter('excludeId', $excludeId);
+        if ($excludeId != null) {
+            $query = $this->em->createQuery('
+                SELECT s FROM Application_Model_Species s 
+                WHERE s.name = :name AND s.id <> :excludeId
+                ');
+            $query->setParameter('name', $name);
+            $query->setParameter('excludeId', $excludeId);
+        } else {
+            $query = $this->em->createQuery('
+                SELECT s FROM Application_Model_Species s 
+                WHERE s.name = :name
+                ');
+            $query->setParameter('name', $name);
+        }
         $species = $query->getResult();
         return (count($species) > 0);
     }

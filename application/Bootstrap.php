@@ -105,10 +105,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         Zend_Registry::set('searchIndex', $index);
     }
-
-    protected function _initCustomActionHelpers() {
-        $contextSwitch = new Application_Controller_Action_Helper_RestContextSwitch();
-        Zend_Controller_Action_HelperBroker::addHelper($contextSwitch);
-    }
 }
 

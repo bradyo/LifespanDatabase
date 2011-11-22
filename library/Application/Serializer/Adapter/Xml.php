@@ -6,6 +6,8 @@ class Application_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_Adapter
 */
     protected $_options = array(
         'rootNode' => 'response',
+        'version' => "1.0",
+        'encoding' => 'utf-8',
     );
 
     /**
@@ -19,16 +21,13 @@ class Application_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_Adapter
     public function serialize($value, array $opts = array())
     {
         $opts = $opts + $this->_options;
-
-        try
-        {
-            $dom = new DOMDocument;
+        try {
+            $dom = new DOMDocument($opts['version'], $opts['encoding']);
             $root = $dom->appendChild($dom->createElement($opts['rootNode']));
             $this->createNodes($dom, $value, $root, false);
             return $dom->saveXml();
         }
-        catch (Exception $e)
-        {
+        catch (Exception $e) {
             require_once 'Zend/Serializer/Exception.php';
             throw new Zend_Serializer_Exception('Serialization failed', 0, $e);
         }

@@ -7,12 +7,6 @@ class Test_Model_SpeciesServiceTest {
      */
     private $em;
     
-    /**
-     * @var Application_Model_User User accessing the service
-     */
-    private $user;
-    
-    
     public function __construct(\Doctrine\ORM\EntityManager $em) {
         $this->em = $em;
     }
@@ -31,6 +25,12 @@ class Test_Model_SpeciesServiceTest {
         $this->em->persist($memberUser);
         
         $this->em->flush();
+    }
+    
+    public function test() {
+       //$this->setup();
+       $this->testCreate();
+       //$this->testUpdate();
     }
     
     public function testCreate() {
@@ -82,7 +82,7 @@ class Test_Model_SpeciesServiceTest {
         
         $newData = array(
             'name' => 'Saccharomyces cerevisiae',
-            'commonName' => 'brewer\'s yeast',
+            'commonName' => 'awesome yeast',
             'ncbiTaxonId' => 4932,
             'synonyms' => array(
                 array(

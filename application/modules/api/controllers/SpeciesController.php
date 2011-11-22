@@ -1,45 +1,49 @@
 <?php
 
-/**
-index {html, xml, json}
-show {html, xml, json}
-add {html}
-edit {html}
-create {html(set flash, redirect to get/edit), xml, json}
-update {html(set flash, redirect to get/edit), xml, json}
-delete {html(set flash, redirect to index), xml, json}
- */
-
 class Api_SpeciesController extends Application_Controller_RestController
 {   
+    /**
+     * @var Application_Service_SpeciesService
+     */
+    private $speciesService;
+
+    public function init() {
+        parent::init();
+        
+        // set up service
+        $em = Application_Registry::getEm();
+        $user = Application_Registry::getCurrentUser();
+        $this->speciesService = new Application_Service_SpeciesService($user, $em);
+    }
+    
     public function indexAction() {
-        $this->view->resources = array();
+        $this->view->species = $this->speciesService->getAll();
+        $this->view->count = count($this->view->species);
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction() {
-        $this->view->id = $this->_getParam('id');
-        $this->view->resource = new stdClass;
-        $this->view->resource->name = "hello";
-        
-        $format = $this->getRequest()->getParam('format');
-        $json = Zend_Json_Encoder::encode(array('hello' => 'world', 'format' => $format));
-        $this->getResponse()->setBody($json);
+        $id = $this->getRequest()->getParam('id');
+        $this->view->species = $this->speciesService->get($id);
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function postAction() {
-        $this->view->message = 'Resource Created';
+        $postData = $this->getRequest()->getParams();
+        $this->view->species = $this->speciesService->create($postData);
         $this->getResponse()->setHttpResponseCode(201);
     }
 
     public function putAction() {
-        $this->view->message = sprintf('Resource #%s Updated', $this->_getParam('id'));
+        $id = $this->getRequest()->getParam('id');
+        $postData = $this->getRequest()->getParams();
+        $this->view->species = $this->speciesService->update($id, $postData);
         $this->getResponse()->setHttpResponseCode(201);
     }
 
     public function deleteAction() {
-        $this->view->message = sprintf('Resource #%s Deleted', $this->_getParam('id'));
+        $id = $this->getRequest()->getParam('id');
+        $this->speciesService->delete($id);
         $this->getResponse()->setHttpResponseCode(200);
     }
 }
