@@ -31,13 +31,7 @@ class Application_Model_Strain
      * @Column(name="name", type="string", length="128")
      */
     private $name;
-    
-    /**
-     * @var string Strain common name.
-     * @Column(name="common_name", type="string", length="128")
-     */
-    private $commonName;
-    
+   
     
     public function getId() {
         return $this->id;
@@ -69,13 +63,5 @@ class Application_Model_Strain
 
     public function setName($name) {
         $this->name = $name;
-    }
-
-    public function getCommonName() {
-        return $this->commonName;
-    }
-
-    public function setCommonName($commonName) {
-        $this->commonName = $commonName;
     }
 }

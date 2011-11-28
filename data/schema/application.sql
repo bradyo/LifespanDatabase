@@ -161,9 +161,7 @@ CREATE TABLE IF NOT EXISTS gene_go (
 CREATE TABLE IF NOT EXISTS gene_homolog (
     id INT AUTO_INCREMENT PRIMARY KEY,
     gene_id INT NOT NULL,
-    ncbi_gene_id INT,
     homolog_gene_id INT,
-    homolog_ncbi_gene_id INT,
     algorithm VARCHAR(64),
     family VARCHAR(64),
     species VARCHAR(64),

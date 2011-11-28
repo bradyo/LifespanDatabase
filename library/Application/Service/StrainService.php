@@ -1,6 +1,6 @@
 <?php
 
-class Application_Service_SpeciesService 
+class Application_Service_StrainService
 {
     /**
      * @var Application_Model_User User of the service (used in authorization)
@@ -37,7 +37,7 @@ class Application_Service_SpeciesService
         }
         
         // create entity
-        $species = new Application_Model_Species();
+        $species = new Application_Model_Strain();
         $species->setGuid(Application_Guid::generate());
         $species->fromArray($filteredData);
         $this->em->persist($species);
@@ -61,20 +61,16 @@ class Application_Service_SpeciesService
         }
         
         // update entity
-        $repo = $this->em->getRepository('Application_Model_Species');
-        $species = $repo->find($id);
-        if (!$species) {
+        $repo = $this->em->getRepository('Application_Model_Strain');
+        $strain = $repo->find($id);
+        if (!$strain) {
             throw new Exception('Species not found');
         }
-        foreach ($species->getSynonyms() as $synonym) {
-            $species->getSynonyms()->removeElement($synonym);
-            $this->em->remove($synonym);
-        }
-        $species->fromArray($filteredData);
-        $this->em->persist($species);
+        $strain->fromArray($filteredData);
+        $this->em->persist($strain);
         $this->em->flush();
         
-        return $species;
+        return $strain;
     }
     
     public function delete($id) {
@@ -84,26 +80,26 @@ class Application_Service_SpeciesService
         }
         
         // delete entity
-        $repo = $this->em->getRepository('Application_Model_Species');
-        $species = $repo->find($id);
-        if (!$species) {
-            throw new Exception('Species not found');
+        $repo = $this->em->getRepository('Application_Model_Strain');
+        $strain = $repo->find($id);
+        if (!$strain) {
+            throw new Exception('Strain not found');
         }
-        $this->em->remove($species);
+        $this->em->remove($strain);
         $this->em->flush();
     }
     
     public function get($id) {
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application_Model_Strain');
         $item = $repo->find($id);
         if (!$item) {
-            throw new Exception('Species not found');
+            throw new Exception('Strain not found');
         }
         return $item->toArray();        
     }
     
     public function getAll() {
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application_Model_Strain');
         $items = $repo->findAll();
         $data = array();
         foreach ($items as $item) {
@@ -128,18 +124,18 @@ class Application_Service_SpeciesService
     private function isValidData($data) {
         $this->validationErrors = array();
         
-        if (empty($data['name'])) {
-            $message = 'Species name cannot be empty';
-            $this->validationErrors['name'] = $message;
-        }
-        
         if ( ! isset($data['id'])) {
             $data['id'] = null;
         }
         
-        $speciesRepo = $this->em->getRepository('Application_Model_Species');
-        if ($speciesRepo->nameExists($data['name'], $data['id'])) {
-            $message = 'Species name "'. $data['name'] . '" already exists';
+        if (empty($data['name'])) {
+            $message = 'Species name cannot be empty';
+            $this->validationErrors['name'] = $message;
+        }
+
+        $repo = $this->em->getRepository('Application_Model_Strain');
+        if ($repo->nameExists($data['name'], $data['id'])) {
+            $message = 'Strain name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;
         }
         
