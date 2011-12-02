@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="species_synonym")
  */
-class Application_Model_SpeciesSynonym
+class SpeciesSynonym
 {
     /**
      * @var integer
@@ -14,8 +16,8 @@ class Application_Model_SpeciesSynonym
     private $id;
     
     /**
-     * @var Application_Model_Species
-     * @ManyToOne(targetEntity="Application_Model_Species", inversedBy="synonyms")
+     * @var Species
+     * @ManyToOne(targetEntity="Application\Model\Species", inversedBy="synonyms")
      * @JoinColumn(name="species_id", referencedColumnName="id")
      */
     private $species;

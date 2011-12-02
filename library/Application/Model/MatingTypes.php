@@ -1,6 +1,8 @@
 <?php
 
-class Application_Model_MatingTypes 
+namespace Application\Model;
+
+class MatingTypes 
 {
     public function getOptions($speciesName = null) {
         if ($speciesName == 'mammal') {

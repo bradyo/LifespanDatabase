@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="observation_environment")
  */
-class Application_Model_ObservationEnvironment 
+class EnvironmentIntervention
 {
     /**
      * @var integer
@@ -14,15 +16,15 @@ class Application_Model_ObservationEnvironment
     private $id;
     
     /**
-     * @var Application_Model_Observation
-     * @ManyToOne(targetEntity="Application_Model_Observation", inversedBy="environmentInterventions")
+     * @var Observation
+     * @ManyToOne(targetEntity="Application\Model\Observation", inversedBy="environmentInterventions")
      * @JoinColumn(name="observation_id", referencedColumnName="id")
      */
     private $observation;
     
     /**
-     * @var Application_Model_Environment
-     * @OneToOne(targetEntity="Application_Model_Environment", fetch="EAGER")
+     * @var Environment
+     * @OneToOne(targetEntity="Application\Model\Environment", fetch="EAGER")
      * @JoinColumn(name="environment_id", referencedColumnName="id")
      */
     private $environment;
@@ -32,7 +34,6 @@ class Application_Model_ObservationEnvironment
      * @Column(name="description", type="string")
      */
     private $description;
-    
     
     
     public function getId() {

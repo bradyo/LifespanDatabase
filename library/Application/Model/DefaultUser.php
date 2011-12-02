@@ -1,6 +1,8 @@
 <?php
 
-class Application_Model_DefaultUser extends Application_Model_User
+namespace Application\Model;
+
+class DefaultUser extends User
 {
     public function __construct() {
         parent::__construct();

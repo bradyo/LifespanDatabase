@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="user")
  */
-class Application_Model_User 
+class User 
 {
     /**
      * The number of seconds since last activity that the user should be

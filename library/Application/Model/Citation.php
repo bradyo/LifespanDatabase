@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="citation")
  */
-class Application_Model_Citation 
+class Citation 
 {
     /**
      * @var integer

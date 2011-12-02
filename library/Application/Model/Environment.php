@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="environment")
  */
-class Application_Model_Environment
+class Environment
 {
     /**
      * @var integer

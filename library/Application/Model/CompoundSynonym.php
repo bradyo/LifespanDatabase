@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="compound_synonym")
  */
-class Application_Model_CompoundSynonym
+class CompoundSynonym
 {
     /**
      * @var integer
@@ -14,15 +16,15 @@ class Application_Model_CompoundSynonym
     private $id;
     
     /**
-     * @var Application_Model_Compound
-     * @ManyToOne(targetEntity="Application_Model_Compound", inversedBy="synonyms")
+     * @var Compound
+     * @ManyToOne(targetEntity="\Application\Model\Compound", inversedBy="synonyms")
      * @JoinColumn(name="compound_id", referencedColumnName="id")
      */
     private $compound;
-    
+        
     /**
-     * @var string Synonym of the compound.
-     * @Column(name="name", type="string", length="64")
+     * @var string Synonym name of the species.
+     * @Column(name="name", type="string", length="128")
      */
     private $name;
     
@@ -42,4 +44,31 @@ class Application_Model_CompoundSynonym
     public function setName($name) {
         $this->name = $name;
     }
+    
+    public function getCompound() {
+        return $this->compound;
+    }
+
+    public function setCompound($compound) {
+        $this->compound = $compound;
+    }
+
+    public function fromArray($data) {
+        $properties = get_object_vars($this);
+        foreach ($data as $key => $value) {
+            if (array_key_exists($key, $properties)) {
+                $setter = 'set' . ucfirst($key);
+                $this->{$setter}($value);
+            }
+        }
+    }
+    
+    public function toArray() {
+        $data = array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        );
+        return $data;
+    }
 }
+

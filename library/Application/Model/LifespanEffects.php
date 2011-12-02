@@ -1,6 +1,8 @@
 <?php
 
-class Application_Model_LifespanEffects 
+namespace Application\Model;
+
+class LifespanEffects 
 {
     public function getChoices() {
         return array(

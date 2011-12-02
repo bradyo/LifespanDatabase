@@ -1,9 +1,11 @@
 <?php
 
+use \Application\Model\SpeciesService;
+
 class Api_SpeciesController extends Application_Controller_RestController
 {   
     /**
-     * @var Application_Service_SpeciesService
+     * @var Application\Service\SpeciesService
      */
     private $speciesService;
 
@@ -13,7 +15,7 @@ class Api_SpeciesController extends Application_Controller_RestController
         // set up service
         $em = Application_Registry::getEm();
         $user = Application_Registry::getCurrentUser();
-        $this->speciesService = new Application_Service_SpeciesService($user, $em);
+        $this->speciesService = new SpeciesService($user, $em);
     }
     
     public function indexAction() {

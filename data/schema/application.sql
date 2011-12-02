@@ -34,19 +34,21 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS citation (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    status VARCHAR(32),
     year INT,
     author TEXT,
     title TEXT,
     source TEXT,
     pubmed_id INT,
+    INDEX (status),
     INDEX (year),
     INDEX (pubmed_id)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS species (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
+    status VARCHAR(32),
     name VARCHAR(128) NOT NULL,
     common_name VARCHAR(128),
     ncbi_tax_id INT,    
@@ -69,13 +71,13 @@ CREATE TABLE IF NOT EXISTS species_synonym (
 
 CREATE TABLE IF NOT EXISTS strain (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
+    status VARCHAR(32),
     species_id INT,
     name VARCHAR(128) NOT NULL,
     common_name VARCHAR(128),
+    INDEX (guid),    
     INDEX (status),
-    INDEX (guid),
     FOREIGN KEY (species_id) REFERENCES species (id) ON DELETE SET NULL,
     INDEX (name),
     INDEX (common_name)
@@ -84,13 +86,13 @@ CREATE TABLE IF NOT EXISTS strain (
 
 CREATE TABLE IF NOT EXISTS compound (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
+    status VARCHAR(32),
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     ncbi_compound_id INT,
+    INDEX (guid),    
     INDEX (status),
-    INDEX (guid),
     INDEX (ncbi_compound_id),
     INDEX (name)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -107,8 +109,8 @@ CREATE TABLE IF NOT EXISTS compound_synonym (
 
 CREATE TABLE IF NOT EXISTS gene (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    status VARCHAR(32),
     guid CHAR(36) NOT NULL,
+    status VARCHAR(32),
     species VARCHAR(128),
     symbol VARCHAR(64),
     locus_tag VARCHAR(64),

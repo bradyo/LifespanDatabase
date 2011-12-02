@@ -1,17 +1,26 @@
 <?php
 
+namespace Application\Model;
+
 use Doctrine\Common\Collections\ArrayCollection;
+use Model\SpeciesSynonym;
+use Model\Exception\ValidateException;
+
 
 /**
  * @Entity 
  * @Table(name="species")
  */
-class Application_Model_Species
+class Species
 {
+    const STATUS_PENDING = 'pending';
+    const STATUS_PUBLIC = 'public';
+    const STATUS_DELETED = 'deleted';
+    
     /**
      * @var integer
      * @Id 
-     * @Column(name="id", type="integer")
+     * @Column(name="id", type="integer") 
      * @GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -21,6 +30,12 @@ class Application_Model_Species
      * @Column(name="guid", type="string", length="36")
      */
     private $guid;
+    
+    /**
+     * @var string Record status (if reviewed or not)
+     * @Column(name="status", type="string", length="32")
+     */
+    private $status = self::STATUS_PENDING;
     
     /**
      * @var string Full species name.
@@ -41,8 +56,8 @@ class Application_Model_Species
     private $ncbiTaxonId;
     
     /**
-     * $var array(Application_Model_SpeciesSynonym) List of synonyms for species name.
-     * @OneToMany(targetEntity="Application_Model_SpeciesSynonym", mappedBy="species", cascade={"persist"})
+     * $var array(Application\Model\SpeciesSynonym) List of synonyms for species name.
+     * @OneToMany(targetEntity="Application\Model\SpeciesSynonym", mappedBy="species", cascade={"persist"})
      */
     private $synonyms;
     
@@ -106,7 +121,7 @@ class Application_Model_Species
             if ($key == 'synonyms') {
                 $this->synonyms = new ArrayCollection();
                 foreach ($value as $synonymData) {
-                    $synonym = new Application_Model_SpeciesSynonym();
+                    $synonym = new SpeciesSynonym();
                     $synonym->fromArray($synonymData);
                     $this->addSynonym($synonym);
                 }
@@ -121,12 +136,13 @@ class Application_Model_Species
     public function toArray() {
         $synonymsData = array();
         foreach ($this->getSynonyms() as $synonym) {
-            /* @var $synonym Application_Model_SpeciesSynonym */
+            /* @var $synonym SpeciesSynonym */
             $synonymsData[] = $synonym->toArray();
         }
         $data = array(
             'id' => $this->id,
             'guid' => $this->guid,
+            'status' => $this->status,
             'name' => $this->name,
             'commonName' => $this->commonName,
             'ncbiTaxonId' => $this->ncbiTaxonId,
@@ -140,7 +156,7 @@ class Application_Model_Species
      */
     public function validate() {
         if ($this->guid === null) {
-            throw new Application_Exception_ValidateException("Guid required");
+            throw new ValidateException("Guid required");
         }
     }
 }

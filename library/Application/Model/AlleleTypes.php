@@ -1,6 +1,8 @@
 <?php
 
-class Application_Model_AlleleTypes 
+namespace Application\Model;
+
+class AlleleTypes 
 {
     public function getChoices() {
         return array(

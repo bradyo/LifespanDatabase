@@ -23,7 +23,7 @@ class Application_Registry {
         if (Zend_Registry::isRegistered('currentUser')) {
             return Zend_Registry::get('currentUser');
         } else {
-            return new Application_Model_DefaultUser();
+            return new Application\Model\DefaultUser();
         }
     }
 }

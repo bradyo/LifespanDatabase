@@ -1,5 +1,7 @@
 <?php 
 
+namespace Application\Model;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -7,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Table(name="observation")
  * @HasLifecycleCallbacks
  */
-class Application_Model_Observation
+class Observation
 {
     /**
      * Status given to observations that are active and made public in searches.
@@ -36,7 +38,8 @@ class Application_Model_Observation
     
     /**
      * @var integer ID of the observation version (each version has different ID)
-     * @Id @Column(name="id", type="integer")
+     * @Id 
+     * @Column(name="id", type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -65,7 +68,6 @@ class Application_Model_Observation
      */
     private $reviewStatus;
 
-        
     /**
      * @var DateTime When the author submitted the observation entry.
      * @Column(name="authored_at", type="datetime")
@@ -73,8 +75,8 @@ class Application_Model_Observation
     private $authoredAt;
     
     /**
-     * @var Application_Model_User User that created the observation version.
-     * @OneToOne(targetEntity="Application_Model_User", fetch="EAGER")
+     * @var User User that created the observation version.
+     * @OneToOne(targetEntity="Application\Model\User", fetch="EAGER")
      * @JoinColumn(name="author_Id", referencedColumnName="id")
      */
     private $author;
@@ -93,7 +95,7 @@ class Application_Model_Observation
     
     /**
      * @var Application_Model_User User that reviewed the observation version.
-     * @OneToOne(targetEntity="Application_Model_User", fetch="EAGER")
+     * @OneToOne(targetEntity="Application\Model\User", fetch="EAGER")
      * @JoinColumn(name="reviewer_id", referencedColumnName="id")
      */
     private $reviewer;
@@ -105,10 +107,16 @@ class Application_Model_Observation
     private $reviewerComment;
               
     /**
-     * @OneToOne(targetEntity="Application_Model_Citation")
+     * @OneToOne(targetEntity="Application\Model\Citation")
      * @JoinColumn(name="citation_id", referencedColumnName="id")
      */
     private $citation;
+    
+    /**
+     * @var string E-mail for correspondance
+     * @Column(name="correspondance_email", type="text")
+     */
+    private $correspondanceEmail;
     
     /**
      * @var double Lifespan value with interventions.
@@ -147,14 +155,14 @@ class Application_Model_Observation
     private $lifespanMeasure;
     
     /**
-     * @var string Full species name.
-     * @Column(name="species", type="string", length="128")
+     * @OneToOne(targetEntity="Application\Model\Species")
+     * @JoinColumn(name="species_id", referencedColumnName="id")
      */
     private $species;
     
     /**
-     * @var string Full strain name.
-     * @Column(name="strain", type="string", length="128")
+     * @OneToOne(targetEntity="Application\Model\Strain")
+     * @JoinColumn(name="strain_id", referencedColumnName="id")
      */
     private $strain;
     
@@ -183,19 +191,19 @@ class Application_Model_Observation
     private $description;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_ObservationGene", 
+     * @OneToMany(targetEntity="Application\Model\GeneIntervention", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $geneInterventions;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_ObservationCompound", 
+     * @OneToMany(targetEntity="Application\Model\CompoundIntervention", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $compoundInterventions;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_ObservationEnvironment", 
+     * @OneToMany(targetEntity="Application\Model\EnvironmentIntervention", 
      *  mappedBy="observation", fetch="EAGER")
      */
     private $environmentInterventions;
@@ -330,6 +338,14 @@ class Application_Model_Observation
 
     public function setCitation($citation) {
         $this->citation = $citation;
+    }
+
+    public function getCorrespondanceEmail() {
+        return $this->correspondanceEmail;
+    }
+
+    public function setCorrespondanceEmail($correspondanceEmail) {
+        $this->correspondanceEmail = $correspondanceEmail;
     }
 
     public function getLifespanValue() {

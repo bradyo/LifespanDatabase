@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="observation_gene")
  */
-class Application_Model_ObservationGene
+class GeneIntervention
 {
     /**
      * @var integer
@@ -14,28 +16,22 @@ class Application_Model_ObservationGene
     private $id;
     
     /**
-     * @var Application_Model_Observation
-     * @ManyToOne(targetEntity="Application_Model_Observation", inversedBy="geneInterventions")
+     * @var Observation
+     * @ManyToOne(targetEntity="Application\Model\Observation", inversedBy="geneInterventions")
      * @JoinColumn(name="observation_id", referencedColumnName="id")
      */
     private $observation;
     
     /**
-     * @var Application_Model_Gene
-     * @OneToOne(targetEntity="Application_Model_Gene", fetch="EAGER")
+     * @var Gene
+     * @OneToOne(targetEntity="Application\Model\Gene", fetch="EAGER")
      * @JoinColumn(name="gene_id", referencedColumnName="id")
      */
     private $gene;
     
     /**
-     * @var string Gene symbol.
-     * @Column(name="symbol", type="string", length="64")
-     */
-    private $symbol;
-    
-    /**
      * @var string
-     * @Colu*mn(name="allele_type", type="string")
+     * @Column(name="allele_type", type="string")
      */
     private $alleleType;
     
@@ -53,6 +49,14 @@ class Application_Model_ObservationGene
     public function setId($id) {
         $this->id = $id;
     }
+        
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    public function setObservation($observation) {
+        $this->observation = $observation;
+    }
 
     public function getGene() {
         return $this->gene;
@@ -60,14 +64,6 @@ class Application_Model_ObservationGene
 
     public function setGene($gene) {
         $this->gene = $gene;
-    }
-    
-    public function getSymbol() {
-        return $this->symbol;
-    }
-
-    public function setSymbol($symbol) {
-        $this->symbol = $symbol;
     }
 
     public function getAlleleType() {
@@ -84,13 +80,5 @@ class Application_Model_ObservationGene
 
     public function setAllele($allele) {
         $this->allele = $allele;
-    }
-    
-    public function getObservation() {
-        return $this->observation;
-    }
-
-    public function setObservation($observation) {
-        $this->observation = $observation;
     }
 }

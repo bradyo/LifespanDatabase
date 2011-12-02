@@ -1,9 +1,11 @@
 <?php
 
-class Application_Service_SpeciesService 
+namespace Application\Model;
+
+class SpeciesService 
 {
     /**
-     * @var Application_Model_User User of the service (used in authorization)
+     * @var User User of the service (used in authorization)
      */
     private $user;
     
@@ -33,11 +35,11 @@ class Application_Service_SpeciesService
         
         // validate input data
         if (! $this->isValidData($filteredData)) {
-            throw new Application_Exception_ValidateException('Invalid data');
+            throw new Exception('Invalid data');
         }
         
         // create entity
-        $species = new Application_Model_Species();
+        $species = new Species();
         $species->setGuid(Application_Guid::generate());
         $species->fromArray($filteredData);
         $this->em->persist($species);
@@ -49,7 +51,7 @@ class Application_Service_SpeciesService
     public function update($id, $data) {
         // check authorization
         if ( ! $this->user->isModerator()) {
-            throw new Application_Exception_UnauthorizedException('Permission denied');
+            throw new Exception('Permission denied');
         }
         
         // filter input data
@@ -57,11 +59,11 @@ class Application_Service_SpeciesService
         
         // validate input data
         if (! $this->isValidData($filteredData)) {
-            throw new Application_Exception_ValidateException('Invalid data');
+            throw new Exception('Invalid data');
         }
         
         // update entity
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application\Model\Species');
         $species = $repo->find($id);
         if (!$species) {
             throw new Exception('Species not found');
@@ -80,11 +82,11 @@ class Application_Service_SpeciesService
     public function delete($id) {
         // check authorization
         if ( ! $this->user->isAdmin()) {
-            throw new Application_Exception_UnauthorizedException('Permission denied');
+            throw new Exception('Permission denied');
         }
         
         // delete entity
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application\Model\Species');
         $species = $repo->find($id);
         if (!$species) {
             throw new Exception('Species not found');
@@ -94,7 +96,7 @@ class Application_Service_SpeciesService
     }
     
     public function get($id) {
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application\Model\Species');
         $item = $repo->find($id);
         if (!$item) {
             throw new Exception('Species not found');
@@ -103,7 +105,7 @@ class Application_Service_SpeciesService
     }
     
     public function getAll() {
-        $repo = $this->em->getRepository('Application_Model_Species');
+        $repo = $this->em->getRepository('Application\Model\Species');
         $items = $repo->findAll();
         $data = array();
         foreach ($items as $item) {
@@ -137,7 +139,7 @@ class Application_Service_SpeciesService
             $data['id'] = null;
         }
         
-        $speciesRepo = $this->em->getRepository('Application_Model_Species');
+        $speciesRepo = $this->em->getRepository('Application\Model\Species');
         if ($speciesRepo->nameExists($data['name'], $data['id'])) {
             $message = 'Species name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;

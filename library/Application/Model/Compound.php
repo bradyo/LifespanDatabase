@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="compound")
  */
-class Application_Model_Compound
+class Compound
 {
     /**
      * @var integer
@@ -32,7 +34,7 @@ class Application_Model_Compound
     private $ncbiCompoundId;
     
     /**
-     * @OneToMany(targetEntity="Application_Model_CompoundSynonym", mappedBy="compound")
+     * @OneToMany(targetEntity="Application\Model\CompoundSynonym", mappedBy="compound")
      */
     private $synonyms;
     
@@ -72,9 +74,5 @@ class Application_Model_Compound
     
     public function getSynonyms() {
         return $this->synonyms;
-    }
-
-    public function setSynonyms($synonyms) {
-        $this->synonyms = $synonyms;
     }
 }

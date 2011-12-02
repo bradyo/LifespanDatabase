@@ -1,5 +1,7 @@
 <?php 
 
+namespace Application\Model;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -7,10 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Table(name="gene")
  * @HasLifecycleCallbacks
  */
-class Application_Model_Gene 
+class Gene 
 {
-    private $errors;
-
     /**
      * @var integer
      * @Id @Column(name="id", type="integer")
@@ -25,8 +25,8 @@ class Application_Model_Gene
     private $guid;
     
     /**
-     * @var Application_Model_Species Species gene belongs to.
-     * @OneToOne(targetEntity="Application_Model_Species")
+     * @var Species Species gene belongs to.
+     * @OneToOne(targetEntity="Application\Model\Species")
      * @JoinColumn(name="species_id", referencedColumnName="id")
      */     
     private $species;
