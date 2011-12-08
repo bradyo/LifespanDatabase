@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-use Doctrine\ORM\Entity\EntityRepository;
+use Doctrine\ORM\EntityRepository;
 
 class SpeciesRepository extends EntityRepository 
 {

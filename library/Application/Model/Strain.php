@@ -1,11 +1,13 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="strain")
  * @HasLifecycleCallbacks
  */
-class Application_Model_Strain
+class Strain
 {
     /**
      * @Id @Column(name="id", type="integer")
@@ -20,8 +22,8 @@ class Application_Model_Strain
     private $guid;
     
     /**
-     * @var Application_Model_Species Species strain belongs to.
-     * @OneToOne(targetEntity="Application_Model_Species")
+     * @var Species Species strain belongs to.
+     * @OneToOne(targetEntity="Application\Model\Species")
      * @JoinColumn(name="species_id", referencedColumnName="id")
      */     
     private $species;

@@ -61,12 +61,6 @@ class Observation
      * @Column(name="status", type="string")
      */
     private $status;
-    
-    /**
-     * @var string Review status of observation.
-     * @Column(name="review_status", type="string")
-     */
-    private $reviewStatus;
 
     /**
      * @var DateTime When the author submitted the observation entry.
@@ -86,6 +80,12 @@ class Observation
      * @Column(name="author_comment", type="text")
      */
     private $authorComment;
+    
+    /**
+     * @var string Review status of observation.
+     * @Column(name="review_status", type="string")
+     */
+    private $reviewStatus;
     
     /**
      * @var DateTime When the observation entry was reviewed.
@@ -111,12 +111,6 @@ class Observation
      * @JoinColumn(name="citation_id", referencedColumnName="id")
      */
     private $citation;
-    
-    /**
-     * @var string E-mail for correspondance
-     * @Column(name="correspondance_email", type="text")
-     */
-    private $correspondanceEmail;
     
     /**
      * @var double Lifespan value with interventions.
@@ -479,5 +473,65 @@ class Observation
 
     public function getEnvironmentCount() {
         return $this->environmentCount;
+    }
+    
+    public function fromArray($data) {
+        $properties = get_object_vars($this);
+        foreach ($data as $key => $value) {
+            if (array_key_exists($key, $properties)) {
+                $setter = 'set' . ucfirst($key);
+                $this->{$setter}($value);
+            }
+        }
+    }
+    
+    public function toArray() {
+        $data = array(
+            'id' => $this->id,
+            'guid' => $this->guid,
+            'publicId' => $this->publicId,
+            'status' => $this->status,
+            'authoredAt' => ($this->authoredAt) ? $this->authoredAt->format(\DateTime::ISO8601) : null,
+            'author' => $this->author->toArray(),
+            'authorComment' => $this->authorComment,
+            'reviewStatus' => $this->reviewStatus,
+            'reviewedAt' => ($this->reviewedAt) ? $this->reviewedAt->format(\DateTime::ISO8601) : null,
+            'reviewerComment' => $this->reviewerComment,
+            'citation' => ($this->citation) ? $this->citation->toArray() : null,
+            'species' => ($this->species) ? $this->species->toArray() : null,
+            'strain' => ($this->strain) ? $this->strain->toArray() : null,
+            'cellType' => $this->cellType,
+            'temperature' => $this->temperature,
+            'lifespanValue' => $this->lifespanValue,
+            'lifespanBaseValue' => $this->lifespanBaseValue,
+            'lifespanPercentChange' => $this->lifespanPercentChange,
+            'lifespanUnits' => $this->lifespanUnits,
+            'lifespanMeasure' => $this->lifespanMeasure,
+            'lifespanEffect' => $this->lifespanEffect,
+            'description' => $this->description,
+            'geneInterventionsCount' => $this->geneCount,
+            'compoundInterventionsCount' => $this->compoundCount,
+            'environmentInterventionsCount' => $this->environmentCount,
+        );
+        
+        $geneInterventionsData = array();
+        foreach ($this->getGeneInterventions() as $geneIntervention) {
+            $geneInterventionsData[] = $geneIntervention->toArray();
+        }
+        $data['geneInterventions'] = $geneInterventionsData;
+        
+//        $compoundInterventionsData = array();
+//        foreach ($this->getCompoundInterventions() as $intervention) {
+//            $compoundInterventionsData[] = $intervention->toArray();
+//        }
+//        $data['compoundInterventions'] = $compoundInterventionsData;
+//        
+//        $envInterventionsData = array();
+//        foreach ($this->getEnvironmentInterventions() as $intervention) {
+//            $envInterventionsData[] = $intervention->toArray();
+//        }
+//        $data['environmentInterventions'] = $envInterventionsData;
+        
+        return $data;
     }
 }

@@ -2,6 +2,10 @@
 
 namespace Application\Model;
 
+use Application\AuthorizationException;
+use Application\ValidateException;
+use Application\Util\Guid;
+
 class SpeciesService 
 {
     /**
@@ -29,50 +33,63 @@ class SpeciesService
         $this->em = $em;
     }
     
-    public function create($data) {
-        // filter input data
-        $filteredData = $this->filter($data);
-        
-        // validate input data
-        if (! $this->isValidData($filteredData)) {
-            throw new Exception('Invalid data');
+    public function getValidationErrors() {
+        return $this->validationErrors;
+    }
+    
+    public function getSpecies($id, $expandRelations = array()) {
+        $repo = $this->em->getRepository('Application\Model\Species');
+        $species = $repo->find($id);
+        if (!$species) {
+            throw new \Exception('Species not found');
         }
+        return $species;
+    }
+    
+    public function getSpeciesData($id, $expandRelations = array()) {
+        $species = $this->getSpecies($id);
+        return $species->toArray($expandRelations);
+    }
+    
+    public function getAllSpeciesData() {
+        $dql = '
+            SELECT species, synonyms FROM Application\Model\Species species
+            LEFT JOIN species.synonyms synonyms
+            ';
+        $q = $this->em->createQuery($dql);
+        $q->execute();
+        return $q->getArrayResult();
+    }
+    
+    public function create($data) {
+        $this->authorizeMember();
+        $cleanData = $this->filter($data);
+        $this->validate($cleanData);
         
-        // create entity
         $species = new Species();
-        $species->setGuid(Application_Guid::generate());
-        $species->fromArray($filteredData);
+        $species->fromArray($cleanData);
+        $species->setGuid(Guid::generate());
+        $species->setStatus(Species::STATUS_PENDING);
         $this->em->persist($species);
         $this->em->flush();
 
         return $species;
-    }   
-    
+    }
+        
     public function update($id, $data) {
-        // check authorization
-        if ( ! $this->user->isModerator()) {
-            throw new Exception('Permission denied');
-        }
-        
-        // filter input data
-        $filteredData = $this->filter($data);
-        
-        // validate input data
-        if (! $this->isValidData($filteredData)) {
-            throw new Exception('Invalid data');
-        }
+        $this->authorizeAdmin();
+        $cleanData = $this->filter($data);
+        $this->validate($cleanData);
         
         // update entity
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $species = $repo->find($id);
-        if (!$species) {
-            throw new Exception('Species not found');
+        $species = $this->getSpecies($id);
+        if (isset($cleanData['synonyms'])) {
+            foreach ($species->getSynonyms() as $synonym) {
+                $species->getSynonyms()->removeElement($synonym);
+                $this->em->remove($synonym);
+            }
         }
-        foreach ($species->getSynonyms() as $synonym) {
-            $species->getSynonyms()->removeElement($synonym);
-            $this->em->remove($synonym);
-        }
-        $species->fromArray($filteredData);
+        $species->fromArray($cleanData);
         $this->em->persist($species);
         $this->em->flush();
         
@@ -80,76 +97,86 @@ class SpeciesService
     }
     
     public function delete($id) {
-        // check authorization
-        if ( ! $this->user->isAdmin()) {
-            throw new Exception('Permission denied');
-        }
-        
-        // delete entity
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $species = $repo->find($id);
-        if (!$species) {
-            throw new Exception('Species not found');
-        }
+        $this->authorizeAdmin();
+        $species = $this->getSpecies($id);
         $this->em->remove($species);
         $this->em->flush();
     }
-    
-    public function get($id) {
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $item = $repo->find($id);
-        if (!$item) {
-            throw new Exception('Species not found');
+
+    private function authorizeAdmin() {
+        if ( ! $this->user->isAdmin() || $this->user->isBlocked()) {
+            throw new AuthorizationException('Permission denied');
         }
-        return $item->toArray();        
     }
-    
-    public function getAll() {
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $items = $repo->findAll();
-        $data = array();
-        foreach ($items as $item) {
-            $data[] = $item->toArray();
+
+    private function authorizeMember() {
+        if ($this->user->isGuest() || $this->user->isBlocked()) {
+            throw new AuthorizationException('Permission denied');
         }
-        return $data;     
     }
+        
     
-    private function filter($data) {
-        $filteredData = array();
-        foreach ($data as $key => $value) {
-            if ($key == 'name') {
-                $filter = new Zend_Filter_StringTrim();
-                $filteredData[$key] = $filter->filter($value);
-            } else {
-                $filteredData[$key] = $value;
+    private function validate($data) {
+        // dis-allow any extra fields in data
+        $extraFields = array();
+        $allowedFields = $this->getAllowedFields();
+        foreach (array_keys($data) as $field) {
+            if (! in_array($field, $allowedFields)) {
+                $extraFields[] = $field;
             }
         }
-        return $filteredData;
-    }
-    
-    private function isValidData($data) {
+        if (count($extraFields) > 0) {
+            $msg = 'The following fields are not allowed: ' . join(', ', $extraFields);
+            $this->validationErrors['extraFields'] = $msg;
+        }
+        
         $this->validationErrors = array();
-        
         if (empty($data['name'])) {
-            $message = 'Species name cannot be empty';
-            $this->validationErrors['name'] = $message;
+            $this->validationErrors['name'] = 'Species name cannot be empty';
         }
-        
-        if ( ! isset($data['id'])) {
-            $data['id'] = null;
-        }
-        
-        $speciesRepo = $this->em->getRepository('Application\Model\Species');
-        if ($speciesRepo->nameExists($data['name'], $data['id'])) {
+
+        $repo = $this->em->getRepository('Application\Model\Species');
+        if ($repo->nameExists($data['name'], $data['id'])) {
             $message = 'Species name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;
         }
         
-        $isValid = (count($this->validationErrors) == 0);
-        return $isValid;
+        if (! $this->user->isModerator() && isset($data['status'])) {
+            $this->validationErrors['status'] = 'Only moderators can set status field';
+        }
+        
+        if (count($this->validationErrors) > 0) {
+            throw new ValidateException('Supplied data is invalid');
+        }
     }
     
-    public function getValidationErrors() {
-        return $this->validationErrors;
+    private function getAllowedFields() {
+        $fields = array(
+            'status',
+            'name',
+            'commonName',
+            'ncbiTaxonId',
+        );
+        if (! $this->user->isAdmin()) {
+            unset($fields['status']);
+        }
+        return $fields;
+    }
+
+    private function filter($data) {
+        // ID and GUID should be created and set automatically, not by user data
+        unset($data['id']);
+        unset($data['guid']);
+        
+        $cleanData = $data;
+        foreach ($cleanData as $key => $value) {
+            if ($key == 'name') {
+                $filter = new \Zend_Filter_StringTrim();
+                $cleanData[$key] = $filter->filter($value);
+            } else {
+                $cleanData[$key] = $value;
+            }
+        }
+        return $cleanData;
     }
 }

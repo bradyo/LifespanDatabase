@@ -3,12 +3,9 @@
 namespace Application\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Model\SpeciesSynonym;
-use Model\Exception\ValidateException;
-
 
 /**
- * @Entity 
+ * @entity(repositoryClass="Application\Model\SpeciesRepository")
  * @Table(name="species")
  */
 class Species
@@ -56,14 +53,56 @@ class Species
     private $ncbiTaxonId;
     
     /**
-     * $var array(Application\Model\SpeciesSynonym) List of synonyms for species name.
-     * @OneToMany(targetEntity="Application\Model\SpeciesSynonym", mappedBy="species", cascade={"persist"})
+     * $var ArrayCollection Synonyms for species name.
+     * @OneToMany(targetEntity="Application\Model\SpeciesSynonym", mappedBy="species", 
+     *  cascade={"persist"})
      */
     private $synonyms;
     
     
     public function __construct() {
         $this->synonyms = new ArrayCollection();
+    }
+
+    public function fromArray($data) {
+        $properties = array(
+            'id',
+            'guid',
+            'status',
+            'name',
+            'commonName',
+            'ncbiTaxonId',
+        );
+        foreach ($properties as $property) {
+            if (isset($data[$property])) {
+                $this->{$property} = $data[$property];
+            }
+        }
+        if (isset($data['synonyms'])) {
+            foreach ($data['synonyms'] as $synonymData) {
+                $synonym = new SpeciesSynonym($synonymData);
+                $this->addSynonym($synonym);
+            }
+        }
+    }
+    
+    public function toArray($expandRelations = array()) {
+        $data = array(
+            'id' => $this->id,
+            'guid' => $this->guid,
+            'status' => $this->status,
+            'name' => $this->name,
+            'commonName' => $this->commonName,
+            'ncbiTaxonId' => $this->ncbiTaxonId,
+        );
+        if (in_array('synonyms', $expandRelations)) {
+            $synonymsData = array();
+            foreach ($this->getSynonyms() as $synonym) {
+                $synonymsData[] = $synonym->toArray();
+            }
+            $data['synonyms'] = $synonymsData;
+        }
+        return $data;
     }
     
     public function getId() {
@@ -79,7 +118,15 @@ class Species
     }
 
     public function setGuid($guid) {
-        $this->guid = (string) $guid;
+        $this->guid = $guid;
+    }
+
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function setStatus($status) {
+        $this->status = $status;
     }
 
     public function getName() {
@@ -87,7 +134,7 @@ class Species
     }
 
     public function setName($name) {
-        $this->name = (string) $name;
+        $this->name = $name;
     }
 
     public function getCommonName() {
@@ -95,7 +142,7 @@ class Species
     }
 
     public function setCommonName($commonName) {
-        $this->commonName = (string) $commonName;
+        $this->commonName = $commonName;
     }
 
     public function getNcbiTaxonId() {
@@ -103,60 +150,19 @@ class Species
     }
 
     public function setNcbiTaxonId($ncbiTaxonId) {
-        $this->ncbiTaxonId = (integer) $ncbiTaxonId;
+        $this->ncbiTaxonId = $ncbiTaxonId;
     }
 
     public function getSynonyms() {
         return $this->synonyms;
     }
 
+    public function setSynonyms($synonyms) {
+        $this->synonyms = $synonyms;
+    }
+
     public function addSynonym($synonym) {
         $synonym->setSpecies($this);
         $this->synonyms->add($synonym);
-    }
-    
-    public function fromArray($data) {
-        $properties = get_object_vars($this);
-        foreach ($data as $key => $value) {
-            if ($key == 'synonyms') {
-                $this->synonyms = new ArrayCollection();
-                foreach ($value as $synonymData) {
-                    $synonym = new SpeciesSynonym();
-                    $synonym->fromArray($synonymData);
-                    $this->addSynonym($synonym);
-                }
-            } 
-            else if (array_key_exists($key, $properties)) {
-                $setter = 'set' . ucfirst($key);
-                $this->{$setter}($value);
-            }
-        }
-    }
-    
-    public function toArray() {
-        $synonymsData = array();
-        foreach ($this->getSynonyms() as $synonym) {
-            /* @var $synonym SpeciesSynonym */
-            $synonymsData[] = $synonym->toArray();
-        }
-        $data = array(
-            'id' => $this->id,
-            'guid' => $this->guid,
-            'status' => $this->status,
-            'name' => $this->name,
-            'commonName' => $this->commonName,
-            'ncbiTaxonId' => $this->ncbiTaxonId,
-            'synonyms' => $synonymsData,
-        );
-        return $data;
-    }
-    
-    /**
-     * @PrePersist @PreUpdate
-     */
-    public function validate() {
-        if ($this->guid === null) {
-            throw new ValidateException("Guid required");
-        }
     }
 }

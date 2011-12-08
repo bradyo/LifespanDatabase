@@ -66,7 +66,6 @@ class SpeciesSynonym
     public function setSpecies($species) {
         $this->species = $species;
     }
-
         
     public function fromArray($data) {
         $properties = get_object_vars($this);

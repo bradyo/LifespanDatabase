@@ -93,12 +93,6 @@ class User
     }
     
     
-    /**
-     * =======================================================================
-     * Getters and Setters
-     * =======================================================================
-     */
-    
     public function getId() {
         return $this->id;
     }
@@ -248,5 +242,21 @@ class User
 
     public function isDeleted() {
         return ($this->status == self::STATUS_DELETED);
+    }
+    
+    public function toArray() {
+        return array(
+            'id' => $this->id,
+            'status' => $this->status,
+            'role' => $this->role,
+            'username' => $this->username,
+            'name' => $this->name,
+            'email' => $this->email,
+            'passwordAlgorithm' => $this->passwordAlgorithm,
+            'passwordSalt' => $this->passwordSalt,
+            'passwordHash' => $this->passwordHash,
+            'locale' => $this->locale,
+            'timezone' => $this->timezone
+        );
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="gene_go")
  */
-class Application_Model_GeneGoTerm 
+class GeneGoTerm 
 {  
     const CATEGORY_FUNCTION = 'Function';
     const CATEGORY_PROCESS = 'Process';
@@ -19,7 +21,7 @@ class Application_Model_GeneGoTerm
     
     /**
      * @var Application_Model_Gene
-     * @ManyToOne(targetEntity="Application_Model_Gene", inversedBy="goTerms")
+     * @ManyToOne(targetEntity="Application\Model\Gene", inversedBy="goTerms")
      * @JoinColumn(name="gene_id", referencedColumnName="id")
      */
     private $gene;
@@ -96,5 +98,15 @@ class Application_Model_GeneGoTerm
 
     public function setDescription($description) {
         $this->description = $description;
+    }
+    
+    public function toArray() {
+        return array(
+            'id' => $this->id,
+            'termId' => $this->termId,
+            'category' => $this->category,
+            'evidenceCode' => $this->evidenceCode,
+            'description' => $this->description,
+        );
     }
 }

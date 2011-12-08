@@ -85,7 +85,7 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
     }
     
     public function renderXml() {
-        $data = $this->view->getVars();
+        $data = $this->view->responseData;
         if (count($data) !== 0) {
             $serializer = new Application_Serializer_Adapter_Xml();
             $body = $serializer->serialize($data);
@@ -94,7 +94,7 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
     }
     
     public function renderJson() {
-        $data = $this->view->getVars();
+        $data = $this->view->responseData;
         if (count($data) !== 0) {
             $serializer = new Zend_Serializer_Adapter_Json();
             $body = $serializer->serialize($data);
@@ -108,7 +108,7 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
     }
     
     public function renderText() {
-        $data = $this->view->getVars();
+        $data = $this->view->responseData;
         if (count($data) !== 0) {
             $serializer = new Zend_Serializer_Adapter_Json();
             $body = $serializer->serialize($data);

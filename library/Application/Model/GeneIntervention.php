@@ -81,4 +81,14 @@ class GeneIntervention
     public function setAllele($allele) {
         $this->allele = $allele;
     }
+    
+    public function toArray() {
+        $data = array(
+            'id' => $this->id,
+            'alleleType' => $this->alleleType,
+            'allele' => $this->allele,
+            'gene' => $this->gene->toArray(),
+        );
+        return $data;
+    }
 }

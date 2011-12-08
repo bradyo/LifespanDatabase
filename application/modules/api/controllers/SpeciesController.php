@@ -5,7 +5,7 @@ use \Application\Model\SpeciesService;
 class Api_SpeciesController extends Application_Controller_RestController
 {   
     /**
-     * @var Application\Service\SpeciesService
+     * @var Application\Model\SpeciesService
      */
     private $speciesService;
 
@@ -19,14 +19,53 @@ class Api_SpeciesController extends Application_Controller_RestController
     }
     
     public function indexAction() {
-        $this->view->species = $this->speciesService->getAll();
-        $this->view->count = count($this->view->species);
+        $allSpecies = $this->speciesService->getAll();
+        
+        $response = array();
+        $response['species'] = array();
+        foreach ($allSpecies as $species) {
+            $speciesData = $species->toArray();
+            $speciesData['links'] = array(
+                array(
+                    'rel' => 'self',
+                    'href' => $_SERVER['self'],
+                ),
+            );
+            $response['species'] = $speciesData;
+        }
+        $response['count'] = count($species);
+        $response['links'] = array(
+            array(
+                'rel' => 'next',
+                'href' => '/species?start=' . $start . '&count=' . $count
+            ),
+            array(
+                'rel' => 'prev',
+                'href' => '/species?start=' . $start . '&count=' . $count
+            )
+        );
+        
+        $this->view->responseData = $responseData;
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction() {
         $id = $this->getRequest()->getParam('id');
-        $this->view->species = $this->speciesService->get($id);
+        
+        $species = $this->speciesService->getSpecies($id);
+        
+        $responseData = $species->toArray();
+        $responseData['_links'] = array(
+            array(
+                'rel' => 'edit',
+                'href' => '/species/' . $i . '/edit',
+            ),
+            array(
+                'rel' => 'delete',
+                'href' => '/species/' . $i . '/delete',
+            ),
+        );
+        $this->view->responseData = $responseData;
         $this->getResponse()->setHttpResponseCode(200);
     }
 

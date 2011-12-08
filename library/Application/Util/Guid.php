@@ -1,6 +1,8 @@
 <?php
     
-class Application_Guid
+namespace Application\Util;
+
+class Guid
 {
     /**
      * Generate a GUID

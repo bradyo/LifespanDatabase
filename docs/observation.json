@@ -1,26 +1,37 @@
 {
-    description: "double deletion extends lifespan",
+    publicId: "1",
+    status: "public",
+    authoredAt: "2011-07-01T00:00:00+7",
+    authorId: "1",
+    authorComment: "author comment",
+    reviewedAt: "2011-07-01T00:00:00+7",
+    reviewerId: "1",
+    reviewerComment: "reviewer comment",
     lifespan: "40",
     lifespanUnits: "days",
     lifespanMeasure: "mean",
     lifespanEffect: "increased",
     temperature: "25",
+    description: "double deletion extends lifespan",
     geneInterventions: [
         {
+            allele: "allele x",
             alleleType: "deletion",
-            gene: {
-                id: 139,
-                name: "sir2",
-                species: "Saccromyces cerevisiae",
-            }
+            geneId: "139"
         },
         {
+            allele: "allele y",
             alleleType: "deletion",
-            gene: {
-                id: 139,
-                name: "fob1",
-                species: "Saccromyces cerevisiae",
-            }
+            geneId: "140"
         }
-    ],
+    ]
+}
+
+gene:
+{
+    id: "139",
+    symbol: "sir2",
+    speciesId: 1,
+    
+    
 }

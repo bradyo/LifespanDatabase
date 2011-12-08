@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS citation (
     author TEXT,
     title TEXT,
     source TEXT,
+    
     pubmed_id INT,
     INDEX (status),
     INDEX (year),
@@ -266,7 +267,6 @@ CREATE TABLE IF NOT EXISTS observation (
     reviewer_comment TEXT,
 
     created_at DATETIME,
-    correspondance_email VARCHAR(128),
     lifespan DOUBLE,
     lifespan_base DOUBLE,
     lifespan_units VARCHAR(64),
@@ -285,7 +285,6 @@ CREATE TABLE IF NOT EXISTS observation (
     compound_count INT NOT NULL DEFAULT 0,
     environment_count INT NOT NULL DEFAULT 0,
 
-    INDEX (public_id, version),
     INDEX (public_id),
     INDEX (version),
     INDEX (status),

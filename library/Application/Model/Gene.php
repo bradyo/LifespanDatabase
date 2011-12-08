@@ -61,16 +61,16 @@ class Gene
      */
     private $ncbiProteinId;
 
-    
-    /** 
-     * Generate a unique GUID if needed
-     * @PrePersist 
+    /**
+     * $var array(Application\Model\GeneGoTerm) List of associated gene go temrs
+     * @OneToMany(targetEntity="Application\Model\GeneGoTerm", mappedBy="gene", cascade={"persist"})
      */
-    public function generateGuid() {
-        if (empty($this->guid)) {
-            $this->guid = Application_Guid::generate();
-        }
+    private $goTerms;
+    
+    public function __construct() {
+        $this->goTerms = ArrayCollection();
     }
+
     
     public function getId() {
         return $this->id;
@@ -78,6 +78,14 @@ class Gene
 
     public function setId($id) {
         $this->id = $id;
+    }
+    
+    public function getGuid() {
+        return $this->guid;
+    }
+
+    public function setGuid($guid) {
+        $this->guid = $guid;
     }
 
     public function getSpecies() {
@@ -126,5 +134,36 @@ class Gene
 
     public function setNcbiProteinId($ncbiProteinId) {
         $this->ncbiProteinId = $ncbiProteinId;
+    }
+    
+    public function getGoTerms() {
+        return $this->goTerms;
+    }
+
+    public function setGoTerms($goTerms) {
+        $this->goTerms = $goTerms;
+    }
+    
+    public function toArray($expandRelations = array()) {
+        $data = array(
+            'id' => $this->id,
+            'guid' => $this->guid,
+            'species' => ($this->species) ? $this->species->toArray() : null,
+            'symbol' => $this->symbol,
+            'locusTag' => $this->locusTag,
+            'description' => $this->description,
+            'ncbiGeneId' => $this->ncbiGeneId,
+            'ncbiProteinId' => $this->ncbiProteinId,
+        );
+        
+        if (in_array('goTerms', $expandRelations)) {
+            $goTermsData = array();
+            foreach ($this->getGoTerms() as $goTerm) {
+                $goTermsData[] = $goTerm->toArray();
+            }
+            $data['goTerms'] = $goTermsData;
+        }
+        
+        return $data;
     }
 }

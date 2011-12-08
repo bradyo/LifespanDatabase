@@ -21,20 +21,14 @@ $application->bootstrap();
 
 
 $em = Application_Registry::getEm();
-$user = $em->getRepository('Application\Model\User')
-    ->findOneBy(array('username' => 'admin'));
-$speciesService = new \Application\Model\SpeciesService($user, $em);
 
-//$data = array(
-//    'name' => 'Drosophilla melanogaster',
-//);
-//try {
-//    $speciesService->create($data);
-//} 
-//catch (\Application\ValidateException $e) {
-//    $errors = $speciesService->getValidationErrors();
-//    print_r($errors);
-//}
+$repo = $em->getRepository('Application\Model\Observation');
+$item = $repo->findOneBy(array('id' => 1));
 
-$data = $speciesService->getAllSpeciesData();
-print_r($data);
+print_r($item->toArray());
+
+
+//$tester = new Test_Model_SpeciesServiceTest($em);
+//$test->setUp();
+//$tester->test();
+//$test->testCreateNotAuthorized();
