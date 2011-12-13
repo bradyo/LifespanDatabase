@@ -9,6 +9,7 @@ define('DATA_PATH', BASE_PATH . '/data');
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(BASE_PATH . '/library'),
     realpath(BASE_PATH . '/library/HtmlPurifier'),
+    realpath(BASE_PATH . '/tests'),
     get_include_path(),
 )));
 
@@ -20,21 +21,9 @@ $application = new Zend_Application(
 $application->bootstrap();
 
 
+
+
 $em = Application_Registry::getEm();
-$user = $em->getRepository('Application\Model\User')
-    ->findOneBy(array('username' => 'admin'));
-$speciesService = new \Application\Model\SpeciesService($user, $em);
 
-//$data = array(
-//    'name' => 'Drosophilla melanogaster',
-//);
-//try {
-//    $speciesService->create($data);
-//} 
-//catch (\Application\ValidateException $e) {
-//    $errors = $speciesService->getValidationErrors();
-//    print_r($errors);
-//}
-
-$data = $speciesService->getAllSpeciesData();
-print_r($data);
+$tester = new Test_Model_ObservationServiceTest($em);
+$tester->test();

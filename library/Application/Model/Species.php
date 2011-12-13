@@ -78,12 +78,6 @@ class Species
                 $this->{$property} = $data[$property];
             }
         }
-        if (isset($data['synonyms'])) {
-            foreach ($data['synonyms'] as $synonymData) {
-                $synonym = new SpeciesSynonym($synonymData);
-                $this->addSynonym($synonym);
-            }
-        }
     }
     
     public function toArray($expandRelations = array()) {

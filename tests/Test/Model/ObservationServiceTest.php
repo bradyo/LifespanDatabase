@@ -87,30 +87,6 @@ class Test_Model_ObservationServiceTest {
     }
     
     public function testUpdate() {
-        $userRepo = $this->em->getRepository('Application\Model\User');
-        $adminUser = $userRepo->findOneBy(array('username' => 'admin'));
-        $speciesService = new SpeciesService($adminUser, $this->em);
         
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $oldSpecies = $repo->findOneBy(array('name' => 'Saccharomyces cerevisiae'));
-        if ($oldSpecies == null) {
-            throw new \Exception('Species not found');
-        }
-        $id = $oldSpecies->getId();
-        
-        $newData = array(
-            'name' => 'Saccharomyces cerevisiae',
-            'commonName' => 'awesome yeast',
-            'ncbiTaxonId' => 4932,
-            'synonyms' => array(
-                array(
-                    'type' => 'common',
-                    'name' => 'Brewer\'s yeast',
-                )
-            ),
-        );
-        $species = $speciesService->update($id, $newData);
-        echo "species updated";
-        var_dump($species);
     }
 }

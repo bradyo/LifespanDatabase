@@ -60,7 +60,7 @@ class Observation
      * @var string Status of observation version.
      * @Column(name="status", type="string")
      */
-    private $status;
+    private $status = self::STATUS_PUBLIC;
 
     /**
      * @var DateTime When the author submitted the observation entry.
@@ -85,7 +85,7 @@ class Observation
      * @var string Review status of observation.
      * @Column(name="review_status", type="string")
      */
-    private $reviewStatus;
+    private $reviewStatus = self::REVIEW_STATUS_PENDING;
     
     /**
      * @var DateTime When the observation entry was reviewed.
@@ -443,8 +443,9 @@ class Observation
         return $this->geneInterventions;
     }
 
-    public function setGeneInterventions($geneInterventions) {
-        $this->geneInterventions = $geneInterventions;
+    public function addGeneIntervention($geneIntervention) {
+        $this->geneInterventions->add($geneIntervention);
+        $geneIntervention->setObservation($this);
     }
     
     public function getCompoundInterventions() {

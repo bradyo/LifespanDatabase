@@ -23,7 +23,6 @@ class SpeciesService
      */
     private $validationErrors;
     
-    
     /**
      * @param Application_Model_User $user
      * @param \Doctrine\ORM\EntityManager $em 
@@ -37,29 +36,6 @@ class SpeciesService
         return $this->validationErrors;
     }
     
-    public function getSpecies($id, $expandRelations = array()) {
-        $repo = $this->em->getRepository('Application\Model\Species');
-        $species = $repo->find($id);
-        if (!$species) {
-            throw new \Exception('Species not found');
-        }
-        return $species;
-    }
-    
-    public function getSpeciesData($id, $expandRelations = array()) {
-        $species = $this->getSpecies($id);
-        return $species->toArray($expandRelations);
-    }
-    
-    public function getAllSpeciesData() {
-        $dql = '
-            SELECT species, synonyms FROM Application\Model\Species species
-            LEFT JOIN species.synonyms synonyms
-            ';
-        $q = $this->em->createQuery($dql);
-        $q->execute();
-        return $q->getArrayResult();
-    }
     
     public function create($data) {
         $this->authorizeMember();
@@ -70,6 +46,13 @@ class SpeciesService
         $species->fromArray($cleanData);
         $species->setGuid(Guid::generate());
         $species->setStatus(Species::STATUS_PENDING);
+        if (isset($cleanData['synonyms'])) {
+            foreach ($cleanData['synonyms'] as $synonymData) {
+                $synonym = new SpeciesSynonym();
+                $synonym->fromArray($synonymData);
+                $species->addSynonym($synonym);
+            }
+        }
         $this->em->persist($species);
         $this->em->flush();
 
@@ -83,13 +66,18 @@ class SpeciesService
         
         // update entity
         $species = $this->getSpecies($id);
+        $species->fromArray($cleanData);
         if (isset($cleanData['synonyms'])) {
             foreach ($species->getSynonyms() as $synonym) {
                 $species->getSynonyms()->removeElement($synonym);
                 $this->em->remove($synonym);
             }
+            foreach ($cleanData['synonyms'] as $synonymData) {
+                $synonym = new SpeciesSynonym();
+                $synonym->fromArray($synonymData);
+                $species->addSynonym($synonym);
+            }
         }
-        $species->fromArray($cleanData);
         $this->em->persist($species);
         $this->em->flush();
         
@@ -114,8 +102,16 @@ class SpeciesService
             throw new AuthorizationException('Permission denied');
         }
     }
-        
     
+    private function getSpecies($id, $expandRelations = array()) {
+        $repo = $this->em->getRepository('Application\Model\Species');
+        $species = $repo->find($id);
+        if (!$species) {
+            throw new \Exception('Species not found');
+        }
+        return $species;
+    }
+        
     private function validate($data) {
         // dis-allow any extra fields in data
         $extraFields = array();
@@ -136,7 +132,8 @@ class SpeciesService
         }
 
         $repo = $this->em->getRepository('Application\Model\Species');
-        if ($repo->nameExists($data['name'], $data['id'])) {
+        $id = (isset($data['id'])) ? $data['id'] : null;
+        if ($repo->nameExists($data['name'], $id)) {
             $message = 'Species name "'. $data['name'] . '" already exists';
             $this->validationErrors['name'] = $message;
         }
@@ -156,6 +153,7 @@ class SpeciesService
             'name',
             'commonName',
             'ncbiTaxonId',
+            'synonyms',
         );
         if (! $this->user->isAdmin()) {
             unset($fields['status']);
