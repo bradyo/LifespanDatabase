@@ -12,6 +12,13 @@ delete {html(set flash, redirect to index), xml, json}
 
 class Api_ObservationsController extends Application_Controller_RestController
 {   
+    const DEFAULT_ITEMS_COUNT = 10;
+    
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+    
     /**
      * @var Application_Service_ObservationService
      */
@@ -20,14 +27,39 @@ class Api_ObservationsController extends Application_Controller_RestController
     public function init() {
         parent::init();
         
-        $em = Application_Registry::getEm();
+        $this->em = Application_Registry::getEm();
         $currentUser = Application_Registry::getCurrentUser();
-        $this->observationService = new Application_Service_Observation($em, $currentUser);
+        $this->observationService = new Application_Service_Observation($this->em, $currentUser);
     }
     
     public function indexAction() {
-        $this->view->resources = array();
+        $criteria = $this->getCriteria($this->_getAllParams());
+        $orderBy = $this->_getParam('order', null);
+        $limit = $this->_getParam('limit', self::DEFAULT_ITEMS_COUNT);
+        $offset = $this->_getParam('offset', 0);
+        $repo = $this->em->getRepository('Application\Model\Observation');
+        $this->view->observations = $repo->findBy($criteria, $orderBy, $limit, $offset);
+        
         $this->getResponse()->setHttpResponseCode(200);
+    }
+    
+    private function getCriteria($params) {
+        $criteria = array();
+        
+        
+        return $criteria;
+    }
+    
+    private function getObservationsData($observations) {
+        $data = array();
+        foreach ($observations as $observation) {
+            $data[] = $this->getObservationData($observation);
+        }
+        return $data;
+    }
+    
+    private function getObservationData($observation) {
+        return $observation->toArray();
     }
 
     public function getAction() {

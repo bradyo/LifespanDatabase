@@ -83,36 +83,36 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
         $response->setBody(sprintf('Resource #%s Deleted', $this->_getParam('id')));
         $response->setHttpResponseCode(200);
     }
-    
-    public function renderXml() {
-        $data = $this->view->responseData;
-        if (count($data) !== 0) {
-            $serializer = new Application_Serializer_Adapter_Xml();
-            $body = $serializer->serialize($data);
-            $this->getResponse()->setBody($body);
-        }
-    }
-    
-    public function renderJson() {
-        $data = $this->view->responseData;
-        if (count($data) !== 0) {
-            $serializer = new Zend_Serializer_Adapter_Json();
-            $body = $serializer->serialize($data);
-
-            $callback = $this->getRequest()->getParam('jsonp-callback', false);
-            if ($callback !== false and !empty($callback)) {
-                $body = sprintf('%s(%s)', $callback, $body);
-            }
-            $this->getResponse()->setBody($body);
-        }
-    }
-    
-    public function renderText() {
-        $data = $this->view->responseData;
-        if (count($data) !== 0) {
-            $serializer = new Zend_Serializer_Adapter_Json();
-            $body = $serializer->serialize($data);
-            $this->getResponse()->setBody($body);
-        }
-    }
+//    
+//    public function renderXml() {
+//        $data = $this->view->responseData;
+//        if (count($data) !== 0) {
+//            $serializer = new Application_Serializer_Adapter_Xml();
+//            $body = $serializer->serialize($data);
+//            $this->getResponse()->setBody($body);
+//        }
+//    }
+//    
+//    public function renderJson() {
+//        $data = $this->view->responseData;
+//        if (count($data) !== 0) {
+//            $serializer = new Zend_Serializer_Adapter_Json();
+//            $body = $serializer->serialize($data);
+//
+//            $callback = $this->getRequest()->getParam('jsonp-callback', false);
+//            if ($callback !== false and !empty($callback)) {
+//                $body = sprintf('%s(%s)', $callback, $body);
+//            }
+//            $this->getResponse()->setBody($body);
+//        }
+//    }
+//    
+//    public function renderText() {
+//        $data = $this->view->responseData;
+//        if (count($data) !== 0) {
+//            $serializer = new Zend_Serializer_Adapter_Json();
+//            $body = $serializer->serialize($data);
+//            $this->getResponse()->setBody($body);
+//        }
+//    }
 }
