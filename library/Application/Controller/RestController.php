@@ -12,12 +12,12 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
             array( 
                 'json' => array(
                     'headers' => array(
-                        'Content-Type' => 'application/json',
+//                        'Content-Type' => 'application/json',
                         'Content-Charset' => 'utf-8',
                     ),
-                    'callbacks' => array(
-                        'post' => array(&$this, 'renderJson')
-                    ),
+//                    'callbacks' => array(
+//                        'post' => array(&$this, 'renderJson')
+//                    ),
                 ),
                 'xml' => array(
                     'headers' => array(
@@ -28,23 +28,15 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
                         'post' => array(&$this, 'renderXml')
                     ),
                 ),
-                'text' => array(
-                    'headers' => array(
-                        'Content-Type' => 'text/plain',
-                        'Content-Charset' => 'utf-8',
-                    ),
-                    'callbacks' => array(
-                        'post' => array(&$this, 'renderText')
-                    )
-                )
             )
         );
         
         // add contexts
         $actions = array('options', 'head', 'index', 'get', 'post', 'put', 'delete');
         foreach ($actions as $action) {
-            $contextSwitch->addActionContext($action, array('xml', 'json', 'text'));
+            $contextSwitch->addActionContext($action, array('json', 'xml'));
         }
+        $contextSwitch->setAutoJsonSerialization(false);
         $contextSwitch->initContext();
     }
     
@@ -83,36 +75,22 @@ abstract class Application_Controller_RestController extends Zend_Rest_Controlle
         $response->setBody(sprintf('Resource #%s Deleted', $this->_getParam('id')));
         $response->setHttpResponseCode(200);
     }
-//    
-//    public function renderXml() {
-//        $data = $this->view->responseData;
-//        if (count($data) !== 0) {
-//            $serializer = new Application_Serializer_Adapter_Xml();
-//            $body = $serializer->serialize($data);
-//            $this->getResponse()->setBody($body);
-//        }
-//    }
-//    
-//    public function renderJson() {
-//        $data = $this->view->responseData;
-//        if (count($data) !== 0) {
-//            $serializer = new Zend_Serializer_Adapter_Json();
-//            $body = $serializer->serialize($data);
-//
-//            $callback = $this->getRequest()->getParam('jsonp-callback', false);
-//            if ($callback !== false and !empty($callback)) {
-//                $body = sprintf('%s(%s)', $callback, $body);
-//            }
-//            $this->getResponse()->setBody($body);
-//        }
-//    }
-//    
-//    public function renderText() {
-//        $data = $this->view->responseData;
-//        if (count($data) !== 0) {
-//            $serializer = new Zend_Serializer_Adapter_Json();
-//            $body = $serializer->serialize($data);
-//            $this->getResponse()->setBody($body);
-//        }
-//    }
+    
+    public function renderXml() {
+        $data = $this->view->responseData;
+        if (count($data) !== 0) {
+            $serializer = new Application_Serializer_Adapter_Xml();
+            $body = $serializer->serialize($data);
+            $this->getResponse()->setBody($body);
+        }
+    }
+    
+    public function renderJson() {
+        $data = $this->view->responseData;
+        if (count($data) !== 0) {
+            $serializer = new Zend_Serializer_Adapter_Json();
+            $body = $serializer->serialize($data);
+            $this->getResponse()->setBody($body);
+        }
+    }
 }

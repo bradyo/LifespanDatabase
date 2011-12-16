@@ -6,7 +6,7 @@ use Application\AuthorizationException;
 use Application\ValidateException;
 use Application\Util\Guid;
 
-class SpeciesService 
+class ObservationService 
 {
     /**
      * @var User User of the service (used in authorization)

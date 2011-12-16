@@ -1,10 +1,14 @@
 <?php
 
+namespace Application\Model;
+
+
+
 /**
  * @Entity
  * @Table(name="observation_compound")
  */
-class Application_Model_ObservationCompound 
+class CompoundIntervention
 {
     /**
      * @var integer
@@ -14,15 +18,15 @@ class Application_Model_ObservationCompound
     private $id;
     
     /**
-     * @var Application_Model_Observation
-     * @ManyToOne(targetEntity="Application_Model_Observation", inversedBy="compoundInterventions")
+     * @var Observation
+     * @ManyToOne(targetEntity="Application\Model\Observation", inversedBy="compoundInterventions")
      * @JoinColumn(name="observation_id", referencedColumnName="id")
      */
     private $observation;
     
     /**
      * @var Application_Model_Compound
-     * @OneToOne(targetEntity="Application_Model_Compound", fetch="EAGER")
+     * @OneToOne(targetEntity="Application\Model\Compound", fetch="EAGER")
      * @JoinColumn(name="compound_id", referencedColumnName="id")
      */
     private $compound;

@@ -107,6 +107,12 @@ class Observation
     private $reviewerComment;
               
     /**
+     * @var string E-mail address of person that should be contacted in regards to this observation
+     * @Column(name="correspondance_email", type="text")
+     */
+    private $correspondanceEmail;
+    
+    /**
      * @OneToOne(targetEntity="Application\Model\Citation")
      * @JoinColumn(name="citation_id", referencedColumnName="id")
      */
@@ -325,6 +331,14 @@ class Observation
     public function setReviewerComment($reviewerComment) {
         $this->reviewerComment = $reviewerComment;
     }
+    
+    public function getCorrespondanceEmail() {
+        return $this->correspondanceEmail;
+    }
+
+    public function setCorrespondanceEmail($correspondanceEmail) {
+        $this->correspondanceEmail = $correspondanceEmail;
+    }
 
     public function getCitation() {
         return $this->citation;
@@ -332,14 +346,6 @@ class Observation
 
     public function setCitation($citation) {
         $this->citation = $citation;
-    }
-
-    public function getCorrespondanceEmail() {
-        return $this->correspondanceEmail;
-    }
-
-    public function setCorrespondanceEmail($correspondanceEmail) {
-        $this->correspondanceEmail = $correspondanceEmail;
     }
 
     public function getLifespanValue() {
@@ -444,6 +450,7 @@ class Observation
     }
 
     public function addGeneIntervention($geneIntervention) {
+        /* @var $geneIntervention Application\Model\GeneIntervention */
         $this->geneInterventions->add($geneIntervention);
         $geneIntervention->setObservation($this);
     }
@@ -498,6 +505,7 @@ class Observation
             'reviewStatus' => $this->reviewStatus,
             'reviewedAt' => ($this->reviewedAt) ? $this->reviewedAt->format(\DateTime::ISO8601) : null,
             'reviewerComment' => $this->reviewerComment,
+            'correspondanceEmail' => $this->correspondanceEmail,
             'citation' => ($this->citation) ? $this->citation->toArray() : null,
             'species' => ($this->species) ? $this->species->toArray() : null,
             'strain' => ($this->strain) ? $this->strain->toArray() : null,

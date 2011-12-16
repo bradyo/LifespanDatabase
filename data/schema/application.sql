@@ -263,8 +263,7 @@ CREATE TABLE IF NOT EXISTS observation (
     reviewed_at DATETIME,
     reviewer_id INT,
     reviewer_comment TEXT,
-
-    created_at DATETIME,
+    correspondance_email VARCHAR(128),
     lifespan DOUBLE,
     lifespan_base DOUBLE,
     lifespan_units VARCHAR(64),
@@ -291,7 +290,7 @@ CREATE TABLE IF NOT EXISTS observation (
     INDEX (review_status),
     INDEX (reviewed_at),
     FOREIGN KEY (reviewer_id) REFERENCES `user` (id) ON DELETE SET NULL,
-    INDEX (created_at),
+    INDEX (correspondance_email),
     INDEX (lifespan),
     INDEX (lifespan_base),
     INDEX (lifespan_units),

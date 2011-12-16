@@ -44,12 +44,6 @@ class Citation
      * @Column(name="pubmed_id", type="integer")
      */
     private $pubmedId;
-        
-    /**
-     * @var string E-mail for correspondance
-     * @Column(name="correspondance_email", type="text")
-     */
-    private $correspondanceEmail;
     
     
     public function getId() {
@@ -99,12 +93,15 @@ class Citation
     public function setPubmedId($pubmedId) {
         $this->pubmedId = $pubmedId;
     }
-    
-    public function getCorrespondanceEmail() {
-        return $this->correspondanceEmail;
-    }
-
-    public function setCorrespondanceEmail($correspondanceEmail) {
-        $this->correspondanceEmail = $correspondanceEmail;
+       
+    public function toArray() {
+        return array(
+            'id' => $this->id,
+            'year' => $this->year,
+            'authors' => $this->authors,
+            'title' => $this->title,
+            'source' => $this->source,
+            'pubmedId' => $this->pubmedId,
+        );
     }
 }

@@ -48,9 +48,6 @@ class Application_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_A
             case 'application/json':
                 $request->setParam('format', 'json');
                 break;
-            default:
-                $request->setParam('format', 'text');
-                break;
         }
     }
 }

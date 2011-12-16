@@ -10,6 +10,8 @@ update {html(set flash, redirect to get/edit), xml, json}
 delete {html(set flash, redirect to index), xml, json}
  */
 
+use Application\Model\ObservationService;
+
 class Api_ObservationsController extends Application_Controller_RestController
 {   
     const DEFAULT_ITEMS_COUNT = 10;
@@ -29,7 +31,7 @@ class Api_ObservationsController extends Application_Controller_RestController
         
         $this->em = Application_Registry::getEm();
         $currentUser = Application_Registry::getCurrentUser();
-        $this->observationService = new Application_Service_Observation($this->em, $currentUser);
+        $this->observationService = new ObservationService($this->em, $currentUser);
     }
     
     public function indexAction() {
@@ -38,9 +40,24 @@ class Api_ObservationsController extends Application_Controller_RestController
         $limit = $this->_getParam('limit', self::DEFAULT_ITEMS_COUNT);
         $offset = $this->_getParam('offset', 0);
         $repo = $this->em->getRepository('Application\Model\Observation');
-        $this->view->observations = $repo->findBy($criteria, $orderBy, $limit, $offset);
-        
-        $this->getResponse()->setHttpResponseCode(200);
+        $observations = $repo->findBy($criteria, $orderBy, $limit, $offset);
+
+        $data = $this->getObservationsJsonData($observations);
+        $body = Zend_Json::encode($data);
+        $this->getResponse()->setBody($body);
+    }
+    
+    private function getObservationsJsonData($observations) {
+        $data = array();
+        foreach ($observations as $observation) {
+            $data[] = $this->getObservationJsonData($observation);
+        }
+        return $data;
+    }
+    
+    private function getObservationJsonData($observation) {
+        $data = $observation->toArray();
+        return $data;
     }
     
     private function getCriteria($params) {
