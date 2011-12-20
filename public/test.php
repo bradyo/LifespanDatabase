@@ -22,8 +22,6 @@ $application->bootstrap();
 
 
 
-
 $em = Application_Registry::getEm();
-
 $tester = new Test_Model_ObservationServiceTest($em);
-$tester->test();
+$tester->setUp();

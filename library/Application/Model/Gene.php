@@ -68,7 +68,7 @@ class Gene
     private $goTerms;
     
     public function __construct() {
-        $this->goTerms = ArrayCollection();
+        $this->goTerms = new ArrayCollection();
     }
 
     

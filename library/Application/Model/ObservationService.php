@@ -36,7 +36,6 @@ class ObservationService
         return $this->validationErrors;
     }
     
-    
     public function create($data) {
         $this->authorizeMember();
         $cleanData = $this->filter($data);
