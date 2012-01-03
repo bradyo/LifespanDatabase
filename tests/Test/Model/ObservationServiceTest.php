@@ -94,7 +94,7 @@ class Test_Model_ObservationServiceTest {
             $data = $baseData;
             $datetime = \DateTime::createFromFormat('Y-m-d', '2011-08-01');
             $datetime->add(new DateInterval('P' . $i . 'D'));
-            $data['createdAt'] = $datetime;
+            $data['authoredAt'] = $datetime;
             $data['reviewedAt'] = $datetime;
             
             $geneIntervention = new \Application\Model\GeneIntervention();
@@ -119,7 +119,7 @@ class Test_Model_ObservationServiceTest {
             $data = $baseData;
             $datetime = \DateTime::createFromFormat('Y-m-d', '2011-08-01');
             $datetime->add(new DateInterval('P' . $i . 'D'));
-            $data['createdAt'] = $datetime;
+            $data['authoredAt'] = $datetime;
             $data['reviewedAt'] = $datetime;
             
             $geneIntervention = new \Application\Model\GeneIntervention();

@@ -2,35 +2,47 @@
 
 namespace Application\Model;
 
-use Doctrine\ORM\Entity\EntityRepository;
+use Doctrine\ORM\EntityRepository;
 
 class ObservationRepository extends EntityRepository 
 {
+    /**
+     * @var Application_Service_SearchService
+     */
+    private $searchService;
+    
+    
+    public function __construct($em, Mapping\ClassMetadata $class) {
+        parent::__construct($em, $class);
+        $this->searchService = new Application_Service_SearchService();
+    }
+    
     public function getCurrent($criteria, $orderBy, $limit, $offset) {
-        
-        // todo: fetch id subset from fulltext search
-        $searchMatchIds = array();
-        
+        // build search query
         $dql = '
             SELECT observation
-            FROM (
-                SELECT observationSubset
-                FROM (
-                        SELECT id, MAX(authoredAt) as versionDate 
-                        FROM Application\Model\Observation GROUP BY publicId
-                ) AS observationSubset
-                LEFT JOIN Application\Model\Observation o ON o.id = observationSubset.id
-            ) as observation
-            WHERE observation.status = :status 
+            FROM Application\Model\Observation observation
+            WHERE observation.reviewedAt = (
+                SELECT MAX(subsetObservation.reviewedAt)
+                FROM Application\Model\Observation subsetObservation
+                WHERE observation.publicId = subsetObservation.publicId
+                    AND subsetObservation.reviewedAt < :maxReviewedAt
+                GROUP BY subsetObservation.publicId
+            )
+            AND observation.status = :status 
             AND observation.reviewStatus = :reviewStatus
             ';
-        if (count($searchMatchIds) > 0) {
+        
+        // add fulltext search criteria if given
+        if (isset($criteria['search']) && !empty($criteria['search'])) {
+            $searchMatchIds = $this->searchService->getMatchIds($criteria['search']);
             $dql .= ' AND observation.id IN (' . implode(', ', $searchMatchIds) . ')';
         }
+        
         $query = $this->getEntityManager()->createQuery($dql);
         $query->setParameter('status', Observation::STATUS_PUBLIC);
         $query->setParameter('reviewStatus', Observation::REVIEW_STATUS_ACCEPTED);
-        
+        $query->setParameter('maxReviewedAt', '2011-08-03');
         return $query->getResult();
     }
 }

@@ -40,7 +40,7 @@ class Api_ObservationsController extends Application_Controller_RestController
         $limit = $this->_getParam('limit', self::DEFAULT_ITEMS_COUNT);
         $offset = $this->_getParam('offset', 0);
         $repo = $this->em->getRepository('Application\Model\Observation');
-        $observations = $repo->findLatestBy($criteria, $orderBy, $limit, $offset);
+        $observations = $repo->getCurrent($criteria, $orderBy, $limit, $offset);
 
         $data = $this->getObservationsJsonData($observations);
         $body = Zend_Json::encode($data);
