@@ -7,14 +7,14 @@ use Doctrine\ORM\EntityRepository;
 class ObservationRepository extends EntityRepository 
 {
     /**
-     * @var Application_Service_SearchService
+     * @var Zend_Search_Lucene_Interface
      */
-    private $searchService;
+    private $searchIndex;
     
     
-    public function __construct($em, Mapping\ClassMetadata $class) {
+    public function __construct($em, $searchIndex, Mapping\ClassMetadata $class) {
         parent::__construct($em, $class);
-        $this->searchService = new Application_Service_SearchService();
+        $this->searchIndex = $searchIndex;
     }
     
     public function getCurrent($criteria, $orderBy, $limit, $offset) {
@@ -44,5 +44,15 @@ class ObservationRepository extends EntityRepository
         $query->setParameter('reviewStatus', Observation::REVIEW_STATUS_ACCEPTED);
         $query->setParameter('maxReviewedAt', '2011-08-03');
         return $query->getResult();
+    }
+    
+    private function getMatchIds($searchQuery) {
+        $matchIds = array();
+        $hits = $this->searchIndex->find($searchQuery);
+        foreach ($hits as $hit) {
+            /* @var $hit Zend_Search_Lucene_Search_QueryHit */
+            $matchIds[] = $hit->id;
+        }
+        return $matchIds;
     }
 }
