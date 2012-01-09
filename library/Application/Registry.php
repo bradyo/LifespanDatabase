@@ -17,7 +17,7 @@ class Application_Registry {
     }
     
     /**
-     * @return Application_Model_User
+     * @return \Application\Model\User
      */
     public static function getCurrentUser() {
         if (Zend_Registry::isRegistered('currentUser')) {
@@ -25,5 +25,12 @@ class Application_Registry {
         } else {
             return new Application\Model\DefaultUser();
         }
+    }
+    
+    /**
+     * @return Zend_Search_Lucene_Interface
+     */
+    public static function getSearchIndex() {
+        return Zend_Registry::get('searchIndex');
     }
 }

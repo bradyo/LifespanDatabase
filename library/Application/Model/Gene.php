@@ -62,12 +62,21 @@ class Gene
     private $ncbiProteinId;
 
     /**
+     * $var array(Application\Model\GeneSynonym) List of associated synonyms
+     * @OneToMany(targetEntity="Application\Model\GeneSynonym", mappedBy="gene")
+     */
+    private $synonyms;
+    
+    /**
      * $var array(Application\Model\GeneGoTerm) List of associated gene go temrs
      * @OneToMany(targetEntity="Application\Model\GeneGoTerm", mappedBy="gene", cascade={"persist"})
      */
     private $goTerms;
     
+    
+    
     public function __construct() {
+        $this->synonyms = new ArrayCollection();
         $this->goTerms = new ArrayCollection();
     }
 
@@ -136,6 +145,14 @@ class Gene
         $this->ncbiProteinId = $ncbiProteinId;
     }
     
+    public function getSynonyms() {
+        return $this->synonyms;
+    }
+
+    public function setSynonyms($synonyms) {
+        $this->synonyms = $synonyms;
+    }
+
     public function getGoTerms() {
         return $this->goTerms;
     }
@@ -148,7 +165,6 @@ class Gene
         $data = array(
             'id' => $this->id,
             'guid' => $this->guid,
-            'species' => ($this->species) ? $this->species->toArray() : null,
             'symbol' => $this->symbol,
             'locusTag' => $this->locusTag,
             'description' => $this->description,

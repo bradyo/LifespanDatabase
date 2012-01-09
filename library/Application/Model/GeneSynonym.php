@@ -1,10 +1,12 @@
 <?php
 
+namespace Application\Model;
+
 /**
  * @Entity
  * @Table(name="gene_synonym")
  */
-class Application_Model_GeneSynonym
+class GeneSynonym
 {
     /**
      * @var integer
@@ -14,8 +16,8 @@ class Application_Model_GeneSynonym
     private $id;
     
     /**
-     * @var Application_Model_Gene
-     * @ManyToOne(targetEntity="Application_Model_Gene", inversedBy="synonyms")
+     * @var Application\Model\Gene
+     * @ManyToOne(targetEntity="Application\Model\Gene", inversedBy="synonyms")
      * @JoinColumn(name="gene_id", referencedColumnName="id")
      */
     private $gene;

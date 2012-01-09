@@ -88,7 +88,7 @@ class Test_Model_ObservationServiceTest {
             'lifespanUnits' => 'days',
             'lifespanMeasure' => 'mean',
             'lifespanEffect' => 'increased',
-            'description' => 'observation description',
+            'description' => 'observation description firstDescription',
         );
         for ($i = 0; $i < 3; $i++) {
             $data = $baseData;
@@ -115,6 +115,7 @@ class Test_Model_ObservationServiceTest {
         $baseData['temperature'] = 30;
         $baseData['lifespanValue'] = 100;
         $baseData['lifespanBaseValue'] = 90;
+        $baseData['description'] = 'observation description secondDescription';
         for ($i = 0; $i < 2; $i++) {
             $data = $baseData;
             $datetime = \DateTime::createFromFormat('Y-m-d', '2011-08-01');
@@ -135,6 +136,10 @@ class Test_Model_ObservationServiceTest {
         }
         
         $this->em->flush();
+        
+        $searchIndex = Application_Registry::getSearchIndex();
+        $service = new Application\Model\ObservationService(null, $this->em, $searchIndex);
+        $service->rebuildObservationsIndex();
     }
 
     

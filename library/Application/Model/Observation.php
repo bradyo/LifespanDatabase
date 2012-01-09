@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @Entity(repositoryClass="Application\Model\ObservationRepository")
+ * @Entity
  * @Table(name="observation")
  * @HasLifecycleCallbacks
  */

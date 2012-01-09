@@ -1,15 +1,5 @@
 <?php
 
-/**
-index {html, xml, json}
-show {html, xml, json}
-add {html}
-edit {html}
-create {html(set flash, redirect to get/edit), xml, json}
-update {html(set flash, redirect to get/edit), xml, json}
-delete {html(set flash, redirect to index), xml, json}
- */
-
 use Application\Model\ObservationService;
 
 class Api_ObservationsController extends Application_Controller_RestController
@@ -26,12 +16,18 @@ class Api_ObservationsController extends Application_Controller_RestController
      */
     private $observationService;
     
+    /**
+     * @var Zend_Search_Lucene_Interface
+     */
+    private $searchIndex;
+    
     public function init() {
         parent::init();
         
         $this->em = Application_Registry::getEm();
+        $this->searchIndex = Application_Registry::getSearchIndex();
         $currentUser = Application_Registry::getCurrentUser();
-        $this->observationService = new ObservationService($this->em, $currentUser);
+        $this->observationService = new ObservationService($currentUser, $this->em, $this->searchIndex);
     }
     
     public function indexAction() {
@@ -39,8 +35,7 @@ class Api_ObservationsController extends Application_Controller_RestController
         $orderBy = $this->_getParam('order', null);
         $limit = $this->_getParam('limit', self::DEFAULT_ITEMS_COUNT);
         $offset = $this->_getParam('offset', 0);
-        $repo = $this->em->getRepository('Application\Model\Observation');
-        $observations = $repo->getCurrent($criteria, $orderBy, $limit, $offset);
+        $observations = $this->observationService->getCurrent($criteria, $orderBy, $limit, $offset);
 
         $data = $this->getObservationsJsonData($observations);
         $body = Zend_Json::encode($data);
@@ -62,8 +57,9 @@ class Api_ObservationsController extends Application_Controller_RestController
     
     private function getCriteria($params) {
         $criteria = array();
-        
-        
+        if (isset($params['search'])) {
+            $criteria['search'] = $params['search'];
+        }
         return $criteria;
     }
     

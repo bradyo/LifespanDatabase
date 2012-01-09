@@ -3,7 +3,6 @@
 namespace Application\Model;
 
 
-
 /**
  * @Entity
  * @Table(name="observation_compound")
@@ -25,7 +24,7 @@ class CompoundIntervention
     private $observation;
     
     /**
-     * @var Application_Model_Compound
+     * @var Application\Model\Compound
      * @OneToOne(targetEntity="Application\Model\Compound", fetch="EAGER")
      * @JoinColumn(name="compound_id", referencedColumnName="id")
      */
