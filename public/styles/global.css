@@ -3,31 +3,42 @@
     padding: 0;
 }
 
-html {
-    font-family: sans-serif;
-    font-size: 0.9em;
+body {
+    margin: 10px;
 }
 
 #viewport {
-    min-width: 780px;
-    max-width: 1144px;
+    width: 960px;
     margin: 0 auto;
 }
 
 #header {
     height: 50px;
+    width: auto;
+    border: 1px solid black;
     background-color: #ffffcc;
     line-height: 50px;
+    font-size: 30px;
+    font-weight: bolder;
     padding-left: 10px;
     padding-right: 10px;
     clear: both;
-    height: 70px;
-    line-height: 70px;
-    background: url("images/header_bg.jpg") repeat-x scroll 0 0 #000033;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #333;
+
+    border: 0px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 26px;
+    color: white;
+    background: url("images/header_bg.jpg") repeat-x scroll 0 0 #000033
 }
 
+#header a {
+    color: white;
+    text-decoration: none;
+}
+#header a:hover {
+    text-decoration: underline;
+}
 #header a img {
     border: none;
 }
@@ -35,6 +46,27 @@ html {
 #top-nav {
     margin-bottom: 10px;
 }
+
+
+#top-bar { 
+    vertical-align: middle; 
+    padding: 0px 10px; 
+    position: relative;
+    height: 2em;
+    line-height: 2em;
+}
+#top-bar a { 
+    text-decoration: underline; 
+}
+#top-bar #global-crumb {
+    position: relative;
+    float: left;
+}
+#top-bar #user-menu {
+    position:relative;
+    float: right;
+}
+
 
 #menu {
     clear: both;
@@ -47,19 +79,21 @@ html {
 }
 
 #footer {
-    margin-top: 2em;
-    padding: 5px;
-    background-color: white;
-    color: black;
-    text-align: center;
+    text-align:center;
+     border-top: 1px solid #999999;
+    color: #333;
+    margin-top: 1em;
+    padding: 10px 0;
     clear: both;
 }
 
 h1 {
+    font-size: 22px;
     margin-bottom: 0.25em;
 }
 
 h2 {
+    font-size: 18px;
     margin-bottom: 0.25em;
 }
 
@@ -76,14 +110,10 @@ ul.errors {
 }
 
 a {
-    /* color: #0645AD; wikipedia blue */
-    color: #0645AD;
-    text-decoration: none;
+    color: #3333ff;
 }
 a:hover {
-    /* color: #cc33aa; */
-    color: #0645AD;
-    text-decoration: underline;
+    color: #ff33ff;
 }
 
 a.remove {
@@ -153,7 +183,7 @@ a.remove {
 }
 
 .sidepane {
-    width: 400px;
+    width: 300px;
     float: right;
     clear: right;
     margin-bottom: 1em;
@@ -174,26 +204,25 @@ a.remove {
     padding: 10px;
 }
 
-
-.leftSidebar {
-    position: relative;
+.leftpane {
     float: left;
-    width: 200px;
-}
-.block {
     margin-bottom: 1em;
 }
-.blockTitle {
-    padding: 4px 8px;
+.leftpane-header {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    background: url("images/header_bg.png") repeat-x;
     color: white;
     font-weight: bold;
-    border: 1px solid #333;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
     padding-left: 10px;
-    background: url("images/header_bg.jpg") repeat-x scroll 0 0 #000033;
 }
-.blockContent {
+.leftpane-bottom {
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid black;
     border-top: 0px;
     padding: 10px;
 }
@@ -260,6 +289,10 @@ label {
 
 
 
+a, a:hover, a:visited {
+    color: #053D99;
+}
+
 .formTable {
     border: 0;
 }
@@ -277,6 +310,139 @@ input.radio {
 }
 
 
+
+.sidepane-export {
+    border: 1px solid black;
+    padding: 4px;
+    background-color: #f5f9fc;
+    width: 300px;
+}
+
+h1 a.action {
+    color: #cccccc;
+    text-decoration: none;
+}
+h1 a.action:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+.grayed-anchor, .grayed-anchor:visited {
+   color: #666666;
+   text-decoration: none;
+}
+.grayed-anchor:hover {
+   color: blue;
+   text-decoration: underline;
+}
+
+
+
+div.details p {
+   margin-bottom: 0.5em;
+}
+
+
+.comments {
+    margin-top: 1em;
+}
+.comments .comment-header {
+
+}
+
+.comment-pending {
+    color: gray;
+}
+.comment-pending .comment-header {
+    color: gray;
+}
+
+.comment-pending .pending-message {
+}
+
+hr.separator {
+    border-style: none;
+    border-top: 1px solid #CCC;
+}
+
+dl dt {
+    margin-top: 0.5em;
+}
+
+a.add {
+    background: url('images/add.png') 0 50% no-repeat;
+    padding-left: 20px;
+}
+
+ul.tabs {
+    text-align: left;
+    margin: 1em 0 1em 0; 
+    border-bottom: 1px solid #999;
+    list-style-type: none;
+    padding: 3px 10px 3px 10px; /* THIRD number must change with respect to padding-top (X) below */
+}
+
+ul.tabs li {
+    display: inline;
+}
+
+ul.tabs li a {
+    padding: 3px 4px; /* FIRST number must change with respect to padding-top (X) above */
+    border: 1px solid #999;
+    background-color: #eee;
+    color: #666;
+    margin-right: 0px;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+ul.tabs li a:hover {
+    background: #fff;
+}
+
+ul.tabs li.selected {
+    border-bottom: 1px solid #fff;
+    background-color: #fff;
+}
+
+ul.tabs li.selected a {
+    background-color: #fff;
+    color: #000;
+    position: relative;
+    top: 1px;
+    padding-top: 4px; /* must change with respect to padding (X) above and below */
+}
+
+a.rss {
+    background: url(images/feed.png) 0 50% no-repeat;
+    padding-left: 20px;
+}
+
+
+
+
+.leftSidebar {
+    position: relative;
+    float: left;
+    width: 200px;
+}
+.block {
+    margin-bottom: 1em;
+}
+.blockTitle {
+    padding: 4px 8px;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #333;
+    padding-left: 10px;
+    background: url("images/header_bg.jpg") repeat-x scroll 0 0 #000033;
+}
+.blockContent {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: 0px;
+    padding: 10px;
+}
 
 .pagination {
     padding: 0.5em 0;
@@ -306,49 +472,8 @@ input.radio {
     border: 0 none;
 }
 
-
-
-
 .resultCount {
     color: #999;
-}
-
-
-
-
-div.details p {
-   margin-bottom: 0.5em;
-}
-
-
-.comments {
-    margin-top: 1em;
-}
-.comments .comment-header {
-
-}
-.comment-pending {
-    color: gray;
-}
-.comment-pending .comment-header {
-    color: gray;
-}
-.comment-pending .pending-message {
-}
-
-
-hr.separator {
-    border-style: none;
-    border-top: 1px solid #CCC;
-}
-
-dl dt {
-    margin-top: 0.5em;
-}
-
-a.add {
-    background: url('images/add.png') 0 50% no-repeat;
-    padding-left: 20px;
 }
 
 
@@ -357,7 +482,7 @@ table.listing {
 }
 table.listing td {
     vertical-align: top;
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #ccc;
     padding: 8px 0 16px 0;
 }
 table.listing td.actionCell {
@@ -366,111 +491,3 @@ table.listing td.actionCell {
 }
 
 
-
-
-ul.tabs {
-    text-align: left;
-    margin: 1em 0 1em 0; 
-    border-bottom: 1px solid #999;
-    list-style-type: none;
-    padding: 3px 10px 3px 10px; /* THIRD number must change with respect to padding-top (X) below */
-}
-ul.tabs li {
-    display: inline;
-}
-ul.tabs li a {
-    padding: 3px 4px; /* FIRST number must change with respect to padding-top (X) above */
-    border: 1px solid #999;
-    background-color: #eee;
-    color: #666;
-    margin-right: 0px;
-    text-decoration: none;
-    border-bottom: none;
-}
-ul.tabs li a:hover {
-    background: #fff;
-}
-ul.tabs li.selected {
-    border-bottom: 1px solid #fff;
-    background-color: #fff;
-}
-ul.tabs li.selected a {
-    background-color: #fff;
-    color: #000;
-    position: relative;
-    top: 1px;
-    padding-top: 4px; /* must change with respect to padding (X) above and below */
-}
-
-
-a.rss {
-    background: url(images/feed.png) 0 50% no-repeat;
-    padding-left: 20px;
-}
-
-.clear { 
-    clear: both;
-}
-
-
-.button {
-  display:inline-block;
-  background:none;
-  margin:0;
-  padding:3px 0;
-  border-width:0;
-  overflow:visible;
-  font:100%/1.2 Arial,Sans-serif;
-  text-decoration:none;
-  color:#333;
-  height: 1.25em;
-  }
-* html button.button {
-  padding-bottom:1px;
-  }
-/* Immediately below is a temporary hack to serve the
-   following margin values only to Gecko browsers
-   Gecko browsers add an extra 3px of left/right
-   padding to button elements which can't be overriden.
-   Thus, we use -3px of left/right margin to overcome this. */
-html:not([lang*=""]) button.button {
-  margin:0 -3px;
-  }
-.button span {
-  background:#ddd url(images/bg-button.gif) repeat-x 0 0;
-  margin:0;
-  padding:3px 0;
-  border-left:1px solid #bbb;
-  border-right:1px solid #aaa;
-  }
-* html .button span {
-  padding-top:0;
-  }
-.button span span {
-  position:relative;
-  padding:3px .4em;
-  border-width:0;
-  border-top:1px solid #bbb;
-  border-bottom:1px solid #aaa;
-  color: #333;
-  }
-
-
-/* only needed if implementing separate hover/focus/active state for buttons */
-.button:hover span, .button:hover span span, .button:focus span, .button:focus span span {
-  cursor:pointer; /* important for any clickable/pressable element */
-  border-color:#666 !important;
-  color:#333;
-  }
-.button:active span {
-  outline:none;
-  }
-.button:focus, .button:active {
-  outline:none; /* doesn't seem to be respected for <button>, only <a> */
-  }
-
-/* use if one button should be the 'primary' button */
-.primary {
-  font-weight:bold;
-  color:#000;
-  }

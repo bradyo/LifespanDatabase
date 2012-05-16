@@ -1,0 +1,33 @@
+<?php
+header("Content-type: application/xml");
+header("Content-Disposition: attachment; filename=search-results.xml");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+echo "<?xml version=\"1.0\" ?>\n";
+echo "<observations>\n";
+foreach ($this->rows as $row) {
+    echo "\t<observation>\n";
+    foreach ($row as $key => $value) {
+        if (!is_array($value) && !empty($value)) {
+            echo "\t\t<$key><![CDATA[".utf8_encode($value)."]]></$key>\n";
+        }
+    }
+
+    if (count($row['genes']) > 0) {
+        $skipKeys = array('observationId', 'geneId');
+        echo "\t\t<genes>\n";
+        foreach ($row['genes'] as $gene) {
+           echo "\t\t\t<gene>\n";
+           foreach ($gene as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "\t\t\t\t<$key>".htmlentities($value)."</$key>\n";
+                }
+           }
+           echo "\t\t\t</gene>\n";
+        }
+        echo "\t\t</genes>\n";
+    }
+    echo "\t</observation>\n";
+}
+echo "</observations>\n";

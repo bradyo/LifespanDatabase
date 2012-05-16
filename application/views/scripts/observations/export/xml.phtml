@@ -1,0 +1,85 @@
+<?php
+header("Content-type: application/xml");
+header("Content-Disposition: attachment; filename=observations_".date('Y-m-d').".xml");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+function fixEncoding($value) {
+  $value = preg_replace("/[^\x9\xA\xD\x20-\x7F]/", "", $value);
+	return '<![CDATA[' . $value . ']]>';
+}
+
+echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
+echo "<observations>\n";
+
+foreach ($this->rows as $row) {
+    echo "\t<observation>\n";
+    foreach ($row as $key => $value) {
+        if (!is_array($value) && !empty($value)) {
+            echo "\t\t<$key>".fixEncoding($value)."</$key>\n";
+        }
+    }
+
+    if (count($row['genes']) > 0) {
+        $skipKeys = array('observationId', 'geneId');
+        echo "\t\t<genes>\n";
+        foreach ($row['genes'] as $gene) {
+           echo "\t\t\t<gene>\n";
+           foreach ($gene as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
+                }
+           }
+           echo "\t\t\t</gene>\n";
+        }
+        echo "\t\t</genes>\n";
+    }
+
+    if (count($row['compounds']) > 0) {
+        $skipKeys = array('observationId', 'compoundId');
+        echo "\t\t<compounds>\n";
+        foreach ($row['compounds'] as $compound) {
+           echo "\t\t\t<compound>\n";
+           foreach ($compound as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
+                }
+           }
+           echo "\t\t\t</compound>\n";
+        }
+        echo "\t\t</compounds>\n";
+    }
+
+    if (count($row['environments']) > 0) {
+        $skipKeys = array('observationId', 'environmentId');
+        echo "\t\t<environments>\n";
+        foreach ($row['environments'] as $environments) {
+           echo "\t\t\t<environment>\n";
+           foreach ($environments as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
+                }
+           }
+           echo "\t\t\t</environment>\n";
+        }
+        echo "\t\t</environments>\n";
+    }
+
+    if (count($row['comments']) > 0) {
+        $skipKeys = array('observationId', 'id', 'parentTable', 'parentId', 'status');
+        echo "\t\t<comments>\n";
+        foreach ($row['comments'] as $item) {
+           echo "\t\t\t<comment>\n";
+           foreach ($item as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
+                }
+           }
+           echo "\t\t\t</comment>\n";
+        }
+        echo "\t\t</comments>\n";
+    }
+
+    echo "\t</observation>\n";
+}
+echo "</observations>\n";

@@ -332,6 +332,10 @@ class Application_Model_ObservationUpdater
         $revision->save();
 
         if ($this->_isModerator) {
+            if (!empty($values['requestedBy'])) {
+                $revision->requestedBy = $values['requestedBy'];
+            }
+
             $reviewedBy = $this->_username;
             $reviewerComment = $values['reviewerComment'];
             $revision->accept($reviewedBy, $reviewerComment);

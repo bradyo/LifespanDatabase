@@ -1,0 +1,23 @@
+<h1>Compounds</h1>
+
+<table class="dataTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Observations</th>
+            <th>More</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->rows as $row): ?>
+            <tr>
+                <td><?php echo $this->escape($row['name']) ?></td>
+                <td><?php echo $this->escape($row['observation_count']) ?></td>
+                <td>
+                    <a href="<?php echo $this->baseUrl() . '/compound/show/id/' . $row['ncbi_compound_id'] ?>"
+                       >Show</a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

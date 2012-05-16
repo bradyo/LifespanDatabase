@@ -15,7 +15,7 @@ class Application_Model_ObservationBrowser
     protected $_page;
     protected $_itemsPerPage;
 
-    public function __construct($queryString = '', $page = 1, $itemsPerPage = 10)
+    public function __construct($queryString = '', $page = 1, $itemsPerPage = 100)
     {
         $this->_queryString = trim($queryString);
         $this->_page = $page;

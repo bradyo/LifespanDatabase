@@ -1,0 +1,592 @@
+connection: 0
+options:
+  type: INNODB
+
+Citation:
+  tableName: citation
+  columns:
+    id: 
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    year:
+      type: integer(4)
+      notnull: true
+    author:
+      type: string(255)
+      notnull: true
+    title:
+      type: string(255)
+      notnull: true
+    source:
+      type: string(255)
+      notnull: true
+    pubmed_id:
+      name: pubmed_id as pubmedId
+      type: integer(4)
+      notnull: false
+
+Compound:
+  tableName: compound
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    name:
+      type: string(255)
+      notnull: true
+    description:
+      type: string(255)
+      notnull: false
+    ncbi_compound_id:
+      name: ncbi_compound_id as ncbiCompoundId
+      type: integer(4)
+      notnull: false
+  relations:
+    synonyms:
+      class: CompoundSynonym
+      local: id
+      foreign: compound_id
+      type: many
+    substrates:
+      class: GeneSubstrate
+      local: id
+      foreign: compound_id
+      type: many
+
+CompoundSynonym:
+  tableName: compound_synonym
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    compound_id:
+      name: compound_id as compoundId
+      type: integer(4)
+      notnull: true
+    synonym:
+      type: string(64)
+      notnull: true
+
+Gene:
+  tableName: gene
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    taxonomy_id:
+      name: taxonomy_id as taxonomyId
+      type: integer(4)
+      notnull: false
+    species:
+      type: string(64)
+      notnull: false
+    symbol:
+      type: string(64)
+      notnull: false
+    locus_tag:
+      name: locus_tag as locusTag
+      type: string(64)
+      notnull: false
+    description:
+      type: string(255)
+      notnull: false
+    ncbi_gene_id:
+      name: ncbi_gene_id as ncbiGeneId
+      type: integer(4)
+      notnull: false
+    ncbi_protein_id:
+      name: ncbi_protein_id as ncbiProteinId
+      type: integer(4)
+      notnull: false
+  relations:
+    taxonomy:
+      class: Taxonomy
+      local: taxonomy_id
+      foreign: id
+      type: one
+    links:
+      class: GeneLink
+      local: id
+      foreign: gene_id
+      type: many
+    gos:
+      class: GeneGo
+      local: id
+      foreign: gene_id
+      type: many
+    homologs:
+      class: GeneHomolog
+      local: id
+      foreign: gene_id
+      type: many
+    interactions:
+      class: GeneInteraction
+      local: id
+      foreign: gene_id
+      type: many
+    substrates:
+      class: GeneSubstrate
+      local: id
+      foreign: gene_id
+      type: many
+    synonyms:
+      class: GeneSynonym
+      local: id
+      foreign: gene_id
+      type: many
+
+
+GeneLink:
+  tableName: gene_link
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    databaseId:
+      name: database_id as databaseId
+      type: string(64)
+      notnull: true
+    identifier:
+      type: string(64)
+      notnull: true
+
+GeneGo:
+  tableName: gene_go
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    go_id:
+      name: go_id as goId
+      type: string(64)
+      notnull: true
+    evidence:
+      type: string(64)
+      notnull: false
+    category:
+      type: string(64)
+      notnull: false
+    term:
+      type: string(255)
+      notnull: false
+
+GeneHomolog:
+  tableName: gene_homolog
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    ncbi_gene_id:
+      name: ncbi_gene_id as ncbiGeneId
+      notnull: true;
+    homolog_gene_id:
+      name: homolog_gene_id as homologGeneId
+      type: integer(4)
+      notnull: false
+    homolog_ncbi_gene_id:
+      name: homolog_ncbi_gene_id as homologNcbiGeneId
+      notnull: true;
+    symbol:
+      type: string(64)
+      notnull: true
+    algorithm:
+      type: string(64)
+      notnull: false
+    family:
+      type: string(64)
+      notnull: false
+    protein_database:
+      name: protein_database as proteinDatabase
+      notnull: false
+    protein_id:
+      name: protein_id as proteinId
+      notnull: false
+
+  relations:
+    gene:
+      class: Gene
+      local: gene_id
+      foreign: id
+      type: one
+    homologGene:
+      class: Gene
+      local: homolog_gene_id
+      foreign: id
+      type: one
+
+GeneInteraction:
+  tableName: gene_interaction
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    name:
+      type: string(64)
+      notnull: true
+    source:
+      type: string(128)
+      notnull: false
+    pubmed_id:
+      name: pubmed_id as pubmedId
+      type: integer(4)
+      notnull: false
+    partner_gene_id:
+      name: partner_gene_id as partnerGeneId
+      type: integer(4)
+      notnull: false
+  relations:
+    gene:
+      class: Gene
+      local: gene_id
+      foreign: id
+      type: one
+    partnerGene:
+      class: Gene
+      local: partner_gene_id
+      foreign: id
+      type: one
+
+GeneSubstrate:
+  tableName: gene_substrate
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    name:
+      type: string(64)
+      notnull: true
+    ncbi_compound_id:
+      name: ncbi_compound_id as ncbiCompoundId
+      type: integer(4)
+      notnull: false
+    compound_id:
+      name: compound_id as compoundId
+      type: integer(4)
+      notnull: false
+  relations:
+    gene:
+      class: Gene
+      local: gene_id
+      foreign: id
+      type: one
+    compound:
+      class: Compound
+      local: compound_id
+      foreign: id
+      type: one
+
+GeneSynonym:
+  tableName: gene_synonym
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: true
+    synonym:
+      type: string(64)
+      notnull: true
+
+Observation:
+  tableName: observation
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    body:
+      type: string()
+      notnull: false
+    lifespan:
+      type: float()
+      notnull: false
+    lifespan_base:
+      name: lifespan_base as lifespanBase
+      type: float()
+      notnull: false
+    lifespan_units:
+      name: lifespan_units as lifespanUnits
+      type: string(64)
+      notnull: false
+    lifespan_change:
+      name: lifespan_change as lifespanChange
+      type: float()
+      notnull: false
+    lifespan_effect:
+      name: lifespan_effect as lifespanEffect
+      type: string(64)
+      notnull: false
+    lifespan_measure:
+      name: lifespan_measure as lifespanMeasure
+      type: string(64)
+      notnull: false
+    taxonomy_id:
+      name: taxonomy_id as taxonomyId
+      type: integer(4)
+      notnull: false
+    species:
+      type: string(64)
+      notnull: false
+    strain:
+      type: string(64)
+      notnull: false
+    strain_genotype:
+      name: strain_genotype as strainGenotype
+      type: string(255)
+      notnull: false
+    cell_type:
+      name: cell_type as cellType
+      type: string(64)
+      notnull: false
+    citation_pubmed_id:
+      name: citation_pubmed_id as citationPubmedId
+      type: integer(4)
+      notnull: false
+    citation_year:
+      name: citation_year as citationYear
+      type: integer(4)
+      notnull: false
+    citation_author:
+      name: citation_author as citationAuthor
+      type: string(255)
+      notnull: false
+    citation_title:
+      name: citation_title as citationTitle
+      type: string(255)
+      notnull: false
+    citation_source:
+      name: citation_source as citationSource
+      type: string(255)
+      notnull: false
+  relations:
+    taxonomy:
+      class: Taxonomy
+      local: taxonomy_id
+      foreign: id
+      type: one
+    genes:
+      class: ObservationGene
+      local: id
+      foreign: observation_id
+      type: many
+    compounds:
+      class: ObservationCompound
+      local: id
+      foreign: observation_id
+      type: many
+    environments:
+      class: ObservationEnvironment
+      local: id
+      foreign: observation_id
+      type: many
+    revisions:
+      class: ObservationRevision
+      local: id
+      foreign: observation_id
+      type: many
+
+ObservationCompound:
+  tableName: observation_compound
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    observation_id:
+      name: observation_id as observationId
+      type: integer(4)
+      notnull: true
+    compound_id:
+      name: compound_id as compoundId
+      type: integer(4)
+      notnull: false
+    ncbi_compound_id:
+      name: ncbi_compound_id as ncbiCompoundId
+      type: integer(4)
+      notnull: false
+    name:
+      type: string(64)
+      notnull: true
+    quantity:
+      type: string(64)
+      notnull: false
+  relations:
+    compound:
+      class: Compound
+      local: compound_id
+      foreign: id
+      type: one
+
+ObservationEnvironment:
+  tableName: observation_environment
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    observation_id:
+      name: observation_id as observationId
+      type: integer(4)
+      notnull: true
+    type:
+      type: string(64)
+      notnull: true
+    body:
+      type: string()
+      notnull: true
+
+ObservationGene:
+  tableName: observation_gene
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    observation_id:
+      name: observation_id as observationId
+      type: integer(4)
+      notnull: true
+    gene_id:
+      name: gene_id as geneId
+      type: integer(4)
+      notnull: false
+    ncbi_gene_id:
+      name: ncbi_gene_id as ncbiGeneId
+      type: integer(4)
+      notnull: false
+    symbol:
+      type: string(64)
+      notnull: true
+    allele_type:
+      name: allele_type as alleleType
+      type: string(64)
+      notnull: true
+  relations:
+    gene:
+      class: Gene
+      local: gene_id
+      foreign: id
+      type: one
+
+ObservationRevision:
+  tableName: observation_revision
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    observation_id:
+      name: observation_id as observationId
+      type: integer(4)
+      notnull: false
+    action:
+      type: string(64)
+      notnull: false
+    observation_data:
+      name: observation_data as observationData
+      type: string()
+      notnull: true
+    requested_by:
+      name: requested_by as requestedBy
+      type: string(64)
+      notnull: false
+    requested_at:
+      name: requested_at as requestedAt
+      type: timestamp(25)
+      notnull: false
+    reviewed_by:
+      name: reviewed_by as reviewedBy
+      type: string(64)
+      notnull: false
+    reviewed_at:
+      name: reviewed_at as reviewedAt
+      type: timestamp(25)
+      notnull: false
+    reviewer_comment:
+      name: reviewer_comment as reviewerComment
+      type: string()
+      notnull: false
+    status:
+      type: string(64)
+      notnull: false
+
+Taxonomy:
+  tableName: taxonomy
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    name:
+      type: string(128)
+      notnull: true
+    common_name:
+      name: common_name as commonName
+      type: string(128)
+      notnull: false
+    ncbi_tax_id:
+      name: ncbi_tax_id as ncbiTaxId
+      type: integer(4)
+      notnull: false
+  relations:
+    gene:
+      class: Gene
+      local: id
+      foreign: taxonomy_id
+      type: many
+    synonyms:
+      class: TaxonomySynonym
+      local: id
+      foreign: taxonomy_id
+      type: many
+
+TaxonomySynonym:
+  tableName: taxonomy_synonym
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    taxonomy_id:
+      name: taxonomy_id as taxonomyId
+      type: integer(4)
+      notnull: true
+    type:
+      type: string(64)
+      notnull: false
+    synonym:
+      type: string(128)
+      notnull: true
+      

@@ -19,7 +19,8 @@ class Application_Form_ObservationEnvironment extends Zend_Form_SubForm
             ->setDecorators(array('ViewHelper', 'Errors'))
             ->setOptions(array(
                 'rows' => '3',
-                'cols' => '60'
+                'cols' => '60',
+								'accept-charset' => 'utf-8',
             )
         );
 

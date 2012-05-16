@@ -4,11 +4,18 @@ header("Content-Disposition: attachment; filename=observations_".date('Y-m-d')."
 header("Pragma: no-cache");
 header("Expires: 0");
 
+function cleanValue($value) {
+    $value = utf8_encode($value);
+    $value = str_replace(array("\r\n", "\n", "\r"), ' ', $value);
+    return $value; 
+}
+
 echo "observations:\n";
 foreach ($this->rows as $row) {
     echo "  -\n";
     foreach ($row as $key => $value) {
         if (!is_array($value) && !empty($value)) {
+            $value = cleanValue($value); 
             echo "    $key: " . $value . "\n";
         }
     }
@@ -20,7 +27,8 @@ foreach ($this->rows as $row) {
            echo "      -\n";
            foreach ($gene as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "        $key: ".htmlentities($value)."\n";
+                    $value = cleanValue($value); 
+                    echo "        $key: ".$value."\n";
                 }
             }
         }
@@ -33,7 +41,8 @@ foreach ($this->rows as $row) {
            echo "      -\n";
            foreach ($gene as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "        $key: ".htmlentities($value)."\n";
+                    $value = cleanValue($value); 
+                    echo "        $key: ".$value."\n";
                 }
             }
         }
@@ -46,7 +55,8 @@ foreach ($this->rows as $row) {
            echo "      -\n";
            foreach ($item as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "        $key: ".htmlentities($value)."\n";
+                    $value = cleanValue($value); 
+                    echo "        $key: ".$value."\n";
                 }
             }
         }

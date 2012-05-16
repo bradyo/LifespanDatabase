@@ -24,6 +24,7 @@ class Application_Form_ObservationRevision extends Zend_Form
             'label' => 'Review Comment:',
             'rows' => 4,
             'cols' => 80,
+						'accept-charset' => 'utf-8',
         ));
 
         $this->addElement('submit', 'Submit');

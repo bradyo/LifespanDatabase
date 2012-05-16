@@ -38,7 +38,7 @@
 </div>
 
 
-<div style="margin-left:220px;">
+<div style="margin-left:220px; width:740px">
     <?php if (count($this->rows) > 0): ?>
         <div style="position: relative; height: auto;">
             <div style="height: 2em;">
@@ -48,6 +48,7 @@
                     <?php echo $this->pager->getLastPage() * 10 ?>:
                 </div>
 
+<?php /*
                 <div style="position: absolute; right: 0; top: 0">
                     Sort by:
                     <a href="<?php echo $this->url(array(
@@ -55,6 +56,7 @@
                         'sortOrder' => 'asc'
                         )) ?>">date</a>
                 </div>
+*/ ?>
             </div>
         </div>
 
@@ -70,68 +72,83 @@
                              alt="Lifespan Observation" />
                     </td>
                     <td>
-                        <em>Lifespan:</em>
-                        <?php if ($row['lifespanEffect'] == 'increased'): ?>
-                            <img src="<?php echo $this->baseUrl('images/up.png') ?>" alt=""/>
-                        <?php elseif ($row['lifespanEffect'] == 'decreased'): ?>
-                            <img src="<?php echo $this->baseUrl('images/down.png') ?>" alt=""/>
-                        <?php endif ?>
-
-                        <?php if (!empty($row['lifespanEffect'])): ?>
-                            <?php echo $this->escape($row['lifespanMeasure']) ?>
-                            <?php if (!empty($row['lifespanChange'])): ?>
-                                <?php echo round($row['lifespanChange'], 2) ?>%
+                        <?php if (!empty($row['species'])): ?>
+                            <?php echo $this->escape($row['species']) ?>
+                            <?php if (!empty($row['strain'])): ?>
+                                (<?php echo $this->escape($row['strain']) ?>)
                             <?php endif ?>
-                            <?php if (!empty($row['lifespanUnits'])): ?>
-                                (<?php echo $this->escape($row['lifespanUnits']) ?>)
-                            <?php endif ?>
-                        <?php endif ?>
-                        <br />
-
-                        <em>Organism:</em>
-                        <?php echo $this->escape($row['species']) ?>
-                        <?php if (!empty($row['strain'])): ?>
-                            (<?php echo $this->escape($row['strain']) ?>)
-                        <?php endif ?>
-                        <?php if (!empty($row['matingType'])): ?>
-                             <?php echo $row['matingType'] ?>
-                        <?php endif ?>
-                        <br />
-
-                        <?php foreach ($row['genes'] as $gene): ?>
-                            <em>Gene Intervention:</em>
-                            <?php echo $this->escape($gene['symbol']) ?>
-                            <?php if (isset($gene['allele'])): ?>
-                                (<?php echo $this->escape($gene['allele']) ?>)
-                            <?php endif ?>
-                            <?php echo $this->escape($gene['alleleType']) ?>
-                            <br />
-                        <?php endforeach ?>
-
-                        <?php foreach ($row['compounds'] as $compound): ?>
-                            <em>Compound Intervention:</em>
-                            <?php echo $this->escape($compound['name']) ?>
-                            <?php if (!empty($compound['quantity'])): ?>
-                                (<?php echo $this->escape($compound['quantity']) ?>)
+                            <?php if (!empty($row['matingType'])): ?>
+                                 <?php echo $row['matingType'] ?>
                             <?php endif ?>
                             <br />
-                        <?php endforeach ?>
+                        <?php endif ?>
+            
+                        <?php if (count($row['genes']) > 0 || count($row['compounds']) > 0 || count($row['environments']) > 0): ?>    
+                            <ul>       
+                                <?php foreach ($row['genes'] as $gene): ?>
+                                    <li>
+                                    <em>Gene Intervention:</em>
+                                    <?php echo $this->escape($gene['symbol']) ?>
+                                    <?php if (isset($gene['allele'])): ?>
+                                        (<?php echo $this->escape($gene['allele']) ?>)
+                                    <?php endif ?>
+                                    <?php echo $this->escape($gene['alleleType']) ?>
+                                    </li>
+                                <?php endforeach ?>
 
-                        <?php foreach ($row['environments'] as $environment): ?>
-                            <em>Environment Intervention:</em>
-                            <?php echo $this->escape($environment['type']) ?>
-                            <br />
-                        <?php endforeach ?>
+                                <?php foreach ($row['compounds'] as $compound): ?>
+                                    <li>
+                                    <em>Compound Intervention:</em>
+                                    <?php echo $this->escape($compound['name']) ?>
+                                    <?php if (!empty($compound['quantity'])): ?>
+                                        (<?php echo $this->escape($compound['quantity']) ?>)
+                                    <?php endif ?>
+                                    </li>
+                                <?php endforeach ?>
 
-                        <div style="color:#666"><?php echo $row['body'] ?></div>
+                                <?php foreach ($row['environments'] as $environment): ?>
+                                    <li>
+                                    <em>Environment Intervention:</em>
+                                    <?php echo $this->escape($environment['type']) ?>
+                                    </li>
+                                <?php endforeach ?>
+                            </ul>
+                        <?php endif ?>
+
+                        <div style="margin-top:0.5em">
+                            <?php if ($row['lifespanEffect'] == 'increased'): ?>
+                                <img src="<?php echo $this->baseUrl('images/up.png') ?>" alt=""/>
+                            <?php elseif ($row['lifespanEffect'] == 'decreased'): ?>
+                                <img src="<?php echo $this->baseUrl('images/down.png') ?>" alt=""/>
+                            <?php endif ?>
+
+                            <?php if (!empty($row['lifespanEffect'])): ?>
+                                <?php echo $this->escape($row['lifespanMeasure']) ?>
+                                    lifespan <?php echo $this->escape($row['lifespanEffect']) ?>                                
+                                    <?php if (!empty($row['lifespanChange'])): ?>
+                                    <?php echo round($row['lifespanChange'], 2) ?>%
+                                <?php endif ?>
+                                <?php if (!empty($row['lifespanUnits'])): ?>
+                                    (<?php echo $this->escape($row['lifespanUnits']) ?>)
+                                <?php endif ?>
+                            <?php endif ?>
+
+                            <?php if ($row['isSignificant'] === 1 || $row['isSignificant'] === 0): ?>
+                                <?php if ($row['isSignificant'] == 1): ?>
+                                    (significant)
+                                <?php elseif ($row['isSignificant'] == 0): ?>
+                                    (not significant)
+                                <?php endif ?>
+                            <?php endif ?>
+                        </div>
                     </td>
 
-                    <td class="actionCell">
+                    <td class="actionCell" style="text-align:right">
                         <a href="<?php echo $this->url(array(
-                            'controller' => 'observation',
+                            'controller' => 'observations',
                             'action' => 'show',
                             'id' => $row['id'],
-                        )) ?>">View</a><br />
+                        ), null, true) ?>">more &gt;</a><br />
                     </td>
                 </tr>
             <?php endforeach ?>
@@ -140,7 +157,7 @@
         <?php echo $this->partial('_paginationList.phtml', array('pager' => $this->pager)) ?>
 
     <?php else: ?>
-    
+
         <div style="position: relative; height: auto;">
             <div style="height: 2em;">
                 <div style="position: absolute; left: 0; top: 0; font-weight: bold; font-size:1.1em">

@@ -1,0 +1,30 @@
+<?php
+header("Content-type: text");
+header("Content-Disposition: attachment; filename=search-results.yml");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+echo "observations:\n";
+foreach ($this->rows as $row) {
+    echo "  -\n";
+    foreach ($row as $key => $value) {
+        if (!is_array($value) && !empty($value)) {
+            $value = iconv("UTF-8", "UTF-8", $value);
+            $value = str_replace(array("\r\n", "\n", "\r"), ' ', $value);  
+            //echo "    $key: " . $value . "\n";
+        }
+    }
+
+    if (count($row['genes']) > 0) {
+        $skipKeys = array('observationId', 'geneId');
+        echo "    genes:\n";
+        foreach ($row['genes'] as $gene) {
+           echo "      -\n";
+           foreach ($gene as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    echo "        $key: ".htmlentities($value)."\n";
+                }
+            }
+        }
+    }
+}

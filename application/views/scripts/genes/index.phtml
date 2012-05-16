@@ -1,0 +1,27 @@
+<h1>Genes</h1>
+
+<table class="dataTable">
+    <thead>
+        <tr>
+            <th>Species</th>
+            <th>Gene Symbol</th>
+            <th>Locus Tag</th>
+            <th>Observations</th>
+            <th>Show</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->rows as $row): ?>
+            <tr>
+                <td><?php echo $this->escape($row['species']) ?></td>
+                <td><?php echo $this->escape($row['symbol']) ?></td>
+                <td><?php echo $this->escape($row['locus_tag']) ?></td>
+                <td><?php echo $this->escape($row['observation_count']) ?></td>
+                <td>
+                    <a href="<?php echo $this->baseUrl() . '/gene/show/id/' . $row['ncbi_gene_id'] ?>"
+                       >Show</a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>

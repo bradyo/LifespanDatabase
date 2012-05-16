@@ -5,9 +5,14 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $request = $this->getRequest();
+        $viewType = $request->get('t', 'observation');
         $queryString = urldecode($request->get('q', ''));
         $page = $request->get('p', '');
         $format = $request->get('format', null);
+
+        if (!in_array($viewType, array('observation', 'gene','compound'))) {
+            $viewType = 'observation';
+        }
 
         // save the search in session
         if (!empty($queryString)) {
@@ -20,7 +25,19 @@ class SearchController extends Zend_Controller_Action
                 $discard = array_pop($searchNamespace->searches);
             }
         }
-        $browser = new Application_Model_ObservationBrowser($queryString, $page);
+
+        // create browser based on view type
+        switch ($viewType) {
+            case 'gene':
+                $browser = new Application_Model_GeneBrowser($queryString, $page);
+                break;
+            case 'compound':
+                $browser = new Application_Model_CompoundBrowser($queryString, $Page);
+                break;
+            default:
+                $browser = new Application_Model_ObservationBrowser($queryString, $page);
+                break;
+        }
 
         // redirect view script based on format
         if (in_array($format, array('csv', 'xml', 'yml'))) {
@@ -36,13 +53,14 @@ class SearchController extends Zend_Controller_Action
         // pass data into view
         $this->view->type = $viewType;
         $this->view->queryString = $queryString;
-        $this->view->filters = $browser->getFilters();
-        $this->view->existingFilters = $browser->getExistingFilters();
-        $this->view->page = $page;
+				$this->view->filters = $browser->getFilters();    
+				$this->view->existingFilters = $browser->getExistingFilters();    
+				$this->view->page = $page;
         $this->view->pager = $browser->getPager();
         $this->view->rows = $this->view->pager->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
        
         // pass params to layout
+        $this->_helper->layout()->t = $viewType;
         $this->_helper->layout()->q = trim($queryString);
     }
 

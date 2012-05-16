@@ -63,7 +63,7 @@ class Application_Form_Observation extends Zend_Form
             'size' => 6,
             'decorators' => array('Label', 'ViewHelper', 'Errors'),
         ));
-        
+
         $this->addElement('text', 'species', array(
             'label' => 'Species:',
             'validators' => array(
@@ -106,7 +106,6 @@ class Application_Form_Observation extends Zend_Form
 
         $this->addElement('textarea', 'body', array(
             'label'      => 'Observation Details:',
-            'required'   => true,
             'rows' => 6,
             'cols' => 80,
         ));
@@ -134,7 +133,7 @@ class Application_Form_Observation extends Zend_Form
         ));
 
         $this->addElement('text', 'lifespanBase', array(
-            'label'         => 'Lifespan (WT):',
+            'label'         => 'Reference Lifespan:',
             'required'      => false,
             'validators'    => array(
                 array('validator' => 'Float'),
@@ -160,12 +159,12 @@ class Application_Form_Observation extends Zend_Form
         ));
 
         $this->addElement('text', 'lifespanChange', array(
-            'label'         => 'Magnitude:',
+            'label'         => 'Percent Change:',
             'required'      => false,
             'validators'    => array(
                 array('validator' => 'Float'),
             ),
-            'size' => 5,
+            'size' => 8,
             'decorators' => array('Label', 'ViewHelper', 'Errors')
         ));
 
@@ -178,6 +177,19 @@ class Application_Form_Observation extends Zend_Form
             'label'         => 'Effect:',
             'required'      => false,
             'multiOptions'  => $effectChoices,
+            'value'         => '',
+            'class'         => 'radio'
+        ));
+
+        $significanceChoices = array(
+            '' => 'N/A',
+            'false' => 'Not Significant',
+            'true' => 'Significant',
+        );
+        $this->addElement('radio', 'isSignificant', array(
+            'label'         => 'Significance:',
+            'required'      => false,
+            'multiOptions'  => $significanceChoices,
             'value'         => '',
             'class'         => 'radio'
         ));

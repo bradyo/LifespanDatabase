@@ -15,7 +15,6 @@
  * @property timestamp $reviewedAt
  * @property string $reviewerComment
  * @property string $status
- * @property Observation $Observation
  * 
  * @package    ##PACKAGE##
  * @subpackage ##SUBPACKAGE##
@@ -85,8 +84,5 @@ abstract class BaseObservationRevision extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('Observation', array(
-             'local' => 'observation_id',
-             'foreign' => 'id'));
     }
 }

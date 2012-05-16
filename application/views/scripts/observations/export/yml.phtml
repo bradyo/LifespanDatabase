@@ -1,0 +1,59 @@
+<?php
+header("Content-type: text");
+header("Content-Disposition: attachment; filename=observations_".date('Y-m-d').".yml");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+echo "observations:\n";
+foreach ($this->rows as $row) {
+    echo "  -\n";
+    foreach ($row as $key => $value) {
+        if (!is_array($value) && !empty($value)) {
+            //$value = utf8_encode($value);
+            $value = preg_replace('/[\r\n]+/', '', $value);  
+            echo "    $key: " . $value . "\n";
+        }
+    }
+
+    if (isset($row['genes']) && count($row['genes']) > 0) {
+        $skipKeys = array('observationId', 'geneId');
+        echo "    genes:\n";
+        foreach ($row['genes'] as $gene) {
+           echo "      -\n";
+           foreach ($gene as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    $value = preg_replace('/[\r\n]+/', "\n", $value);  
+                    echo "        $key: ".$this->escape($value)."\n";
+                }
+            }
+        }
+    }
+
+    if (isset($row['compounds']) && count($row['compounds']) > 0) {
+        $skipKeys = array('observationId', 'compoundId');
+        echo "    compounds:\n";
+        foreach ($row['compounds'] as $items) {
+           echo "      -\n";
+           foreach ($items as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    $value = str_replace(array("\r\n", "\r", "\n"), ' ', $value);  
+                    echo "        $key: ".$this->escape($value)."\n";
+                }
+            }
+        }
+    }
+
+    if (isset($row['environments']) && count($row['environments']) > 0) {
+        $skipKeys = array('observationId', 'environmentId');
+        echo "    environments:\n";
+        foreach ($row['environments'] as $items) {
+           echo "      -\n";
+           foreach ($items as $key => $value) {
+                if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
+                    $value = str_replace(array("\r\n", "\r", "\n"), ' ', $value);  
+                    echo "        $key: ".$this->escape($value)."\n";
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+<h1>Browse Observations</h1>
+
+<form name="browserForm"
+    action="<?php echo $this->form->getAction() ?>" method="get">
+
+    <div style="white-space: nowrap">
+        <div style="float: left; white-space: nowrap">
+            <strong>Filter:</strong>
+            <?php echo $this->form->species->renderViewHelper() ?>
+            <?php echo $this->form->lifespanEffect->renderViewHelper() ?>
+            <?php echo $this->form->Filter->renderViewHelper() ?>
+        </div>
+
+        <div style="float:right">
+            <strong>Search:</strong>
+            <?php echo $this->form->search->renderViewHelper() ?>
+            <?php echo $this->form->Submit->renderViewHelper() ?>
+        </div>
+
+        <div style="clear:both"></div>
+    </div>
+
+
+    <div style="margin-top:1em; margin-bottom: 1em;">
+        <?php if (count($this->rows) > 0): ?>
+            <?php echo $this->partial('tables/observation.phtml',
+                array('rows' => $this->rows)); ?>
+        <?php else: ?>
+            No lifespan observations.
+        <?php endif ?>
+    </div>
+
+    <table style="width: 650px">
+        <tr>
+            <td style="vertical-align: top;">
+                <div style="white-space: nowrap; padding-right: 2em">
+                    <strong>Export All:</strong>
+                    <?php echo $this->form->exportType->renderViewHelper() ?>
+                    <?php echo $this->form->Export->renderViewHelper() ?>
+                </div>
+            </td>
+
+            <td style="text-align: right; vertical-align: top">
+                <div class="pagination" style="display:inline">
+                    <?php if ($this->pager->getNumResults() < 2): ?>
+                        Page 1 of 1
+                    <?php else: ?>
+                        <?php echo $this->formText('p', $this->page, array('size' => '3')) ?>
+                    <?php endif ?>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+</form>

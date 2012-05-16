@@ -2,10 +2,10 @@
     <div style="margin-bottom: 0.5em">
         <?php echo $fieldName ?>:<br />
         <?php foreach ($filters as $filter): ?>
-            <a href="<?php echo $this->url(array('q' => $filter['q'])) ?>"
+            <a href="<?php echo $this->url(array('t' => $this->type, 'q' => $filter['q'])) ?>"
                 ><?php echo $filter['label'] ?></a>
-               <span class="resultCount">(<?php echo $filter['count'] ?>)</span>
-            <br />
+               (<?php echo $filter['count'] ?>)
+               <br />
         <?php endforeach ?>
     </div>
 <?php endforeach ?>

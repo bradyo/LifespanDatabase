@@ -1,3 +1,9 @@
+# cache images and css on client side
+ExpiresActive on
+ExpiresByType image/png "access plus 1 week"
+ExpiresByType image/gif "access plus 1 week"
+ExpiresByType image/jpeg "access plus 1 week"
+
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]

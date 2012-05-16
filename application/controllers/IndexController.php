@@ -31,7 +31,7 @@ class IndexController extends Zend_Controller_Action
         $lastYear  = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"),   date("d"),   date("Y")-1));
 
         $stmt = $db->prepare('SELECT COUNT(1) as count FROM observation WHERE created_at > ?');
-        $stmt->execute(array($lastDay));
+/**        $stmt->execute(array($lastDay));
         if (($result = $stmt->fetch(PDO::FETCH_ASSOC)) !== null) {
             $lastDayCount = $result['count'];
         }
@@ -39,6 +39,7 @@ class IndexController extends Zend_Controller_Action
         if (($result = $stmt->fetch(PDO::FETCH_ASSOC)) !== null) {
             $lastWeekCount = $result['count'];
         }
+**/
         $stmt->execute(array($lastMonth));
         if (($result = $stmt->fetch(PDO::FETCH_ASSOC)) !== null) {
             $lastMonthCount = $result['count'];
@@ -48,8 +49,8 @@ class IndexController extends Zend_Controller_Action
             $lastYearCount = $result['count'];
         }
         $this->view->growthRows = array(
-            'last 24 hr' => $lastDayCount,
-            'last week' => $lastWeekCount,
+//            'last 24 hr' => $lastDayCount,
+//            'last week' => $lastWeekCount,
             'last month' => $lastMonthCount,
             'last year' => $lastYearCount,
         );
@@ -95,7 +96,7 @@ class IndexController extends Zend_Controller_Action
             WHERE r.action = 'create' AND r.status = 'accepted'
             GROUP BY r.requested_by
             ORDER BY COUNT(r.observation_id) DESC
-            LIMIT 5
+            LIMIT 10
             ");
         $stmt->execute();
         $this->view->topContributers = array();
@@ -121,6 +122,20 @@ class IndexController extends Zend_Controller_Action
         $this->view->form = $browser->getForm();
         $this->view->rows = $browser->getRows();
         $this->view->paginator = $browser->getPaginator();
+    }
+
+    public function approveAction() {
+          // accept all pending revisions
+          echo "approving\n";
+          $revisions = ObservationRevisionTable::findPending();
+          foreach ($revisions as $revision) {
+              echo "approving revision " . $revision->id . "\n";
+              $revision->accept('bradyo', '');
+          }
+          die();
+         //accept single revision
+         //$revision = Doctrine_Query::create()->from('ObservationRevision r')->where('r.id = ?', 5776)->fetchOne();
+         //$revision->accept('bradyo', '');
     }
 }
 

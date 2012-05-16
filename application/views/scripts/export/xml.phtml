@@ -5,20 +5,20 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 
-function xmlentities($string) {
-   return str_replace(
-       array('&', '"', "'", '<', '>', '�' ),
-       array ('&amp;', '&quot;', '&apos;' , '&lt;' , '&gt;', '&apos;'),
-       $string);
+function fixEncoding($value) {
+  $value = preg_replace("/[^\x9\xA\xD\x20-\x7F]/", "", $value);
+	return '<![CDATA[' . $value . ']]>';
 }
 
-echo "<?xml version=\"1.0\" ?>\n";
+
+
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 echo "<observations>\n";
 foreach ($this->rows as $row) {
     echo "\t<observation>\n";
     foreach ($row as $key => $value) {
         if (!is_array($value) && !empty($value)) {
-            echo "\t\t<$key>".xmlentities($value)."</$key>\n";
+            echo "\t\t<$key>".fixEncoding($value)."</$key>\n";
         }
     }
 
@@ -29,7 +29,7 @@ foreach ($this->rows as $row) {
            echo "\t\t\t<gene>\n";
            foreach ($gene as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "\t\t\t\t<$key>".xmlentities($value)."</$key>\n";
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
                 }
            }
            echo "\t\t\t</gene>\n";
@@ -44,7 +44,7 @@ foreach ($this->rows as $row) {
            echo "\t\t\t<compound>\n";
            foreach ($compound as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "\t\t\t\t<$key>".xmlentities($value)."</$key>\n";
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
                 }
            }
            echo "\t\t\t</compound>\n";
@@ -59,7 +59,7 @@ foreach ($this->rows as $row) {
            echo "\t\t\t<environment>\n";
            foreach ($environments as $key => $value) {
                 if (!is_array($value) && !in_array($key, $skipKeys) && !empty($value)) {
-                    echo "\t\t\t\t<$key>".xmlentities($value)."</$key>\n";
+                    echo "\t\t\t\t<$key>".fixEncoding($value)."</$key>\n";
                 }
            }
            echo "\t\t\t</environment>\n";
