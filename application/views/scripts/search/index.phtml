@@ -43,9 +43,10 @@
         <div style="position: relative; height: auto;">
             <div style="height: 2em;">
                 <div style="position: absolute; left: 0; top: 0; font-weight: bold; font-size:1.1em">
-                    <?php $itemStart = ($this->pager->getPage() - 1) * 10 + 1; ?>
-                    Showing results <?php echo $itemStart ?>-<?php echo $itemStart + 10 ?> of
-                    <?php echo $this->pager->getLastPage() * 10 ?>:
+                    Showing results 
+                    <?php echo $this->pager->getFirstIndice() ?>-
+                    <?php echo $this->pager->getLastIndice() ?> of
+                    <?php echo $this->pager->getNumResults() ?>:
                 </div>
 
 <?php /*
