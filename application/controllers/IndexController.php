@@ -8,7 +8,7 @@ class IndexController extends Zend_Controller_Action
         $stmt = $db->prepare('
             SELECT o.species as species, COUNT(o.id) as observationCount
             FROM observation o
-            WHERE o.species IS NOT NULL AND o.status = "public"
+            WHERE o.species IS NOT NULL
             GROUP BY o.species
             ORDER BY observationCount DESC
             ');
